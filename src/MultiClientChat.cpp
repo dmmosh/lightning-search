@@ -4,6 +4,7 @@
 
 void MultiClientChat::onClientConnected(int client){ // client connected
     sendToClient(client, "welcome",9);
+    std::cout << "client connected to server\n";
 };
 
 void MultiClientChat::onClientDisconnected(int client){ // client disconnected
