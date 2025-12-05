@@ -4,7 +4,7 @@
 
 int main()
 {
-    MultiClientChat mcc("0.0.0.0", 54000);
+    MultiClientChat mcc("127.0.0.1", 54000);
     if(mcc.init() != 0){
         return 0;
     }
