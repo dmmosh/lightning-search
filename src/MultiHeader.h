@@ -1,0 +1,16 @@
+#pragma once
+#include "header.h"
+
+// for multiple clients
+
+class MultiClientChat : public TcpListener
+{
+public:
+    MultiClientChat(const char* ip, int port):
+        TcpListener(ip, port) {};
+    
+protected:
+virtual void onClientConnected(int client); // client connected
+virtual void onClientDisconnected(int client); // client disconnected
+virtual void onMessageReceived(int client, const char* msg, int length); // message is received from client
+};
