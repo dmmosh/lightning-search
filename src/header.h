@@ -25,6 +25,12 @@ class TcpListener{
     protected:
         void onClientConnected(); // client connected
         void onClientDisconnected(); // client disconnected
+
+        // send message to client
+        void sendToClient(int socket, const char* msg, int length);
+
+        // broadcast message from client
+        void broadcastToClients(int sending, const char* msg, int length);
     private:
         const char*     m_ip; // ip
         uint16_t        m_port; // port
