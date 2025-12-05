@@ -60,8 +60,7 @@ int TcpListener::run(){
 
                 FD_SET(client, &m_master);
 
-                // TODO: client connected? 
-
+                onClientConnected(client);
                 // std::string welcomeMsg = "Welcome to the Awesome Chat Server!\n";
                 // send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
             }
@@ -73,11 +72,13 @@ int TcpListener::run(){
                 int bytesIn = recv(sock, buf, 4096, 0);
                 if (bytesIn <= 0)
                 {
+                    onClientDisconnected(sock);
                     close(sock);
                     FD_CLR(sock, &m_master);
                 }
                 else
                 {
+                    onMessageReceived(sock, buf, bytesIn);
                     // if (buf[0] == '\\')
                     // {
                     //     std::string cmd = std::string(buf, bytesIn);
@@ -90,18 +91,18 @@ int TcpListener::run(){
                     //     continue;
                     // }
 
-                    for (int i = 0; i < FD_SETSIZE; i++)
-                    {
-                        int outSock = m_master.fds_bits[i];
-                        if (outSock != m_socket && outSock != sock)
-                        {
-                            // ostringstream ss;
-                            // ss << "SOCKET #" << sock << ": " << buf << "\n";
-                            // string strOut = ss.str();
+                    // for (int i = 0; i < FD_SETSIZE; i++)
+                    // {
+                    //     int outSock = m_master.fds_bits[i];
+                    //     if (outSock != m_socket && outSock != sock)
+                    //     {
+                    //         // ostringstream ss;
+                    //         // ss << "SOCKET #" << sock << ": " << buf << "\n";
+                    //         // string strOut = ss.str();
 
-                            // send(outSock, strOut.c_str(), strOut.size() + 1, 0);
-                        }
-                    }
+                    //         // send(outSock, strOut.c_str(), strOut.size() + 1, 0);
+                    //     }
+                    // }
                 }
             }
         }
@@ -124,3 +125,37 @@ int TcpListener::run(){
     return 0;
 
 }
+
+        // send message to client
+void TcpListener::sendToClient(int socket, const char* msg, int length){
+    send(socket, msg, length, 0);
+};
+    // broadcast message from client
+void TcpListener::broadcastToClients(int sending, const char* msg, int length){
+    for (int i = 0; i < FD_SETSIZE; i++)
+                    {
+                        int outSock = m_master.fds_bits[i];
+                        if (outSock != m_socket && outSock != sending)
+                        {
+                            sendToClient(outSock, msg, length);
+                        }
+                    }
+};
+
+void TcpListener::onClientConnected(int client){ // client connected
+
+
+};
+
+void TcpListener::onClientDisconnected(int client){ // client disconnected
+
+
+};
+
+
+void TcpListener::onMessageReceived(int client, const char* msg, int length){ // message is received from client
+
+
+};
+
+

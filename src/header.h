@@ -23,8 +23,9 @@ class TcpListener{
         // run the listener
         int run();
     protected:
-        void onClientConnected(); // client connected
-        void onClientDisconnected(); // client disconnected
+        virtual void onClientConnected(int client); // client connected
+        virtual void onClientDisconnected(int client); // client disconnected
+        virtual void onMessageReceived(int client, const char* msg, int length); // message is received from client
 
         // send message to client
         void sendToClient(int socket, const char* msg, int length);
@@ -33,8 +34,8 @@ class TcpListener{
         void broadcastToClients(int sending, const char* msg, int length);
     private:
         const char*     m_ip; // ip
-        uint16_t        m_port; // port
-        uint16_t        m_socket; // socket
+        int             m_port; // port
+        int             m_socket; // socket
         fd_set          m_master; // master file descriptor set 
 
 };
