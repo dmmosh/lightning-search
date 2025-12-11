@@ -76,11 +76,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    int errorCode = 404;
    std::ifstream f; // reead from file
    //std::future<cpr::Response>
-   std::cout << key << '\n';
+   //std::cout << key << '\n';
    unsigned long size = 9;
-   std::cout << "{\n";
-    std::cout << msg;
-   std::cout << "}\n";
+//    std::cout << "{\n";
+//     std::cout << msg;
+//    std::cout << "}\n";
 
    const char* url = parsed[1].c_str()+1; // the url without the / at beginning, use strcmp and strncmp
 
