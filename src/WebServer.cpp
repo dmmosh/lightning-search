@@ -2,7 +2,10 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <istream>
+#include <iterator>
 #include <fstream>
+#include <vector>
 #include <filesystem>
 
 
@@ -18,10 +21,32 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     write the document back to the client
 
     */
-   std::ifstream f("www/index.html"); // reead from file
-    int errorCode = (f.good())? 200 : 404;
-   unsigned long size = std::filesystem::file_size("www/index.html");
    
+   // parse out the document requested
+   std::istringstream iss(msg);
+   std::vector<std::string> parsed((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
+   
+   int errorCode = 404;
+   std::ifstream f("www/index.html"); // reead from file
+   unsigned long size = 9;
+    if(f.good()){
+    errorCode = 200;
+    size = std::filesystem::file_size("www/index.html");
+    }
+
+    if(parsed.size() >= 3 && parsed[0] == "GET "){ // < request type > < file or endpoint > < http type >
+        f.close();
+        f.open("www"+parsed[1]);
+        if(f.good()){
+            errorCode = 200;
+            size = std::filesystem::file_size("www"+parsed[1]);
+        } else{
+            errorCode = 404;
+            size = 9;
+        }
+
+    }
+
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
                             "Connection: Keep-Alive\r\n"
@@ -29,8 +54,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                             "ETag: \"lightning-search\"\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
                            "Content-Length: "<< size <<"\r\n"
-                           "\r\n"
-                           << f.rdbuf();
+                           "\r\n";
+    if(f.good()){
+        oss << f.rdbuf();
+    } else {
+        oss << "error 404";
+    }
+                           
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
     
 
