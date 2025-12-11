@@ -1,5 +1,8 @@
 #include "header.h"
-
+#include <cstring>
+#include <string>
+#include <sstream>
+#include <iostream>
 
 
 int TcpListener::init(){
