@@ -19,9 +19,9 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    std::string out = "HTTP/1.1 200 OK\r\n"
                             "Cache-Control: no-cache, private\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
-                           "Content-Length: 12\r\n"
+                           "Content-Length: 14\r\n"
                            "\r\n"
-                           "Hello World!";
+                           "<h1>Hello</h1>";
    sendToClient(client, out.c_str(), out.size()+1);
 }; 
 
