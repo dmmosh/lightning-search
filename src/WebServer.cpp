@@ -22,9 +22,10 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 200 OK\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
-                           "Transfer-Encoding: chunked\r\n"
-                           "\r\n";
-    oss<< f.rdbuf(); // copy buffer from filestream to stringstream
+                           "Content-Length: 5\r\n"
+                           "\r\n"
+                           "Hello";
+    //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
 
     
 
