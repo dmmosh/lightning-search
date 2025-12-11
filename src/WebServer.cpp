@@ -72,8 +72,8 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
     if(!strncmp(msg, "GET", 4)){ // if this is a get request 
         unsigned int i = 0;
         while(i<length){
-            if(msg[i] == ' '){
-                msg[i] = '\0';
+            if((msg+4)[i] == ' '){
+                (msg+4)[i] = '\0';
                 break;
             }
             i++;
