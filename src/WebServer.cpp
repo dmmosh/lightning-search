@@ -87,13 +87,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed[1] = "/search.html";
         }else if(url[0] == '\0'){
             parsed[1] = "/index.html";
-        } else if(!strncmp(url, "css", 3)){ // if the folder is css
+        } else if(!strncmp(url, "css/", 4)){ // if the folder is css
             h_num = H_CSS;
             parsed[1].insert(0,"/css");
-        } else if(!strncmp(url, "images", 6)){ // images are being loaded
+        } else if(!strncmp(url, "images/", 7)){ // images are being loaded
             h_num = H_IMAGE;
             parsed[1].insert(0,"/images");
-        } else if(!strncmp(url, "js", 2)){ // js code is being loaded
+        } else if(!strncmp(url, "js/", 3)){ // js code is being loaded
             h_num = H_JS;
             parsed[1].insert(0,"/js");
         } else if(strncmp(url, "search.html",12) != 0) { // html page is being loaded and its not search 
