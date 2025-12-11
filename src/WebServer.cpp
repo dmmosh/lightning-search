@@ -71,16 +71,15 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
 
 
+
+
    int errorCode = 404;
    std::ifstream f; // reead from file
-   std::string query;
    //std::future<cpr::Response>
    std::cout << key << '\n';
    unsigned long size = 9;
    std::cout << "{\n";
-    for(const std::string& s: parsed){
-        std::cout << s << '\t';
-    }
+    std::cout << msg;
    std::cout << "}\n";
 
    const char* url = parsed[1].c_str()+1; // the url without the / at beginning, use strcmp and strncmp
@@ -91,7 +90,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
         if(url[0] == '/'){ // search query , has to be preceded by / because files cant be named as such 
             h_num = H_PAGE;
-            query = parsed[1];
             parsed[1] = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
             parsed[1] = "/index.html";
