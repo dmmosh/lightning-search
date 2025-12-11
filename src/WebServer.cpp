@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <filesystem>
 
 
 // when the server receivees thee message from client
@@ -17,16 +18,16 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     write the document back to the client
 
     */
-   std::ifstream f("../www/index.html", std::ios::binary | std::ios::ate); // reead from file
+   std::ifstream f("www/index.html"); // reead from file
+   unsigned long size = std::filesystem::file_size("www/index.html");
    
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 200 OK\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
-                           "Content-Length: 5\r\n"
+                           "Content-Length: "<< size <<"\r\n"
                            "\r\n"
-                           "Hello";
+                           << f.rdbuf();
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
-
     
 
    sendToClient(client, oss.str().c_str(), oss.str().length());
