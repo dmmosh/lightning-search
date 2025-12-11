@@ -67,11 +67,15 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
   
 
    std::vector<std::string> parsed((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
-   
+   std::string s;
     if(!strncmp(msg,"GET",3)){
-        std::cout <<msg+4 ;
+        unsigned int i = 4; // starts at 2nd argument 
+        while(i<length and msg[i] != ' '){ // goes until end of string or blank char
+            i++;
+        }
+        s = std::string(msg+4,i);
     }
-   
+    std::cout << s << '\n';
 
    int errorCode = 404;
    std::ifstream f; // reead from file
