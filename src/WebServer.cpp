@@ -70,10 +70,10 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
    
     std::string parsed;
     if(!strncmp(msg, "GET", 4)){ // if this is a get request 
-        unsigned int i = 0;
+        unsigned int i = 4;
         while(i<length){
-            if((msg+4)[i] == ' '){
-                (msg+4)[i] = '\0';
+            if(msg[i] == ' '){
+                msg[i] = '\0';
                 break;
             }
             i++;
