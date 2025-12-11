@@ -73,7 +73,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         while(i<length and msg[i] != ' '){ // goes until end of string or blank char
             i++;
         }
-        s = std::string(msg+4,i-4);
+        parsed = std::string(msg+4,i-4);
     }
 
    int errorCode = 404;
