@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include <filesystem>
+#include <cstring>
 
 /*
 
@@ -15,17 +16,25 @@
 
 const char* headers[] = {
     "Connection: Keep-Alive\r\n"  
-    "ETag: \"lightning-search\"\r\n"
+    "ETag: \"lightning-search-html\"\r\n"
     "Content-Type: text/html; charset=UTF-8\r\n",
     
     "Content-Type: image/x-icon\r\n"
-    "Connection: close\r\n"
-    
+    "Connection: close\r\n",
+
+    "Content-Type: text/css\r\n",
+    "ETag: \"lightning-search-css\"\r\n",
+
+    "Content-Type: text/javascript\r\n"
+    "ETag: \"lightning-search-js\"\r\n"
+
 }; 
 int h_num = 0; // header number
 // macros for headers
 #define H_PAGE 0  // header for pages
 #define H_IMAGE 1 // header for images
+#define H_CSS 2 // header for css
+#define H_JS 3 // header for js
 
 #define QUERY parsed[1] // only use if search query specified 
 
@@ -66,40 +75,66 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     }
    std::cout << "}\n";
 
+   const char* url = parsed[1].c_str()+1; // the url without the / at beginning, use strcmp and strncmp
 
 
     // if a request has been made, 
    if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
-    
-    
-        if(parsed[1].find("/images") != std::string::npos){ // if query contains images
-            h_num = H_IMAGE;
-            parsed[1] = "www"+parsed[1];
-            f.open(parsed[1], std::ios::in | std::ios::binary); // open image in binary mode
-            if(f.good()){
-                errorCode = 200;
-                // size is the size of header, size of parsed file, and 
-                size = std::filesystem::file_size(parsed[1]);
-            }
 
-        } else{ // if NOT images (pages)
+        if(url[0] == '/'){ // search query , has to be preceded by / because files cant be named as such 
             h_num = H_PAGE;
-
-            if(parsed[1] == "/"){ // reroute to home page 
-                parsed[1] = "www/index.html";
-            } else { // anything else is a search query , use QUERY macro
-                query = parsed[1];
-                parsed[1] = "www/search.html";
-                
-            }
+            query = parsed[1];
+            parsed[1] = "/search.html";
+        } else if(!strncmp(url, "css", 3)){ // if the folder is css
+            h_num = H_CSS;
+            parsed[1].insert(0,"/css");
+        } else if(!strncmp(url, "images", 6)){ // images are being loaded
+            h_num = H_IMAGE;
+            parsed[1].insert(0,"/images");
+        } else if(!strncmp(url, "js", 2)){ // js code is being loaded
+            h_num = H_JS;
+            parsed[1].insert(0,"/js");
+        } else if(strncmp(url, "search.html",12) != 0) { // html page is being loaded and its not search 
+            h_num = H_PAGE;
             
-            f.open(parsed[1]);
-            if(f.good()){
-                    errorCode = 200;
-                    // size is the size of header, size of parsed file, and 
-                    size = std::filesystem::file_size(parsed[1]);
-            }
         }
+
+        parsed[1].insert(0,"www");
+
+        f.open(parsed[1], std::ios::in | (h_num == H_IMAGE)?std::ios::binary: (std::ios_base::openmode)0); // open image in binary mode  
+
+        if(f.good()){
+            errorCode = 200;
+            // size is the size of header, size of parsed file, and 
+            size = std::filesystem::file_size(parsed[1]);
+        }
+        
+        // if(parsed[1].find("/images") != std::string::npos){ // if query contains images
+        //     parsed[1] = "www"+parsed[1];
+        //     if(f.good()){
+        //         errorCode = 200;
+        //         // size is the size of header, size of parsed file, and 
+        //         size = std::filesystem::file_size(parsed[1]);
+        //     }
+
+        // } else{ // if NOT images (pages)
+        //     h_num = H_PAGE;
+
+        //     if(parsed[1] == "/"){ // reroute to home page 
+        //         parsed[1] = "www/index.html";
+        //     } else { // anything else is a search query , use QUERY macro
+        //         query = parsed[1];
+        //         parsed[1] = "www/search.html";
+                
+        //     }
+            
+        //     f.open(parsed[1]);
+        //     if(f.good()){
+        //             errorCode = 200;
+        //             // size is the size of header, size of parsed file, and 
+        //             size = std::filesystem::file_size(parsed[1]);
+        //     }
+        // }
     }
 
    std::ostringstream oss; // output stream
