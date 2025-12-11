@@ -42,7 +42,7 @@ char* key = std::getenv(env_key);
 #define H_CSS 2 // header for css
 #define H_JS 3 // header for js
 
-#define QUERY parsed // only use if search query specified 
+#define QUERY parsed[1] // only use if search query specified 
 
 
 
@@ -66,21 +66,9 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
 
   
 
-   //std::vector<std::string> parsed((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
+   std::vector<std::string> parsed((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
    
-    std::string parsed;
-    if(!strncmp(msg, "GET", 4)){ // if this is a get request 
-        unsigned int i = 4;
-        while(i<length){
-            if(msg[i] == ' '){
-                msg[i] = '\0';
-                break;
-            }
-            i++;
-        }
-        parsed = msg+4;
-
-    }
+    
 
 
 
@@ -91,25 +79,25 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
    std::cout << key << '\n';
    unsigned long size = 9;
    std::cout << "{\n";
-    std::cout << parsed;
+    std::cout << parsed[1];
    std::cout << "}\n";
 
-   const char* url = parsed.c_str()+1; // the url without the / at beginning, use strcmp and strncmp
+   const char* url = parsed[1].c_str()+1; // the url without the / at beginning, use strcmp and strncmp
 
 
     // if a request has been made, 
-   if(!parsed.empty()){ // < request type > < file or endpoint > < http type >
+   if(!parsed[1].empty()){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '/'){ // search query , has to be preceded by / because files cant be named as such 
             h_num = H_PAGE;
-            parsed = "/search.html"; //
+            parsed[1] = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
-            parsed = "/index.html";
+            parsed[1] = "/index.html";
         } else if(!strncmp(url, "css", 4)){ // if the folder is css
             h_num = H_CSS;
         } else if(!strncmp(url, "images", 7)){ // images are being loaded
             h_num = H_IMAGE;
-            parsed.insert(0,"/images");
+            parsed[1].insert(0,"/images");
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
         } else if(strncmp(url, "search.html",12) != 0) { // html page is being loaded and its not search 
@@ -117,19 +105,19 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
             
         }
 
-        parsed.insert(0,"www");
+        parsed[1].insert(0,"www");
 
         if(h_num == H_IMAGE){
-            f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
+            f.open(parsed[1], std::ios::in | std::ios::binary); // open image in binary mode  
         } else {
-            f.open(parsed);
+            f.open(parsed[1]);
         }
 
-        //std::cout << parsed << '\n';
+        //std::cout << parsed[1] << '\n';
         if(f.good()){
             errorCode = 200;
-            // size is the size of header, size of parsed file, and 
-            size = std::filesystem::file_size(parsed);
+            // size is the size of header, size of parsed[1] file, and 
+            size = std::filesystem::file_size(parsed[1]);
         }
         
     }
