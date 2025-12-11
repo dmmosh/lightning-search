@@ -14,5 +14,5 @@ public:
 protected:
 virtual void onClientConnected(int client); // client connected
 virtual void onClientDisconnected(int client); // client disconnected
-virtual void onMessageReceived(int client, char* msg, int length); // message is received from client
+virtual void onMessageReceived(int client, const char* msg, int length); // message is received from client
 };

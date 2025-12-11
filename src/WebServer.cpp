@@ -14,7 +14,7 @@
 */
 
 const char* headers[] = {
-    "Connection: Keep-Alive\r\n"   // headers for pages
+    "Connection: Keep-Alive\r\n"  
     "ETag: \"lightning-search\"\r\n"
     "Content-Type: text/html; charset=UTF-8\r\n",
 
@@ -33,7 +33,7 @@ int h_num = 0; // header number
 
 
 // when the server receivees thee message from client
-void WebServer::onMessageReceived(int client, char* msg, int length){
+void WebServer::onMessageReceived(int client, const char* msg, int length){
 
     /*
     client (google) will sent a message in the form of:
@@ -98,10 +98,7 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
 
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
-                           "Connection: Keep-Alive\r\n"
-                            "Cache-Control: public, max-age=31536000\r\n"
-                            "ETag: \"lightning-search\"\r\n"
-                           "Content-Type: text/html; charset=UTF-8\r\n"
+                            << headers[h_num] << 
                            "Content-Length: "<< size <<"\r\n"
                            "\r\n";
     
