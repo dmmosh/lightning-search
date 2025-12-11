@@ -17,20 +17,19 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     write the document back to the client
 
     */
-   std::ifstream f("www/index.html"); // reead from file
+   std::ifstream f("../www/index.html", std::ios::binary | std::ios::ate); // reead from file
+   unsigned int length = f.tellg();
    std::ostringstream oss; // output stream
-   oss  <<                 "HTTP/1.1 200 OK\r\n";
-   oss  <<                        "Cache-Control: no-cache, private\r\n";
-   oss  <<                       "Content-Type: text/html; charset=UTF-8\r\n";
-   oss  <<                       "Transfer-Encoding: chunked\r\n";
-   oss  <<                       "\r\n";
-   oss <<                       "<h1>hello</h1>";
+   oss  <<                 "HTTP/1.1 200 OK\r\n"
+                           "Content-Type: text/html; charset=UTF-8\r\n"
+                           "Transfer-Encoding: chunked\r\n"
+                           "\r\n";
+    oss<< f.rdbuf(); // copy buffer from filestream to stringstream
 
-    std::string out = oss.str();
-    unsigned int size = out.size() +1;
     
 
-   sendToClient(client, out.c_str(), size);
+   sendToClient(client, oss.str().c_str(), 88+length);
+   f.close();
 }; 
 
 void WebServer::onClientConnected(int client){
