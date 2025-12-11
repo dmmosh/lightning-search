@@ -75,7 +75,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    std::ifstream f; // reead from file
    std::string query;
    //std::future<cpr::Response>
-   std::cout << env_key << '\n';
+   std::cout << key << '\n';
    unsigned long size = 9;
    std::cout << "{\n";
     for(const std::string& s: parsed){
