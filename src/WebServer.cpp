@@ -32,7 +32,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    std::string query;
    unsigned long size = 9;
     for(int i=0; i<parsed.size(); i++){
-        std::cout << parsed[i] << '\n';
+        std::cout << parsed[i] << '\t';
     }
 
 
