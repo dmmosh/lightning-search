@@ -18,7 +18,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
     */
    std::ifstream f("../www/index.html", std::ios::binary | std::ios::ate); // reead from file
-   unsigned int l = f.tellg();
+   unsigned long l = f.tellg();
+   std::cout << l << '\n';
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 200 OK\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
