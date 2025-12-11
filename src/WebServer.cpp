@@ -31,11 +31,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    unsigned long size = 9;
 
     if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
-        std::cout << parsed[1];
-        if(parsed[1] == "/"){
+        if(parsed[1] == "/"){ // reroute to home page 
             parsed[1] = "/index.html";
         }
-
+        std::cout << parsed[1] << "\n";
+        
         f.open("www"+parsed[1]);
         if(f.good()){
             errorCode = 200;

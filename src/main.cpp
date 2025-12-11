@@ -12,6 +12,6 @@ int main()
         return 0;
     }
     webServer.run();
-    system("pause");
+    //system("pause");
     
 }
