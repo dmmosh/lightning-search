@@ -25,6 +25,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    oss  <<                 "HTTP/1.1 200 OK\r\n"
                             "Connection: Keep-Alive\r\n"
                             "Cache-Control: public, max-age=31536000\r\n"
+                            "Content-Encoding: gzip\r\n"
+                            "Vary: Accept-Encoding\r\n"
                             "ETag: \"lightning-search\"\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
                            "Content-Length: "<< size <<"\r\n"
