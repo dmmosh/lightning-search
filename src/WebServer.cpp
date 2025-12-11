@@ -2,9 +2,10 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 
-
+// when the server receivees thee message from client
 void WebServer::onMessageReceived(int client, const char* msg, int length){
 
     /*
@@ -16,13 +17,24 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     write the document back to the client
 
     */
-   std::string out = "HTTP/1.1 200 OK\r\n"
+   std::ifstream f("../www/index.html"); // reead from file
+   std::ostringstream oss; // output stream
+   oss  <<                 "HTTP/1.1 200 OK\r\n"
                             "Cache-Control: no-cache, private\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
-                           "Content-Length: 14\r\n"
-                           "\r\n"
-                           "<h1>Hello</h1>";
-   sendToClient(client, out.c_str(), out.size()+1);
+                           "Transfer-Encoding: chunked\r\n"
+                           "\r\n";
+    if(f.good()){
+        oss<< f.rdbuf(); // copy buffer from filestream to stringstream
+    } else {
+        oss << "<h1>404 Not Found</h1>";
+    }
+
+    
+    unsigned int size = oss.view().size()+1;
+    
+
+   sendToClient(client, oss.str().c_str(), size);
 }; 
 
 void WebServer::onClientConnected(int client){
