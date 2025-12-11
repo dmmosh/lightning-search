@@ -19,10 +19,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
     */
    std::ifstream f("www/index.html"); // reead from file
+    int errorCode = (f.good())? 200 : 404;
    unsigned long size = std::filesystem::file_size("www/index.html");
    
    std::ostringstream oss; // output stream
-   oss  <<                 "HTTP/1.1 200 OK\r\n"
+   oss  <<                 "HTTP/1.1"<<errorCode<<"OK\r\n"
                             "Connection: Keep-Alive\r\n"
                             "Cache-Control: public, max-age=31536000\r\n"
                             "ETag: \"lightning-search\"\r\n"
