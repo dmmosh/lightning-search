@@ -11,15 +11,15 @@
 /*
 
 "Cache-Control: public, max-age=31536000\r\n"
-"Connection: close\r\n",
 */
 
 const char* headers[] = {
     "Connection: Keep-Alive\r\n"  
     "ETag: \"lightning-search\"\r\n"
     "Content-Type: text/html; charset=UTF-8\r\n",
-
+    
     "Content-Type: image/x-icon\r\n"
+    "Connection: close\r\n"
     
 }; 
 int h_num = 0; // header number
