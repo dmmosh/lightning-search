@@ -85,6 +85,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             h_num = H_PAGE;
             query = parsed[1];
             parsed[1] = "/search.html";
+        }else if(url[0] == '\0'){
+            parsed[1] = "/index.html";
         } else if(!strncmp(url, "css", 3)){ // if the folder is css
             h_num = H_CSS;
             parsed[1].insert(0,"/css");
