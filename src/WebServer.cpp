@@ -45,7 +45,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         if(f.good()){
             errorCode = 200;
             // size is the size of header, size of parsed file, and 
-            size = std::filesystem::file_size("www"+parsed[1]) + std::filesystem::file_size("www/images/favicon.ico");
+            size = std::filesystem::file_size("www"+parsed[1]);
         }
     }
 
