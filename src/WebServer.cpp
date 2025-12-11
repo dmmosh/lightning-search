@@ -68,7 +68,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
    std::vector<std::string> parsed((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
    
-    if(!strncmp(msg,"GET",7)){
+    if(!strncmp(msg,"GET",3)){
         std::cout <<"jksdhkjcv\n" ;
     }
    
