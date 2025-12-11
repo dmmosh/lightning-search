@@ -19,11 +19,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     */
    std::ifstream f("../www/index.html"); // reead from file
    std::ostringstream oss; // output stream
-   oss  <<                 "HTTP/1.1 200 OK\r\n"
-                            "Cache-Control: no-cache, private\r\n"
-                           "Content-Type: text/html; charset=UTF-8\r\n"
-                           "Transfer-Encoding: chunked\r\n"
-                           "\r\n";
+   oss  <<                 "HTTP/1.1 200 OK\r\n";
+   oss  <<                        "Cache-Control: no-cache, private\r\n";
+   oss  <<                       "Content-Type: text/html; charset=UTF-8\r\n";
+   oss  <<                       "Transfer-Encoding: chunked\r\n";
+   oss  <<                       "\r\n";
+    oss<< f.rdbuf(); // copy buffer from filestream to stringstream
 
     
     unsigned int size = oss.view().size()+1;
