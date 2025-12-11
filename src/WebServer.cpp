@@ -80,7 +80,7 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
         } else{ // if NOT images (pages)
             h_num = H_PAGE;
 
-            if(parsed[1] == "/" || parsed[1] == "/index.html"){ // reroute to home page 
+            if(parsed[1] == "/"){ // reroute to home page 
                 parsed[1] = "www/index.html";
             } else { // anything else is a search query , use QUERY macro
                 query = parsed[1];
