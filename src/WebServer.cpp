@@ -19,7 +19,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    std::ostringstream oss;
    oss << "HTTP/1.1 200 OK\r\n\r\n"; 
    oss<< "Cache-Control: no-cache, private\r\n";
-   oss<< "Content-Type: text";
+   oss<< "Content-Type: text/plain\r\n";
    oss<< "Content-Length: 5\r\n";
    oss << "\r\n";
    oss << "hello";
