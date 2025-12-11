@@ -31,7 +31,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    unsigned long size = 9;
 
     if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
-        
+        std::cout << parsed[1];
         if(parsed[1] == ""){
             parsed[1] = "/index.html";
         }
