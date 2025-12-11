@@ -26,11 +26,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    oss  <<                       "\r\n";
     oss<< f.rdbuf(); // copy buffer from filestream to stringstream
 
-    
+    std::string out = oss.str();
     unsigned int size = oss.view().size()+1;
     
 
-   sendToClient(client, oss.str().c_str(), size);
+   sendToClient(client, out.c_str(), size);
 }; 
 
 void WebServer::onClientConnected(int client){
