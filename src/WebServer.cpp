@@ -87,13 +87,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed[1] = "/search.html";
         }else if(url[0] == '\0'){
             parsed[1] = "/index.html";
-        } else if(!strncmp(url, "css/", 4)){ // if the folder is css
+        } else if(!strncmp(url, "css", 4)){ // if the folder is css
             h_num = H_CSS;
             parsed[1].insert(0,"/css");
-        } else if(!strncmp(url, "images/", 7)){ // images are being loaded
+        } else if(!strncmp(url, "images", 7)){ // images are being loaded
             h_num = H_IMAGE;
             parsed[1].insert(0,"/images");
-        } else if(!strncmp(url, "js/", 3)){ // js code is being loaded
+        } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
             parsed[1].insert(0,"/js");
         } else if(strncmp(url, "search.html",12) != 0) { // html page is being loaded and its not search 
@@ -109,7 +109,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             f.open(parsed[1]);
         }
 
-
+        std::cout << parsed[1] << '\n';
         if(f.good()){
             errorCode = 200;
             // size is the size of header, size of parsed file, and 
@@ -152,6 +152,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     
     if(f.good()){ // write the opened file's buffer into ostringstream
         oss << f.rdbuf();
+        f.close(); // close the file
     } else {
         oss << "error 404";
     }
@@ -160,7 +161,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     
 
    sendToClient(client, oss.str().c_str(), oss.str().length()); // send to client
-   f.close(); // close the file
 }; 
 
 void WebServer::onClientConnected(int client){
