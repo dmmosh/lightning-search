@@ -27,24 +27,20 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    std::vector<std::string> parsed((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
    
    int errorCode = 404;
-   std::ifstream f("www/index.html"); // reead from file
+   std::ifstream f; // reead from file
    unsigned long size = 9;
-    if(f.good()){
-    errorCode = 200;
-    size = std::filesystem::file_size("www/index.html");
-    }
 
     if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
-        f.close();
+        
+        if(parsed[1] == ""){
+            parsed[1] = "/index.html";
+        }
+
         f.open("www"+parsed[1]);
         if(f.good()){
             errorCode = 200;
             size = std::filesystem::file_size("www"+parsed[1]);
-        } else{
-            errorCode = 404;
-            size = 9;
         }
-
     }
 
    std::ostringstream oss; // output stream
