@@ -4,8 +4,7 @@
 #include <sstream>
 #include <fstream>
 #include <filesystem>
-#include <vector>
-#include <zlib.h>
+
 
 // when the server receivees thee message from client
 void WebServer::onMessageReceived(int client, const char* msg, int length){
@@ -19,22 +18,9 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     write the document back to the client
 
     */
-   std::ifstream f("www/index.html", std::ios::binary); // read from file in binary mode
-   std::ostringstream fileBuffer;
-   fileBuffer << f.rdbuf();
-   std::string fileContent = fileBuffer.str();
-
-   // Compress the file content using gzip
-   uLongf compressedSize = compressBound(fileContent.size());
-   std::vector<char> compressedData(compressedSize);
-
-   if (compress(reinterpret_cast<Bytef*>(compressedData.data()), &compressedSize, reinterpret_cast<const Bytef*>(fileContent.data()), fileContent.size()) != Z_OK) {
-       std::cerr << "Failed to compress file content" << std::endl;
-       return;
-   }
-
-   compressedData.resize(compressedSize);
-
+   std::ifstream f("www/index.html"); // reead from file
+   unsigned long size = std::filesystem::file_size("www/index.html");
+   
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 200 OK\r\n"
                             "Connection: Keep-Alive\r\n"
@@ -42,11 +28,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                             "Content-Encoding: gzip\r\n"
                             "ETag: \"lightning-search\"\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
-                           "Content-Length: " << compressedData.size() << "\r\n"
-                           "\r\n";
+                           "Content-Length: "<< size <<"\r\n"
+                           "\r\n"
+                           << f.rdbuf();
+    //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
+    
 
    sendToClient(client, oss.str().c_str(), oss.str().length());
-   sendToClient(client, compressedData.data(), compressedData.size());
    f.close();
 }; 
 
@@ -58,5 +46,5 @@ void WebServer::onClientConnected(int client){
 void WebServer::onClientDisconnected(int client){
 
 
-};
+}; 
 
