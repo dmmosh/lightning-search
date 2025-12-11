@@ -99,7 +99,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             
         }
 
-        parsed[1].insert(0,"www");
 
         f.open(parsed[1], std::ios::in | std::ios::binary); // open image in binary mode  
 
