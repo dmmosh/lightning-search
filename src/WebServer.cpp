@@ -8,6 +8,8 @@
 #include <vector>
 #include <filesystem>
 #include <cstring>
+#include <cstdlib> // Required for std::getenv
+#include <cpr/cpr.h>
 
 /*
 
@@ -29,7 +31,11 @@ const char* headers[] = {
     "ETag: \"lightning-search-js\"\r\n"
 
 }; 
+
 int h_num = 0; // header number
+char* env_key = "EXA1"; // goes up until it cant anymore 
+char* key = std::getenv(env_key);
+
 // macros for headers
 #define H_PAGE 0  // header for pages
 #define H_IMAGE 1 // header for images
@@ -68,6 +74,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    int errorCode = 404;
    std::ifstream f; // reead from file
    std::string query;
+   //std::future<cpr::Response>
+   std::cout << env_key << '\n';
    unsigned long size = 9;
    std::cout << "{\n";
     for(const std::string& s: parsed){

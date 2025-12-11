@@ -3,6 +3,9 @@
 
 // for multiple clients
 extern const char* headers[]; 
+
+extern char* env_key;
+extern char* key;
 extern int h_num; // header num
 
 class WebServer : public TcpListener
