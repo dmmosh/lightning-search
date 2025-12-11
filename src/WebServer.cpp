@@ -7,7 +7,21 @@
 #include <fstream>
 #include <vector>
 #include <filesystem>
+
+extern const char* headers[] = {
+    "Connection: Keep-Alive\r\n"   // headers for pages
+    "Cache-Control: public, max-age=31536000\r\n"
+    "ETag: \"lightning-search\"\r\n"
+    "Content-Type: text/html; charset=UTF-8\r\n",
+
+    "Content-Type: image/x-icon\r\n"
+    "Cache-Control: public, max-age=31536000\r\n"
+    "Connection: close\r\n",
+    
+}; 
+
 #define QUERY parsed[1] // only use if search query specified 
+
 
 
 // when the server receivees thee message from client
@@ -31,16 +45,19 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    std::ifstream f; // reead from file
    std::string query;
    unsigned long size = 9;
-    for(int i=0; i<parsed.size(); i++){
-        std::cout << parsed[i] << '\t';
+   std::cout << "{\n";
+    for(const std::string& s: parsed){
+        std::cout << s << '\t';
     }
+   std::cout << "}\n";
+
 
 
     // if a request has been made, 
    if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
     
     
-        if(parsed[1].contains("/images")){ // if query contains images
+        if(parsed[1].find("/images")){ // if query contains images
             
 
         } else{ // if NOT images

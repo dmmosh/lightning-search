@@ -2,6 +2,7 @@
 #include "header.h"
 
 // for multiple clients
+extern const char* headers[]; 
 
 class WebServer : public TcpListener
 {
