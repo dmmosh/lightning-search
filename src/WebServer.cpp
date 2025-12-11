@@ -16,16 +16,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     write the document back to the client
 
     */
-   std::ostringstream oss;
-   oss << "HTTP/1.1 200 OK\r\n"; 
-   oss<< "Cache-Control: no-cache, private\r\n";
-   oss<< "Content-Type: text/plain\r\n";
-   oss<< "Content-Length: 5\r\n";
-   oss << "\r\n";
-   oss << "hello";
-    std::string out = oss.str();
-    int size = out.size()+1;
-   sendToClient(client, out.c_str(), size);
+   std::string out = "HTTP/1.1 200 OK\r\n"
+                           "Content-Type: text/html; charset=UTF-8\r\n"
+                           "Content-Length: 12\r\n"
+                           "\r\n"
+                           "Hello World!";
+   sendToClient(client, out.c_str(), out.size()+1);
 }; 
 
 void WebServer::onClientConnected(int client){
