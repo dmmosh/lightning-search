@@ -34,5 +34,5 @@ class TcpListener{
         int             m_port; // port
         int             m_socket; // socket
         fd_set          m_master; // master file descriptor set 
-
+        int             m_max_fd;
 };

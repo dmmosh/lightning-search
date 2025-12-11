@@ -1,164 +1,175 @@
 #include "header.h"
-#include <cstring>
-#include <string>
-#include <sstream>
 #include <iostream>
+#include <string.h>     // For memset
+#include <unistd.h>     // For close()
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 
+// Define generic types for portability
+#define SOCKET int
+#define INVALID_SOCKET -1
+#define SOCKET_ERROR -1
 
-int TcpListener::init(){
+int TcpListener::init()
+{
+    // NO WSAStartup needed on Linux
+
     // Create a socket
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (m_socket == -1)
+    if (m_socket == INVALID_SOCKET)
     {
-        std::cerr << "Can't create a socket! Quitting\t" << strerror(errno) << '\n';
-        return -1;
+        return -1; // Standard Linux error is -1
     }
 
     // Bind the ip address and port to a socket
     sockaddr_in hint;
     hint.sin_family = AF_INET;
     hint.sin_port = htons(m_port);
-    inet_pton(AF_INET, m_ip, &hint.sin_addr); // converts human-readable ips to compact binary format 
-    // inet_ntop: converts binary back to text
+    inet_pton(AF_INET, m_ip, &hint.sin_addr);
 
-    if (bind(m_socket, (sockaddr*)&hint, sizeof(hint)) == -1)
+    // Set socket option to reuse address (prevents "Address already in use" errors on restart)
+    int opt = 1;
+    setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+
+    if (bind(m_socket, (sockaddr*)&hint, sizeof(hint)) == SOCKET_ERROR)
     {
-        std::cerr << "Can't bind to IP/port! Quitting\t" << strerror(errno) << '\n';
-        return -2;
+        return -1;
     }
 
-    // Tell the socket to listen
-    if (listen(m_socket, SOMAXCONN) == -1)
+    // Tell the socket is for listening
+    if (listen(m_socket, SOMAXCONN) == SOCKET_ERROR)
     {
-        std::cerr << "Can't listen! Quitting\t" << strerror(errno) << '\n';
-        return -3;
+        return -1;
     }
 
     // Create the master file descriptor set and zero it
     FD_ZERO(&m_master);
 
-    // Add our first socket that we're interested in interacting with; the listening socket!
+    // Add our listening socket
     FD_SET(m_socket, &m_master);
+
+    // Keep track of the biggest file descriptor for select()
+    m_max_fd = m_socket;
 
     return 0;
 }
 
-
-int TcpListener::run(){
+int TcpListener::run()
+{
     bool running = true;
 
     while (running)
     {
+        // Make a copy of the master file descriptor set
         fd_set copy = m_master;
 
-        int socketCount = select(FD_SETSIZE, &copy, nullptr, nullptr, nullptr);
+        // See who's talking to us
+        // Linux requires the first param to be max_fd + 1
+        int socketCount = select(m_max_fd + 1, &copy, nullptr, nullptr, nullptr);
 
-        for (int i = 0; i < socketCount; i++)
+        if (socketCount == -1) {
+            // Error handling
+            break;
+        }
+
+        // Linux Loop: We must iterate from 0 to m_max_fd to find which sockets are ready
+        // We cannot use fd_array or fd_count like in Windows
+        for (int i = 0; i <= m_max_fd; i++)
         {
-            int sock = copy.fds_bits[i];
-
-            if (sock == m_socket) // CLIENT CONNECTED
+            // Check if this socket descriptor is in the 'copy' set
+            if (FD_ISSET(i, &copy))
             {
-                int client = accept(m_socket, nullptr, nullptr);
+                SOCKET sock = i; // The current socket descriptor
 
-                FD_SET(client, &m_master);
-
-                onClientConnected(client);
-                // std::string welcomeMsg = "Welcome to the Awesome Chat Server!\n";
-                // send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
-            }
-            else // CLIENT DISCONNECTED 
-            {
-                char buf[4096];
-                memset(buf, 0, 4096);
-
-                int bytesIn = recv(sock, buf, 4096, 0);
-                if (bytesIn <= 0)
+                // Is it the listening socket?
+                if (sock == m_socket)
                 {
-                    onClientDisconnected(sock);
-                    close(sock);
-                    FD_CLR(sock, &m_master);
+                    // Accept a new connection
+                    SOCKET client = accept(m_socket, nullptr, nullptr);
+
+                    if (client != INVALID_SOCKET) {
+                        // Add the new connection to the list of connected clients
+                        FD_SET(client, &m_master);
+
+                        // Update max_fd if this new socket ID is higher
+                        if (client > m_max_fd) {
+                            m_max_fd = client;
+                        }
+
+                        onClientConnected(client);
+                    }
                 }
-                else
+                else // It's an inbound message from a client
                 {
-                    onMessageReceived(sock, buf, bytesIn);
-                    // if (buf[0] == '\\')
-                    // {
-                    //     std::string cmd = std::string(buf, bytesIn);
-                    //     if (cmd == "\\quit")
-                    //     {
-                    //         running = false;
-                    //         break;
-                    //     }
+                    char buf[4096];
+                    memset(buf, 0, 4096); // Linux replacement for ZeroMemory
 
-                    //     continue;
-                    // }
-
-                    // for (int i = 0; i < FD_SETSIZE; i++)
-                    // {
-                    //     int outSock = m_master.fds_bits[i];
-                    //     if (outSock != m_socket && outSock != sock)
-                    //     {
-                    //         // ostringstream ss;
-                    //         // ss << "SOCKET #" << sock << ": " << buf << "\n";
-                    //         // string strOut = ss.str();
-
-                    //         // send(outSock, strOut.c_str(), strOut.size() + 1, 0);
-                    //     }
-                    // }
+                    // Receive message
+                    int bytesIn = recv(sock, buf, 4096, 0);
+                    if (bytesIn <= 0)
+                    {
+                        // Drop the client
+                        onClientDisconnected(sock);
+                        close(sock); // Linux uses close(), not closesocket()
+                        FD_CLR(sock, &m_master);
+                    }
+                    else
+                    {
+                        onMessageReceived(sock, buf, bytesIn);
+                    }
                 }
             }
         }
     }
 
-    FD_CLR(m_socket, &m_master);
-    close(m_socket);
-
-    // std::string msg = "Server is shutting down. Goodbye\n";
-
-    for (int i = 0; i < FD_SETSIZE; i++)
-    {
-        int sock = m_master.fds_bits[i];
-        // send(sock, "bye bye", 9, 0);
-
-        FD_CLR(sock, &m_master);
-        close(sock);
+    // Clean up all sockets
+    // Linux cleanup loop
+    for (int i = 0; i <= m_max_fd; i++) {
+        if (FD_ISSET(i, &m_master)) {
+            close(i);
+        }
     }
 
+    // No WSACleanup needed
     return 0;
-
 }
 
-        // send message to client
-void TcpListener::sendToClient(int socket, const char* msg, int length){
-    send(socket, msg, length, 0);
-};
-    // broadcast message from client
-void TcpListener::broadcastToClients(int sending, const char* msg, int length){
-    for (int i = 0; i < FD_SETSIZE; i++)
-                    {
-                        int outSock = m_master.fds_bits[i];
-                        if (outSock != m_socket && outSock != sending)
-                        {
-                            sendToClient(outSock, msg, length);
-                        }
-                    }
-};
+void TcpListener::sendToClient(int clientSocket, const char* msg, int length)
+{
+    // recv/send on Linux are nearly identical, but strict types might require void* or char* casts depending on flags
+    send(clientSocket, msg, length, 0);
+}
 
-void TcpListener::onClientConnected(int client){ // client connected
+void TcpListener::broadcastToClients(int sendingClient, const char* msg, int length)
+{
+    // We cannot loop through fd_array on Linux. 
+    // We iterate up to m_max_fd and check if they are in the master set.
+    for (int i = 0; i <= m_max_fd; i++)
+    {
+        if (FD_ISSET(i, &m_master))
+        {
+            SOCKET outSock = i;
+            if (outSock != m_socket && outSock != sendingClient)
+            {
+                sendToClient(outSock, msg, length);
+            }
+        }
+    }
+}
 
+void TcpListener::onClientConnected(int clientSocket)
+{
+    // Implementation left to user
+}
 
-};
+void TcpListener::onClientDisconnected(int clientSocket)
+{
+    // Implementation left to user
+}
 
-void TcpListener::onClientDisconnected(int client){ // client disconnected
-
-
-};
-
-
-void TcpListener::onMessageReceived(int client, const char* msg, int length){ // message is received from client
-
-
-};
-
-
+void TcpListener::onMessageReceived(int clientSocket, const char* msg, int length)
+{
+    // Implementation left to user
+}
