@@ -47,7 +47,7 @@ char* key = std::getenv(env_key);
 
 
 // when the server receivees thee message from client
-void WebServer::onMessageReceived(int client, const char* msg, int length){
+void WebServer::onMessageReceived(int client, char* msg, int length){
 
     /*
     client (google) will sent a message in the form of:
@@ -71,10 +71,14 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     std::string parsed;
     if(!strncmp(msg, "GET", 4)){ // if this is a get request 
         unsigned int i = 0;
-        while(i<length && msg[i] != ' '){
+        while(i<length){
+            if(msg[i] == ' '){
+                msg[i] = '\0';
+                break;
+            }
             i++;
         }
-        parsed = std::string(msg+4,i);
+        parsed = msg+4;
 
     }
 
