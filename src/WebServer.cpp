@@ -30,7 +30,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    std::ifstream f; // reead from file
    std::string query; // query if the user searche something
    unsigned long size = 9;
-    
+    std::cout << msg << '\n';
    if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
     
     if(parsed[1] == "/"){ // reroute to home page 
@@ -40,7 +40,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         parsed[1] = "/search.html";
     }
         std::cout << parsed[1] <<'\t' << query << '\n';
-    
+
         f.open("www"+parsed[1]);
         if(f.good()){
             errorCode = 200;
