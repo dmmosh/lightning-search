@@ -47,7 +47,7 @@ char* key = std::getenv(env_key);
 
 
 // when the server receivees thee message from client
-void WebServer::onMessageReceived(int client, char* msg, int length){
+void WebServer::onMessageReceived(int client, const char* msg, int length){
 
     /*
     client (google) will sent a message in the form of:
@@ -68,10 +68,6 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
 
    std::vector<std::string> parsed((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
    
-    
-
-
-
 
    int errorCode = 404;
    std::ifstream f; // reead from file
@@ -79,14 +75,14 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
    std::cout << key << '\n';
    unsigned long size = 9;
    std::cout << "{\n";
-    std::cout << parsed[1];
+    std::cout << msg;
    std::cout << "}\n";
 
    const char* url = parsed[1].c_str()+1; // the url without the / at beginning, use strcmp and strncmp
 
 
     // if a request has been made, 
-   if(!parsed[1].empty()){ // < request type > < file or endpoint > < http type >
+   if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '/'){ // search query , has to be preceded by / because files cant be named as such 
             h_num = H_PAGE;
@@ -116,7 +112,7 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
         //std::cout << parsed[1] << '\n';
         if(f.good()){
             errorCode = 200;
-            // size is the size of header, size of parsed[1] file, and 
+            // size is the size of header, size of parsed file, and 
             size = std::filesystem::file_size(parsed[1]);
         }
         
