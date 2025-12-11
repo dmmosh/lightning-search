@@ -3,7 +3,7 @@
 
 // for multiple clients
 extern const char* headers[]; 
-extern uint16_t h_num; // header num
+extern int h_num; // header num
 
 class WebServer : public TcpListener
 {

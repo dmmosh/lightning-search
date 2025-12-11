@@ -24,7 +24,7 @@ const char* headers[] = {
     "Connection: close\r\n",
     
 }; 
-uint16_t h_num = 0; // header number
+int h_num = 0; // header number
 // macros for headers
 #define H_PAGE 0  // header for pages
 #define H_IMAGE 1 // header for images
