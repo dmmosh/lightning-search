@@ -23,8 +23,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 200 OK\r\n"
+                            "Connection: Keep-Alive\r\n"
+                            "Content-Encoding: gzip\r\n"
+                            "Cache-Control: public, max-age=31536000\r\n"
+                            "ETag: \"lightning-search\"\r\n"
                            "Content-Type: text/html; charset=UTF-8\r\n"
-                           "Transfer-Encoding: chunked\r\n"
+                           "Content-Length: "<< size <<"\r\n"
                            "\r\n"
                            << f.rdbuf();
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
