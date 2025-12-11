@@ -27,7 +27,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    oss <<                       "<h1>hello</h1>";
 
     std::string out = oss.str();
-    unsigned int size = oss.view().size()+1;
+    unsigned int size = oss.view().size();
     
 
    sendToClient(client, out.c_str(), size);
