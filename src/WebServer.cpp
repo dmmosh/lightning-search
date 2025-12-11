@@ -24,11 +24,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                            "Content-Type: text/html; charset=UTF-8\r\n"
                            "Transfer-Encoding: chunked\r\n"
                            "\r\n";
-    if(f.good()){
-        oss<< f.rdbuf(); // copy buffer from filestream to stringstream
-    } else {
-        oss << "<h1>404 Not Found</h1>";
-    }
+    oss<< f.rdbuf(); // copy buffer from filestream to stringstream
 
     
     unsigned int size = oss.view().size()+1;
