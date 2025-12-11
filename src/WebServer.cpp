@@ -75,7 +75,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }
         s = std::string(msg+4,i-4);
     }
-    std::cout << s << '\n';
+    std::cout << s << '"'<<'\n';
 
    int errorCode = 404;
    std::ifstream f; // reead from file
