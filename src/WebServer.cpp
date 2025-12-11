@@ -73,10 +73,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
     
     
-        if(parsed[1].find("/images")){ // if query contains images
-            h_num = H_IMAGE;
-
-        } else{ // if NOT images (pages)
             h_num = H_PAGE;
 
             if(parsed[1] == "/"){ // reroute to home page 
@@ -93,7 +89,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                     // size is the size of header, size of parsed file, and 
                     size = std::filesystem::file_size(parsed[1]);
             }
-        }
     }
 
    std::ostringstream oss; // output stream
