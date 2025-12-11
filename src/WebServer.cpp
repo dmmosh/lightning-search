@@ -17,7 +17,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     write the document back to the client
 
     */
-   std::ifstream f("../www/index.html"); // reead from file
+   std::ifstream f("./www/index.html"); // reead from file
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 200 OK\r\n";
    oss  <<                        "Cache-Control: no-cache, private\r\n";
