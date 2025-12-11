@@ -11,6 +11,7 @@
 /*
 
 "Cache-Control: public, max-age=31536000\r\n"
+"Connection: close\r\n",
 */
 
 const char* headers[] = {
@@ -20,7 +21,6 @@ const char* headers[] = {
 
     "Content-Type: image/x-icon\r\n"
     "Cache-Control: public, max-age=31536000\r\n"
-    "Connection: close\r\n",
     
 }; 
 int h_num = 0; // header number
