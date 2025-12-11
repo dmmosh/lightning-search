@@ -98,9 +98,10 @@ void WebServer::onMessageReceived(int client, char* msg, int length){
 
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
-                           "Connection: Keep-Alive\r\n"   
-    "ETag: \"lightning-search\"\r\n"
-    "Content-Type: text/html; charset=UTF-8\r\n"
+                           "Connection: Keep-Alive\r\n"
+                            "Cache-Control: public, max-age=31536000\r\n"
+                            "ETag: \"lightning-search\"\r\n"
+                           "Content-Type: text/html; charset=UTF-8\r\n"
                            "Content-Length: "<< size <<"\r\n"
                            "\r\n";
     
