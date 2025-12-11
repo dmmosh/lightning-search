@@ -74,7 +74,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     
         if(parsed[1].find("/images") != std::string::npos){ // if query contains images
             h_num = H_IMAGE;
-            f.open(parsed[1]);
+            f.open("www"+parsed[1], std::ios::in | std::ios::binary); // open image in binary mode
             if(f.good()){
                 errorCode = 200;
                 // size is the size of header, size of parsed file, and 
