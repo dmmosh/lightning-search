@@ -8,7 +8,7 @@
 #include <vector>
 #include <filesystem>
 
-extern const char* headers[] = {
+const char* headers[] = {
     "Connection: Keep-Alive\r\n"   // headers for pages
     "Cache-Control: public, max-age=31536000\r\n"
     "ETag: \"lightning-search\"\r\n"
