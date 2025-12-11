@@ -3,6 +3,7 @@
 
 // for multiple clients
 extern const char* headers[]; 
+extern uint16_t h_num; // header num
 
 class WebServer : public TcpListener
 {
@@ -13,5 +14,5 @@ public:
 protected:
 virtual void onClientConnected(int client); // client connected
 virtual void onClientDisconnected(int client); // client disconnected
-virtual void onMessageReceived(int client, const char* msg, int length); // message is received from client
+virtual void onMessageReceived(int client, char* msg, int length); // message is received from client
 };
