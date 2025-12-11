@@ -28,18 +28,23 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    
    int errorCode = 404;
    std::ifstream f; // reead from file
+   std::string query; // query if the user searche something
    unsigned long size = 9;
-
+    
    if(parsed.size() >= 3 && parsed[0] == "GET"){ // < request type > < file or endpoint > < http type >
-    std::cout << parsed[1] << "\n";
-
-        if(parsed[1] == "/"){ // reroute to home page 
-            parsed[1] = "/index.html";
-        }
-        
+    
+    if(parsed[1] == "/"){ // reroute to home page 
+        parsed[1] = "/index.html";
+    } else{
+        query = parsed[1];
+        parsed[1] = "/search.html";
+    }
+        std::cout << parsed[1] <<'\t' << query << '\n';
+    
         f.open("www"+parsed[1]);
         if(f.good()){
             errorCode = 200;
+            // size is the size of header, size of parsed file, and 
             size = std::filesystem::file_size("www"+parsed[1]);
         }
     }
