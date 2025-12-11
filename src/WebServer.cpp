@@ -39,7 +39,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         query = parsed[1];
         parsed[1] = "/search.html";
     }
-        std::cout << parsed[1] <<'\t' << query << '\n';
+        //std::cout << parsed[1] <<'\t' << query << '\n';
 
         f.open("www"+parsed[1]);
         if(f.good()){
