@@ -103,7 +103,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
         parsed[1].insert(0,"www");
 
-        f.open(parsed[1], std::ios::in | std::ios::binary); // open image in binary mode  
+        if(h_num == H_IMAGE){
+            f.open(parsed[1], std::ios::in | std::ios::binary); // open image in binary mode  
+        } else {
+            f.open(parsed[1]);
+        }
+
 
         if(f.good()){
             errorCode = 200;
