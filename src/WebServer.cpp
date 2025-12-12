@@ -59,15 +59,18 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
 
     when a file imports another file , client calls a message to the given 
+
+    only thing parsed: GET <header> , dont need other info as its organized into folders
     */
    
    // parse out the document requested
-   std::istringstream iss(msg);
+   //std::istringstream iss(msg);
 
   
 
    //std::vector<std::string> parsed((std::istream_iterator<std::string>(iss)), std::istream_iterator<std::string>());
-   std::string parsed;
+
+   std::string parsed; 
     if(!strncmp(msg,"GET",3)){
         unsigned int i = 4; // starts at 2nd argument 
         while(i<length and msg[i] != ' '){ // goes until end of string or blank char
@@ -78,7 +81,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
    int errorCode = 404;
    std::ifstream f; // reead from file
-   //std::future<cpr::Response>
+   std::future<cpr::Response> resp; // cpr async get request response
    //std::cout << key << '\n';
    unsigned long size = 9;
 //    std::cout << "{\n";
@@ -92,6 +95,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '/'){ // search query , has to be preceded by / because files cant be named as such 
+            //resp = cpr::GetAsync(cpr::Url{});
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
