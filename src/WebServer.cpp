@@ -94,7 +94,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     // if a request has been made, 
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
-        if(url[0] == '/'){ // search query , has to be preceded by / because files cant be named as such 
+        if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
             //resp = cpr::GetAsync(cpr::Url{});
             h_num = H_PAGE;
             parsed = "/search.html"; //
