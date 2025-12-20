@@ -89,8 +89,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
                                 cpr::Header{{"content-type","application/json"},
                                             {"x-api-key", (const char*)key}},
-                                cpr::Payload{{"{query","testing hello world"},
-                                            {"type","fast}"}}
+                                cpr::Body{{"query","testing hello world"},
+                                            {"type","fast"}}
                             );
             cpr::Response resp = resp_var.get();
             std::cout << resp.text << '\n';
