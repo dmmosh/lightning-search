@@ -34,8 +34,7 @@ const char* headers[] = {
 
 int h_num = 0; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
-char* key = std::getenv(env_key);
-const char* key_access = key;
+const char* key = std::getenv(env_key);
 
 // macros for headers
 #define H_PAGE 0  // header for pages
