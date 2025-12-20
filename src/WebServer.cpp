@@ -77,7 +77,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 //    std::cout << "{\n";
 //     std::cout << msg;
 //    std::cout << "}\n";
-    cpr::AsyncResponse* resp = nullptr;
+    cpr::AsyncResponse resp;
    const char* url = parsed.c_str()+1; // the url without the / at beginning, use strcmp and strncmp
 
 
@@ -86,13 +86,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
             
-            resp = new cpr::AsyncResponse(cpr::PostAsync(
+            resp = cpr::PostAsync(
                                 cpr::Url{"https://api.exa.ai/search"},
 
                                 cpr::Header{{"Content-Type","application/json"},
                                             {"x-api-key", (const char*)key}},
                                 cpr::Body{"{\"query\": \"hello world\", \"type\": \"fast\"}"}
-            ));
+            );
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
@@ -127,9 +127,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     }
 
     if(h_num == H_PAGE){
-        resp->wait();
-        cpr::Response response =  resp->get();
-        std::cout << response.text << '\n';
+        cpr::Response out = resp.get();
+        std::cout << out.text << '\n';
         
     }
 
