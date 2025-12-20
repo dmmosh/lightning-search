@@ -53,8 +53,11 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query){
 
         // Print the full matched subsequence (the 0th submatch)
         // matches[0] returns a std::sub_match object, which can be streamed or converted to a string.
-        std::cout << "Matched string: " << matches[0].str() << std::endl;
-        
+        for (const auto& match: matches){
+            std::cout << "Matched string: " << match.str() << std::endl;
+
+        }
+
         // You can also print the position of the match
         std::cout << "At position: " << matches.prefix().length() << std::endl;
     } else {
