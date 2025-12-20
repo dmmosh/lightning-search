@@ -25,6 +25,7 @@ const char* headers[] = {
 }; 
 
 
+
 // macros for headers
 #define H_PAGE 0  // header for pages
 #define H_IMAGE 1 // header for images
@@ -39,6 +40,31 @@ using json = nlohmann::json;
 int h_num = H_ERROR; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
 char* key = std::getenv(env_key);
+
+
+
+cpr::AsyncResponse WebServer::sendQuery(const char* query){
+    std::regex pattern("\\s[a-zA-Z0-9\\-.]+(\\.[a-zA-Z]{2,3})(/\\S*)?");
+    std::vector<std::string> matches;
+    json body = {
+        {"query",query},
+        {"type", "fast"}
+    };
+
+    return cpr::PostAsync(
+                        cpr::Url{"https://api.exa.ai/search"},
+
+                        cpr::Header{{"Content-Type","application/json"},
+                                    {"x-api-key", (const char*)key}},
+                        cpr::Body{body.dump().c_str()}
+                                );
+                                
+                                // cpr::Body{std::format("{\"query\": \"{}\",")}
+                                //             "\"type\": \"fast\"}",
+                                //             }
+
+};
+
 
 // when the server receivees thee message from client
 void WebServer::onMessageReceived(int client, const char* msg, int length){
@@ -88,14 +114,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
-            
-            resp = cpr::PostAsync(
-                                cpr::Url{"https://api.exa.ai/search"},
-
-                                cpr::Header{{"Content-Type","application/json"},
-                                            {"x-api-key", (const char*)key}},
-                                cpr::Body{"{\"query\": \"hello world\", \"type\": \"fast\"}"}
-            );
+            resp = sendQuery("hello world");
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page

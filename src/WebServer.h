@@ -10,11 +10,13 @@
 #include <filesystem>
 #include <cstring>
 #include <cstdlib> // Required for std::getenv
+#include <regex>
 #include <cpr/cpr.h>
 #include <nlohmann/json.hpp>
 
 // for multiple clients
 extern const char* headers[]; 
+extern const char* category[]; 
 
 
 class WebServer : public TcpListener
@@ -24,6 +26,7 @@ public:
         TcpListener(ip, port) {};
     
 protected:
+cpr::AsyncResponse sendQuery(const char* query);
 virtual void onClientConnected(int client); // client connected
 virtual void onClientDisconnected(int client); // client disconnected
 virtual void onMessageReceived(int client, const char* msg, int length); // message is received from client
