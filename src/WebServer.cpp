@@ -22,7 +22,7 @@ const char* headers[] = {
 
 }; 
 
-int h_num = 1; // header number
+int h_num = 0; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
 
 char* key = std::getenv(env_key);
