@@ -97,8 +97,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
+            h_num = H_PAGE;
             parsed = "/index.html";
-            h_num = 
         } else if(!strncmp(url, "css", 4)){ // if the folder is css
             h_num = H_CSS;
         } else if(!strncmp(url, "images", 7)){ // images are being loaded
