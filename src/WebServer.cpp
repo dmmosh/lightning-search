@@ -155,7 +155,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }
         
         //std::cout << parsed << '\n';
-        if(f.good()){
+        if(f.is_open() && f.good()){
             errorCode = 200;
             // size is the size of header, size of parsed file, and 
             size = std::filesystem::file_size(parsed);
@@ -185,7 +185,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                            "Content-Length: "<< size <<"\r\n"
                            "\r\n";
     
-    if(f.good()){ // write the opened file's buffer into ostringstream
+    if(f.is_open() && f.good()){ // write the opened file's buffer into ostringstream
         oss << f.rdbuf();
         f.close(); // close the file
     } else {
