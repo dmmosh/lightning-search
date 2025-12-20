@@ -22,12 +22,9 @@ const char* headers[] = {
 
 }; 
 
-int h_num = -1; // header number
-char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
-
-char* key = std::getenv(env_key);
 
 // macros for headers
+#define H_INVALID -1
 #define H_PAGE 0  // header for pages
 #define H_IMAGE 1 // header for images
 #define H_CSS 2 // header for css
@@ -35,7 +32,9 @@ char* key = std::getenv(env_key);
 
 #define QUERY parsed // only use if search query specified 
 
-
+int h_num = H_INVALID; // header number
+char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
+char* key = std::getenv(env_key);
 
 // when the server receivees thee message from client
 void WebServer::onMessageReceived(int client, const char* msg, int length){
@@ -110,7 +109,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
         if(h_num == H_IMAGE){
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
-        } else {
+        } else if (h_num != H_INVALID){
             f.open(parsed);
         }
 
