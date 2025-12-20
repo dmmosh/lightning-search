@@ -131,7 +131,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
-            resp = sendQuery(url+1); // everything after question mark is searched
+            //resp = sendQuery(url+1); // everything after question mark is searched
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
