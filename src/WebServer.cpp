@@ -87,7 +87,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             cpr::AsyncResponse resp_var = cpr::GetAsync(
                                 cpr::Url{"https://api.exa.ai/search"},
 
-                                cpr::Header{{"content-type","application/json"},
+                                cpr::Header{{"Content-Type","application/json"},
                                             {"x-api-key", (const char*)key}},
                                 cpr::Body{{"query","testing hello world"},
                                             {"type","fast"}}
