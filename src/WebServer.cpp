@@ -20,15 +20,17 @@ const char* headers[] = {
     "Content-Type: text/javascript\r\n"
     "ETag: \"lightning-search-js\"\r\n"
 
+    "Content-Type: text/plain\r\n"
+    "ETag: \"lightning-search-plain\"\r\n"
 }; 
 
 
 // macros for headers
-#define H_INVALID -1
 #define H_PAGE 0  // header for pages
 #define H_IMAGE 1 // header for images
 #define H_CSS 2 // header for css
 #define H_JS 3 // header for js
+#define H_INVALID 4 // headder for invalid 
 
 #define QUERY parsed // only use if search query specified 
 
@@ -96,6 +98,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
             parsed = "/index.html";
+            h_num = 
         } else if(!strncmp(url, "css", 4)){ // if the folder is css
             h_num = H_CSS;
         } else if(!strncmp(url, "images", 7)){ // images are being loaded
