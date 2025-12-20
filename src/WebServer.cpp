@@ -33,7 +33,7 @@ const char* headers[] = {
 }; 
 
 int h_num = 0; // header number
-char* env_key = "EXA1"; // goes up until it cant anymore 
+char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
 char* key = std::getenv(env_key);
 
 // macros for headers
@@ -81,7 +81,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
    int errorCode = 404;
    std::ifstream f; // reead from file
-   std::future<cpr::Response> resp; // cpr async get request response
+   cpr::AsyncResponse* resp;
    //std::cout << key << '\n';
    unsigned long size = 9;
 //    std::cout << "{\n";
@@ -95,7 +95,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
-            //resp = cpr::GetAsync(cpr::Url{});
+             resp = &cpr::GetAsync(cpr::Url{"https://api.exa.ai/search"},
+                                cpr::Header{"Content-Type", "application/json"},
+                                cpr::Header{"x-api-key", (const char*)key},
+                                cpr::Payload{{"type","fast"},{"query","testing hello world"}}
+                            );
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
@@ -127,6 +131,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             size = std::filesystem::file_size(parsed);
         }
         
+    }
+    if(h_num == H_PAGE){
+        cpr::Response response = resp->get();
+        std::cout << response.text << '\n';
+
+
     }
 
    std::ostringstream oss; // output stream
