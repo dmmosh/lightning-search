@@ -18,9 +18,9 @@ const char* headers[] = {
     "ETag: \"lightning-search-css\"\r\n",
 
     "Content-Type: text/javascript\r\n"
-    "ETag: \"lightning-search-js\"\r\n"
+    "ETag: \"lightning-search-js\"\r\n",
 
-    "Content-Type: text/plain\r\n"
+    "Content-Type: text/html\r\n"
     "ETag: \"lightning-search-plain\"\r\n"
 }; 
 
