@@ -81,7 +81,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
    int errorCode = 404;
    std::ifstream f; // reead from file
-   cpr::AsyncResponse* resp;
    //std::cout << key << '\n';
    unsigned long size = 9;
 //    std::cout << "{\n";
@@ -100,7 +99,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                                 cpr::Header{"x-api-key", (const char*)key},
                                 cpr::Payload{{"type","fast"},{"query","testing hello world"}}
                             );
-            resp = &resp_var;
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
@@ -133,12 +131,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }
         
     }
-    if(h_num == H_PAGE){
-        cpr::Response response = resp->get();
-        std::cout << response.text << '\n';
+    // if(h_num == H_PAGE){
+    //     cpr::Response response = resp->get();
+    //     std::cout << response.text << '\n';
 
 
-    }
+    // }
 
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
