@@ -158,6 +158,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             h_num = H_JS;
         }
         parsed.insert(0,"www");
+
         
         if(h_num == H_IMAGE){
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
@@ -171,7 +172,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             // size is the size of header, size of parsed file, and 
             size = std::filesystem::file_size(parsed);
         }
-        std::cout << h_num << '\n';
+        std::cout << h_num << '\t' << parsed<< '\n';
         
     }
 
