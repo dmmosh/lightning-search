@@ -44,7 +44,7 @@ char* key = std::getenv(env_key);
 
 
 cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
-    std::regex pattern("(?:^|\\s|\+|%20)(([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+)(?![:/.\\w]))");
+    std::regex pattern("(?:^|\\s|\\+|%20)(([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+)(?![:/.\\w]))");
     std::cmatch matches;
 
     // Use cregex_iterator for const char arrays
