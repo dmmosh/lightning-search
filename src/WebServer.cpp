@@ -86,7 +86,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
             
             cpr::AsyncResponse resp_var = cpr::PostAsync(
-                                cpr::Url{"http://www.httpbin.org/post"},
+                                cpr::Url{"https://api.exa.ai/search"},
 
                                 cpr::Header{{"Content-Type","application/json"},
                                             {"x-api-key", key.c_str()}},
