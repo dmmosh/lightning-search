@@ -88,8 +88,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             cpr::AsyncResponse resp_var = cpr::PostAsync(
                                 cpr::Url{"http://www.httpbin.org/post"},
 
-                                cpr::Header{{"Content-Type","application/json"},
-                                            {"x-api-key", key.c_str()}},
+                                cpr::Header{{"Content-Type","application/json"}},
                                 cpr::Payload{{"query","testing hello world"},
                                             {"type","fast"}}
             );
