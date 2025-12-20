@@ -30,11 +30,13 @@ const char* headers[] = {
 #define H_IMAGE 1 // header for images
 #define H_CSS 2 // header for css
 #define H_JS 3 // header for js
-#define H_INVALID 4 // headder for invalid 
+#define H_ERROR 4 // headder for invalid 
+#define SIZE_ERROR 9 // size of error 404 page (9 chars)
 
 #define QUERY parsed // only use if search query specified 
 
-int h_num = H_INVALID; // header number
+using json = nlohmann::json;
+int h_num = H_ERROR; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
 char* key = std::getenv(env_key);
 
@@ -74,7 +76,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    int errorCode = 404;
    std::ifstream f; // reead from file
    //std::cout << key << '\n';
-   unsigned long size = 9;
+   unsigned long size = SIZE_ERROR;
 //    std::cout << "{\n";
 //     std::cout << msg;
 //    std::cout << "}\n";
@@ -112,7 +114,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
         if(h_num == H_IMAGE){
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
-        } else if (h_num != H_INVALID){
+        } else if (h_num != H_ERROR){
             f.open(parsed);
         }
 
@@ -125,12 +127,20 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         
     }
 
-    if(resp.valid()){
-        cpr::Response out = resp.get();
-        std::cout << out.text << '\n';
-    } else {
-        std::cout << "response invalid\n";
+    json data; 
+    if(resp.valid()){ // a search is going on!!
+        cpr::Response out = resp.get(); // wait for response
+
+        if(out.status_code == 200){ // everything worked out
+            data = json::parse(out.text);
+            std::cout << data << '\n';        
+        } else { // if the api request fails, display error msg
+            errorCode = 404;
+            h_num = H_ERROR;
+            size = SIZE_ERROR;
+        }
     }
+    
 
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
