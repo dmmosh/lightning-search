@@ -63,24 +63,24 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
     while (it != end) {
         std::cmatch match = *it;
         body["includeDomains"].push_back(match[1].str());
-        std::cout << "*\t" << match[1].str()<< '\n';
+        //std::cout << "*\t" << match[1].str()<< '\n';
         ++it;
     }
-    std::cout << body << '\n';
+    //std::cout << body << '\n';
 
 
-    return cpr::PostAsync(cpr::Url{"https://httpbin.org/post"});
-    // return cpr::PostAsync(
-    //                     cpr::Url{"https://api.exa.ai/search"},
+    //return cpr::PostAsync(cpr::Url{"https://httpbin.org/post"});
+    return cpr::PostAsync(
+                        cpr::Url{"https://api.exa.ai/search"},
 
-    //                     cpr::Header{{"Content-Type","application/json"},
-    //                                 {"x-api-key", (const char*)key}},
-    //                     cpr::Body{body.dump().c_str()}
-    //                             );
+                        cpr::Header{{"Content-Type","application/json"},
+                                    {"x-api-key", (const char*)key}},
+                        cpr::Body{body.dump().c_str()}
+                                );
                                 
-    //                             // cpr::Body{std::format("{\"query\": \"{}\",")}
-    //                             //             "\"type\": \"fast\"}",
-    //                             //             }
+                                // cpr::Body{std::format("{\"query\": \"{}\",")}
+                                //             "\"type\": \"fast\"}",
+                                //             }
 
 };
 
