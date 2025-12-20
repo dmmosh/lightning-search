@@ -86,12 +86,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
             
             cpr::AsyncResponse resp_var = cpr::PostAsync(
-                                cpr::Url{"https://api.exa.ai/search"},
+                                cpr::Url{"http://www.httpbin.org/post"},
 
                                 cpr::Header{{"Content-Type","application/json"},
                                             {"x-api-key", key.c_str()}},
-                                cpr::Payload{{"{query","testing hello world"},
-                                            {"type","fast}"}}
+                                cpr::Payload{{"query","testing hello world"},
+                                            {"type","fast"}}
             );
             cpr::Response r = resp_var.get();
             std::cout << r.text << '\n';
