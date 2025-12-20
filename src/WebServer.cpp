@@ -22,7 +22,7 @@ const char* headers[] = {
 
 }; 
 
-int h_num = 0; // header number
+int h_num = 1; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
 
 char* key = std::getenv(env_key);
@@ -77,7 +77,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 //    std::cout << "{\n";
 //     std::cout << msg;
 //    std::cout << "}\n";
-
+    cpr::AsyncResponse* resp;
    const char* url = parsed.c_str()+1; // the url without the / at beginning, use strcmp and strncmp
 
 
@@ -86,15 +86,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
             
-            cpr::AsyncResponse resp_var = cpr::PostAsync(
+            resp = &(cpr::AsyncResponse)cpr::PostAsync(
                                 cpr::Url{"https://api.exa.ai/search"},
 
                                 cpr::Header{{"Content-Type","application/json"},
                                             {"x-api-key", (const char*)key}},
                                 cpr::Body{"{\"query\": \"hello world\", \"type\": \"fast\"}"}
             );
-            cpr::Response r = resp_var.get();
-            std::cout << r.text << '\n';
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
@@ -127,12 +125,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }
         
     }
-    // if(h_num == H_PAGE){
-    //     cpr::Response response = resp->get();
-    //     std::cout << response.text << '\n';
 
-
-    // }
+    if(h_num == H_PAGE){
+        cpr::Response response = resp->get();
+        std::cout << response.text << '\n';
+    }
 
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
