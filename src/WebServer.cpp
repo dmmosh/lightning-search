@@ -45,7 +45,35 @@ char* key = std::getenv(env_key);
 
 cpr::AsyncResponse WebServer::sendQuery(const char* query){
     std::regex pattern("\\s[a-zA-Z0-9\\-.]+(\\.[a-zA-Z]{2,3})(/\\S*)?");
-    std::vector<std::string> matches;
+    std::cmatch matches;
+
+    // Perform the search for a subsequence
+    if (std::regex_search(query, matches, pattern)) {
+        std::cout << "Subsequence found!" << std::endl;
+
+        // Print the full matched subsequence (the 0th submatch)
+        // matches[0] returns a std::sub_match object, which can be streamed or converted to a string.
+        std::cout << "Matched string: " << matches[0].str() << std::endl;
+        
+        // You can also print the position of the match
+        std::cout << "At position: " << matches.prefix().length() << std::endl;
+    } else {
+        std::cout << "No subsequence match found." << std::endl;
+    }
+
+    // Example using capture groups
+    const char* log_entry = "ERROR (42): Something went wrong.";
+    std::regex log_pattern(R"((ERROR|\w+)\s*\((.*?)\):\s*(.*))");
+    std::cmatch log_matches;
+
+    if (std::regex_search(log_entry, log_matches, log_pattern)) {
+        std::cout << "\nLog entry details:" << std::endl;
+        std::cout << "Full match: " << log_matches[0].str() << std::endl;
+        std::cout << "Type (Group 1): " << log_matches[1].str() << std::endl;
+        std::cout << "Code (Group 2): " << log_matches[2].str() << std::endl;
+        std::cout << "Message (Group 3): " << log_matches[3].str() << std::endl;
+    }
+
     json body = {
         {"query",query},
         {"type", "fast"}
