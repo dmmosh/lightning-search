@@ -77,7 +77,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 //    std::cout << "{\n";
 //     std::cout << msg;
 //    std::cout << "}\n";
-    cpr::AsyncResponse* resp;
+    cpr::AsyncResponse* resp = nullptr;
    const char* url = parsed.c_str()+1; // the url without the / at beginning, use strcmp and strncmp
 
 
