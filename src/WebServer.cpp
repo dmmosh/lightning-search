@@ -84,6 +84,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
+            try{
             cpr::AsyncResponse resp_var = cpr::GetAsync(
                                 cpr::Url{"https://api.exa.ai/search"},
 
@@ -92,7 +93,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                                 cpr::Body{{"query","testing hello world"},
                                             {"type","fast"}}
                             );
-            
+                        } catch (const std::length_error& e) {
+                            std::cerr << "Caught std::length_error: " << e.what() << std::endl;
+                        } catch (...) {
+                            std::cerr << "Caught an unknown exception" << std::endl;
+                        }
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
