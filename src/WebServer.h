@@ -5,7 +5,7 @@
 extern const char* headers[]; 
 
 extern char* env_key;
-extern std::string key;
+extern char* key;
 extern int h_num; // header num
 
 class WebServer : public TcpListener

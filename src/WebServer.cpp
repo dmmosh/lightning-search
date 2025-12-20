@@ -34,7 +34,7 @@ const char* headers[] = {
 
 int h_num = 0; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
-std::string key = std::getenv(env_key);
+char* key = std::getenv(env_key);
 
 // macros for headers
 #define H_PAGE 0  // header for pages
@@ -95,11 +95,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
-             resp = &cpr::GetAsync(cpr::Url{"https://api.exa.ai/search"},
+            cpr::AsyncResponse resp_var = cpr::GetAsync(cpr::Url{"https://api.exa.ai/search"},
                                 cpr::Header{"Content-Type", "application/json"},
-                                cpr::Header{"x-api-key", key.c_str()},
+                                cpr::Header{"x-api-key", (const char*)key},
                                 cpr::Payload{{"type","fast"},{"query","testing hello world"}}
                             );
+            resp = &resp_var;
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
