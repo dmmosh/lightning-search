@@ -157,12 +157,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
         }
-        parsed.insert(0,"www");
-
+        
         
         if(h_num == H_IMAGE){
+            parsed.insert(0,"www");
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
         } else if (h_num != H_ERROR){
+            parsed.insert(0,"www");
             f.open(parsed);
         }
         
