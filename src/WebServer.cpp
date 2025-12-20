@@ -167,11 +167,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }
 
         //std::cout << parsed << '\n';
-        // if(f.good()){
-        //     errorCode = 200;
-        //     // size is the size of header, size of parsed file, and 
-        //     size = std::filesystem::file_size(parsed);
-        // }
+        if(f.good()){
+            errorCode = 200;
+            // size is the size of header, size of parsed file, and 
+            size = std::filesystem::file_size(parsed);
+        }
         
     }
 
