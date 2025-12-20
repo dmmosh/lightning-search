@@ -74,7 +74,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    int errorCode = 404;
    std::ifstream f; // reead from file
    //std::cout << key << '\n';
-   unsigned long size = 9;
+   unsigned long size = 97; // error 404 file size
 //    std::cout << "{\n";
 //     std::cout << msg;
 //    std::cout << "}\n";
@@ -141,6 +141,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         oss << f.rdbuf();
         f.close(); // close the file
     } else {
+        oss << "<img src=\"https://media1.tenor.com/m/7NL8QR6JdZMAAAAC/epic-embed-fail-ryan-gosling.gif\">";
         oss << "error 404";
     }
                            
