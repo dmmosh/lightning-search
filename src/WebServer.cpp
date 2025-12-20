@@ -44,9 +44,17 @@ char* key = std::getenv(env_key);
 
 
 cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
-    std::regex pattern("(?:^|\\s|\\+|%20)(([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+)(?![:/.\\w]))");
-    std::cmatch matches;
+    
+    json body = {
+        {"query",query},
+        {"type", "fast"}
+    };
+    
 
+    // regex pattern for website matching 
+    // if website is found, itll exclusively search 
+    const std::regex pattern("(?:^|\\s|\\+|%20)(([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+)(?![:/.\\w]))");
+    std::cmatch matches;
     // Use cregex_iterator for const char arrays
     std::cregex_iterator it(query, query+length, pattern);
     std::cregex_iterator end; // Default constructor creates an end-of-sequence iterator
@@ -54,15 +62,12 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
     std::cout << "Found matches:" << std::endl;
     while (it != end) {
         std::cmatch match = *it;
-        std::cout << "* " << match[1].str() << " costs $" << match[2].str() << std::endl;
+        body["includeDomains"].push_back(match[1].str());
+        std::cout << "*\t" << match[1].str()<< '\n';
         ++it;
     }
+    std::cout << body << '\n';
 
-
-    json body = {
-        {"query",query},
-        {"type", "fast"}
-    };
 
     return cpr::PostAsync(cpr::Url{"https://httpbin.org/post"});
     // return cpr::PostAsync(
