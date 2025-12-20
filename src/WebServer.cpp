@@ -59,7 +59,7 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
     std::cregex_iterator it(query, query+length, pattern);
     std::cregex_iterator end; // Default constructor creates an end-of-sequence iterator
 
-    std::cout << "Found matches:" << std::endl;
+    //std::cout << "Found matches:" << std::endl;
     while (it != end) {
         std::cmatch match = *it;
         body["includeDomains"].push_back(match[1].str());
