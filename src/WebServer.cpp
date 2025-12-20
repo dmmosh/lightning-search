@@ -79,17 +79,18 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query){
         {"type", "fast"}
     };
 
-    return cpr::PostAsync(
-                        cpr::Url{"https://api.exa.ai/search"},
+    return cpr::PostAsync(cpr::Url{"https://httpbin.org/"});
+    // return cpr::PostAsync(
+    //                     cpr::Url{"https://api.exa.ai/search"},
 
-                        cpr::Header{{"Content-Type","application/json"},
-                                    {"x-api-key", (const char*)key}},
-                        cpr::Body{body.dump().c_str()}
-                                );
+    //                     cpr::Header{{"Content-Type","application/json"},
+    //                                 {"x-api-key", (const char*)key}},
+    //                     cpr::Body{body.dump().c_str()}
+    //                             );
                                 
-                                // cpr::Body{std::format("{\"query\": \"{}\",")}
-                                //             "\"type\": \"fast\"}",
-                                //             }
+    //                             // cpr::Body{std::format("{\"query\": \"{}\",")}
+    //                             //             "\"type\": \"fast\"}",
+    //                             //             }
 
 };
 
