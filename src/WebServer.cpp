@@ -44,7 +44,7 @@ char* key = std::getenv(env_key);
 
 
 cpr::AsyncResponse WebServer::sendQuery(const char* query){
-    std::regex pattern("\\s[a-zA-Z0-9\\-.]+(\\.[a-zA-Z]{2,3})(/\\S*)?");
+    std::regex pattern("(?<=^|\\s)[a-zA-Z0-9\\-.]+(\\.[a-zA-Z]{2,3})(/\\S*)?");
     std::cmatch matches;
 
     // Perform the search for a subsequence
