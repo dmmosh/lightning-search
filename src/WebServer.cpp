@@ -88,10 +88,10 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                                 cpr::Url{"https://api.exa.ai/search"},
 
                                 cpr::Header{{"content-type","application/json"},
-                                            {"x-api-key", (const char*)key}});
-                                // cpr::Body{{"query","testing hello world"},
-                                //             {"type","fast"}}
-                            //);
+                                            {"x-api-key", (const char*)key}},
+                                cpr::Body{{"query","testing hello world"},
+                                            {"type","fast"}}
+                            );
             cpr::Response resp = resp_var.get();
             std::cout << resp.text << '\n';
             h_num = H_PAGE;
