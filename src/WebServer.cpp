@@ -94,9 +94,14 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
-            cpr::AsyncResponse resp_var = cpr::GetAsync(cpr::Url{"https://api.exa.ai/search"},
-                                cpr::Header{"x-api-key", "12345"},
-                                cpr::Payload{{"type","fast"},{"query","testing hello world"}}
+            cpr::AsyncResponse resp_var = cpr::GetAsync(
+                                cpr::Url{"https://api.exa.ai/search"},
+                                
+                                cpr::Header{{"Content-Type", "application/json"},
+                                            {"x-api-key", (const char*)key}},
+
+                                cpr::Payload{{"type","fast"},
+                                            {"query","testing hello world"}}
                             );
             h_num = H_PAGE;
             parsed = "/search.html"; //
