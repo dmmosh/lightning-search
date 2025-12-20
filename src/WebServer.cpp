@@ -104,9 +104,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed.insert(0,"/images");
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
-        } else if(strncmp(url, "search.html",12) != 0) { // html page is being loaded and its not search 
-            h_num = H_PAGE;
-            
         }
 
         parsed.insert(0,"www");
@@ -127,7 +124,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     }
 
     if(h_num == H_PAGE){
-        resp.wait();
         cpr::Response out = resp.get();
         std::cout << out.text << '\n';
         
