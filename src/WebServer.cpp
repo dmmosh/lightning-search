@@ -92,8 +92,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                                 cpr::Body{{"query","testing hello world"},
                                             {"type","fast"}}
                             );
-            cpr::Response resp = resp_var.get();
-            std::cout << resp.status_code << '\n';
+            
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
