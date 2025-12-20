@@ -18,9 +18,9 @@ const char* headers[] = {
     "ETag: \"lightning-search-css\"\r\n",
 
     "Content-Type: text/javascript\r\n"
-    "ETag: \"lightning-search-js\"\r\n",
+    "ETag: \"lightning-search-js\"\r\n"
 
-    "Content-Type: text/html\r\n"
+    "Content-Type: text/plain\r\n"
     "ETag: \"lightning-search-plain\"\r\n"
 }; 
 
@@ -74,7 +74,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    int errorCode = 404;
    std::ifstream f; // reead from file
    //std::cout << key << '\n';
-   unsigned long size = 97; // error 404 file size
+   unsigned long size = 9;
 //    std::cout << "{\n";
 //     std::cout << msg;
 //    std::cout << "}\n";
@@ -141,7 +141,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         oss << f.rdbuf();
         f.close(); // close the file
     } else {
-        oss << "<img src=\"https://media1.tenor.com/m/7NL8QR6JdZMAAAAC/epic-embed-fail-ryan-gosling.gif\">";
         oss << "error 404";
     }
                            
