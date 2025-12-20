@@ -1,5 +1,16 @@
 #pragma once
 #include "header.h"
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <istream>
+#include <iterator>
+#include <fstream>
+#include <vector>
+#include <filesystem>
+#include <cstring>
+#include <cstdlib> // Required for std::getenv
+#include <cpr/cpr.h>
 
 // for multiple clients
 extern const char* headers[]; 
