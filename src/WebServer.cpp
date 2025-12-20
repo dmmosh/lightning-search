@@ -102,6 +102,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                                 cpr::Payload{{"type","fast"},
                                             {"query","testing hello world"}}
                             );
+            cpr::Response resp = resp_var.get();
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
