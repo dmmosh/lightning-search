@@ -157,7 +157,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
         }
-
+        std::cout << h_num << '\n';
         parsed.insert(0,"www");
 
         if(h_num == H_IMAGE){
