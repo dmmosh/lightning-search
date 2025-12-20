@@ -10,6 +10,7 @@
 #include <cstring>
 #include <cstdlib> // Required for std::getenv
 #include <cpr/cpr.h>
+#include <cpr/async.h>
 
 /*
 
