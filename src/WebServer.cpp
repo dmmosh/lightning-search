@@ -167,7 +167,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     }
     
 
-    std::string results = "<script>let results =</script>";
+    std::string results = "<script>let results =;</script>";
     if(resp.valid()){ // a search is going on!!
         cpr::Response out = resp.get(); // wait for response
 
