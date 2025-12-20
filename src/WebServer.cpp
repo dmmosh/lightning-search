@@ -11,6 +11,7 @@
 #include <cstdlib> // Required for std::getenv
 #include <cpr/cpr.h>
 #include <cpr/async.h>
+#include <cpr/async_wrapper.h>
 
 /*
 
