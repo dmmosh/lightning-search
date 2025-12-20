@@ -127,9 +127,9 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     }
 
     if(h_num == H_PAGE){
-        
-        delete resp;
-        resp = nullptr;
+        resp->wait();
+        cpr::Response response =  resp->get();
+        std::cout << response.text << '\n';
         
     }
 
