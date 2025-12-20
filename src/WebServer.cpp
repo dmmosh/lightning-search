@@ -89,7 +89,9 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                                 cpr::Url{"https://api.exa.ai/search"},
 
                                 cpr::Header{{"Content-Type","application/json"},
-                                            {"x-api-key", key.c_str()}}
+                                            {"x-api-key", key.c_str()}},
+                                cpr::Body{{"vdsfjkhdjk","testing hello world"},
+                                            {"type","fast"}}
             );
             cpr::Response r = resp_var.get();
             std::cout << r.text << '\n';
