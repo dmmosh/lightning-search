@@ -165,14 +165,14 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         //std::cout << h_num << '\t' << parsed<< '\n';
         
     }
+    
 
-    json data; 
+    std::string results = "<script>let results =</script>";
     if(resp.valid()){ // a search is going on!!
         cpr::Response out = resp.get(); // wait for response
 
         if(out.status_code == 200){ // everything worked out
-            data = json::parse(out.text);
-            std::cout << data << '\n';        
+            results.insert(22,out.text);    
         } else { // if the api request fails, display error msg
             errorCode = 404;
             h_num = H_ERROR;
@@ -180,7 +180,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }
     }
     
-
+    std::cout << results << '\n';
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
                             << headers[h_num] << 
