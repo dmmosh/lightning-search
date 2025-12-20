@@ -26,7 +26,7 @@ public:
         TcpListener(ip, port) {};
     
 protected:
-cpr::AsyncResponse sendQuery(const char* query);
+cpr::AsyncResponse sendQuery(const char* query, unsigned int length);
 virtual void onClientConnected(int client); // client connected
 virtual void onClientDisconnected(int client); // client disconnected
 virtual void onMessageReceived(int client, const char* msg, int length); // message is received from client

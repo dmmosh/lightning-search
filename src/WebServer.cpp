@@ -43,25 +43,19 @@ char* key = std::getenv(env_key);
 
 
 
-cpr::AsyncResponse WebServer::sendQuery(const char* query){
-    std::regex pattern("(?:^|\\s|\\+|%20:)(([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+)(?![:/.\\w]))");
+cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
+    std::regex pattern("(?:^|\\s|\+|%20)(([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+)(?![:/.\\w]))");
     std::cmatch matches;
 
-    // Perform the search for a subsequence
-    if (std::regex_search(query, matches, pattern)) {
-        std::cout << "Subsequence found!" << std::endl;
+    // Use cregex_iterator for const char arrays
+    std::cregex_iterator it(query, query+length, pattern);
+    std::cregex_iterator end; // Default constructor creates an end-of-sequence iterator
 
-        // Print the full matched subsequence (the 0th submatch)
-        // matches[0] returns a std::sub_match object, which can be streamed or converted to a string.
-        for (const auto& match: matches){
-            std::cout << "Matched string: " << match.str() << std::endl;
-
-        }
-
-        // You can also print the position of the match
-        std::cout << "At position: " << matches.prefix().length() << std::endl;
-    } else {
-        std::cout << "No subsequence match found." << std::endl;
+    std::cout << "Found matches:" << std::endl;
+    while (it != end) {
+        std::cmatch match = *it;
+        std::cout << "* " << match[1].str() << " costs $" << match[2].str() << std::endl;
+        ++it;
     }
 
 
@@ -134,7 +128,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    if(!parsed.empty() && parsed[0] == '/'){ // < request type > < file or endpoint > < http type >
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
-            resp = sendQuery(url+1); // everything after question mark is searched
+            resp = sendQuery(url+1, parsed.length()-2); // everything after / and question mark is searched
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
