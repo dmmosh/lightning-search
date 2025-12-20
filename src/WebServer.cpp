@@ -157,21 +157,21 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
         }
-        std::cout << h_num << '\n';
         parsed.insert(0,"www");
-
+        
         if(h_num == H_IMAGE){
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
         } else if (h_num != H_ERROR){
             f.open(parsed);
         }
-
+        
         //std::cout << parsed << '\n';
         if(f.is_open() && f.good()){
             errorCode = 200;
             // size is the size of header, size of parsed file, and 
             size = std::filesystem::file_size(parsed);
         }
+        std::cout << h_num << '\n';
         
     }
 
