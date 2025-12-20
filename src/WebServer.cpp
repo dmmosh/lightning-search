@@ -85,13 +85,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
         if(url[0] == '?'){ // search query , has to be preceded by / because files cant be named as such 
             
-            resp = cpr::PostAsync(
-                                cpr::Url{"https://api.exa.ai/search"},
+            // resp = cpr::PostAsync(
+            //                     cpr::Url{"https://api.exa.ai/search"},
 
-                                cpr::Header{{"Content-Type","application/json"},
-                                            {"x-api-key", (const char*)key}},
-                                cpr::Body{"{\"query\": \"hello world\", \"type\": \"fast\"}"}
-            );
+            //                     cpr::Header{{"Content-Type","application/json"},
+            //                                 {"x-api-key", (const char*)key}},
+            //                     cpr::Body{"{\"query\": \"hello world\", \"type\": \"fast\"}"}
+            // );
             h_num = H_PAGE;
             parsed = "/search.html"; //
         }else if(url[0] == '\0'){ // if nothing , main page
@@ -122,11 +122,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         
     }
 
-    if(h_num == H_PAGE){
-        cpr::Response out = resp.get();
-        std::cout << out.text << '\n';
+    // if(h_num == H_PAGE){
+    //     cpr::Response out = resp.get();
+    //     std::cout << out.text << '\n';
         
-    }
+    // }
 
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
