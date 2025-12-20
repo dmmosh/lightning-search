@@ -61,18 +61,6 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query){
         std::cout << "No subsequence match found." << std::endl;
     }
 
-    // Example using capture groups
-    const char* log_entry = "ERROR (42): Something went wrong.";
-    std::regex log_pattern(R"((ERROR|\w+)\s*\((.*?)\):\s*(.*))");
-    std::cmatch log_matches;
-
-    if (std::regex_search(log_entry, log_matches, log_pattern)) {
-        std::cout << "\nLog entry details:" << std::endl;
-        std::cout << "Full match: " << log_matches[0].str() << std::endl;
-        std::cout << "Type (Group 1): " << log_matches[1].str() << std::endl;
-        std::cout << "Code (Group 2): " << log_matches[2].str() << std::endl;
-        std::cout << "Message (Group 3): " << log_matches[3].str() << std::endl;
-    }
 
     json body = {
         {"query",query},
@@ -172,23 +160,23 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             // size is the size of header, size of parsed file, and 
             size = std::filesystem::file_size(parsed);
         }
-        std::cout << h_num << '\t' << parsed<< '\n';
+        //std::cout << h_num << '\t' << parsed<< '\n';
         
     }
 
-    // json data; 
-    // if(resp.valid()){ // a search is going on!!
-    //     cpr::Response out = resp.get(); // wait for response
+    json data; 
+    if(resp.valid()){ // a search is going on!!
+        cpr::Response out = resp.get(); // wait for response
 
-    //     if(out.status_code == 200){ // everything worked out
-    //         data = json::parse(out.text);
-    //         std::cout << data << '\n';        
-    //     } else { // if the api request fails, display error msg
-    //         errorCode = 404;
-    //         h_num = H_ERROR;
-    //         size = SIZE_ERROR;
-    //     }
-    // }
+        if(out.status_code == 200){ // everything worked out
+            data = json::parse(out.text);
+            std::cout << data << '\n';        
+        } else { // if the api request fails, display error msg
+            errorCode = 404;
+            h_num = H_ERROR;
+            size = SIZE_ERROR;
+        }
+    }
     
 
    std::ostringstream oss; // output stream
