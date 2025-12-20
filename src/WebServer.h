@@ -11,6 +11,7 @@
 #include <cstring>
 #include <cstdlib> // Required for std::getenv
 #include <cpr/cpr.h>
+#include <nlohmann/json.hpp>
 
 // for multiple clients
 extern const char* headers[]; 

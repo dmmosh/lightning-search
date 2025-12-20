@@ -24,7 +24,8 @@ const char* headers[] = {
 
 int h_num = 0; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
-std::string key = std::getenv(env_key);
+
+char* key = std::getenv(env_key);
 
 // macros for headers
 #define H_PAGE 0  // header for pages
@@ -89,7 +90,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                                 cpr::Url{"https://api.exa.ai/search"},
 
                                 cpr::Header{{"Content-Type","application/json"},
-                                            {"x-api-key", key.c_str()}},
+                                            {"x-api-key", (const char*)key}},
                                 cpr::Body{"{\"query\": \"hello world\", \"type\": \"fast\"}"}
             );
             cpr::Response r = resp_var.get();
