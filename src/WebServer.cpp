@@ -176,19 +176,19 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         
     }
 
-    json data; 
-    if(resp.valid()){ // a search is going on!!
-        cpr::Response out = resp.get(); // wait for response
+    // json data; 
+    // if(resp.valid()){ // a search is going on!!
+    //     cpr::Response out = resp.get(); // wait for response
 
-        if(out.status_code == 200){ // everything worked out
-            data = json::parse(out.text);
-            std::cout << data << '\n';        
-        } else { // if the api request fails, display error msg
-            errorCode = 404;
-            h_num = H_ERROR;
-            size = SIZE_ERROR;
-        }
-    }
+    //     if(out.status_code == 200){ // everything worked out
+    //         data = json::parse(out.text);
+    //         std::cout << data << '\n';        
+    //     } else { // if the api request fails, display error msg
+    //         errorCode = 404;
+    //         h_num = H_ERROR;
+    //         size = SIZE_ERROR;
+    //     }
+    // }
     
 
    std::ostringstream oss; // output stream
