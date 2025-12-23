@@ -11,7 +11,8 @@ const char* headers[] = {
     "image/x-icon",
     "text/css",
     "text/javascript",
-    "text/plain"
+    "text/plain",
+    "application/json"
 }; 
 
 
@@ -22,13 +23,14 @@ const char* headers[] = {
 #define H_IMAGE 1 // header for images
 #define H_CSS 2 // header for css
 #define H_JS 3 // header for js
-#define H_ERROR 4 // headder for invalid 
+#define H_PLAIN 4 // headder for invalid 
+#define H_JSON 5
 #define SIZE_ERROR 9 // size of error 404 page (9 chars)
 
 #define QUERY parsed // only use if search query specified 
 
 using json = nlohmann::json;
-int h_num = H_ERROR; // header number
+int h_num = H_PLAIN; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
 char* key = std::getenv(env_key);
 
@@ -128,7 +130,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             h_num = H_PAGE;
             parsed = "/search.html"; //
         } else if(!strncmp(url,"ac?",4)){ // autocomplete feature as defined by opensearch.xml file
-
+            h_num=H_JSON;
+            parsed="/testac.json";
         }else if(url[0] == '\0'){ // if nothing , main page
             h_num = H_PAGE;
             parsed = "/index.html";
@@ -145,7 +148,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         parsed.insert(0,"www");
         if(h_num == H_IMAGE){
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
-        } else if (h_num != H_ERROR){
+        } else if (h_num != H_PLAIN){
             f.open(parsed);
         }
         
@@ -172,7 +175,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
         } else { // if the api request fails, display error msg
             errorCode = 404;
-            h_num = H_ERROR;
+            h_num = H_PLAIN;
             size = SIZE_ERROR;
         }
     }
