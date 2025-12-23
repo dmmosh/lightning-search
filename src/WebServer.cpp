@@ -24,7 +24,7 @@ const char* headers[] = {
     "ETag: \"lightning-search-plain\"\r\n",
 
     "Content-Type: application/xml\r\n"
-    "ETag: \"lightning-search-plain\"\r\n"
+    "ETag: \"lightning-search-xml\"\r\n"
     
 }; 
 
@@ -151,7 +151,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed.insert(0,"/images");
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
-        } else if(!strncmp(url, "xml",4)){
+        } else if(!strncmp(url, "xml",4)){ // opensearch xml files
             h_num = H_XML;
         }
         
