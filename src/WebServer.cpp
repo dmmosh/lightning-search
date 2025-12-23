@@ -23,7 +23,7 @@ const char* headers[] = {
     "Content-Type: text/plain\r\n"
     "ETag: \"lightning-search-plain\"\r\n",
 
-    "Content-Type: application/xml\r\n"
+    "Content-Type: application/opensearchdescription+xml\r\n"
     "ETag: \"lightning-search-xml\"\r\n"
     
 }; 
