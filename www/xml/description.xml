@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Lightning Search</ShortName>
+  <Description>Fastest search available.</Description>
+  <Tags>web</Tags>
+  <Contact>dmmosh2005@gmail.com</Contact>
+  <Url type="application/rss+xml"
+       template="http://localhost:8080/?{searchTerms}"/>
+    
+</OpenSearchDescription>

@@ -18,10 +18,14 @@ const char* headers[] = {
     "ETag: \"lightning-search-css\"\r\n",
 
     "Content-Type: text/javascript\r\n"
-    "ETag: \"lightning-search-js\"\r\n"
+    "ETag: \"lightning-search-js\"\r\n",
 
     "Content-Type: text/plain\r\n"
+    "ETag: \"lightning-search-plain\"\r\n",
+
+    "Content-Type: application/xml\r\n"
     "ETag: \"lightning-search-plain\"\r\n"
+    
 }; 
 
 
@@ -32,6 +36,7 @@ const char* headers[] = {
 #define H_CSS 2 // header for css
 #define H_JS 3 // header for js
 #define H_ERROR 4 // headder for invalid 
+#define H_XML 5 // xml file for opensearch browser detection 
 #define SIZE_ERROR 9 // size of error 404 page (9 chars)
 
 #define QUERY parsed // only use if search query specified 
@@ -146,6 +151,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed.insert(0,"/images");
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
+        } else if(!strncmp(url, "xml",4)){
+            h_num = H_XML;
         }
         
         
