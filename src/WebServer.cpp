@@ -7,26 +7,13 @@
 */
 
 const char* headers[] = {
-    "Connection: Keep-Alive\r\n"  
-    "ETag: \"lightning-search-html\"\r\n"
-    "Content-Type: text/html; charset=UTF-8\r\n",
-    
-    "Content-Type: image/x-icon\r\n"
-    "Connection: close\r\n",
-
-    "Content-Type: text/css\r\n",
-    "ETag: \"lightning-search-css\"\r\n",
-
-    "Content-Type: text/javascript\r\n"
-    "ETag: \"lightning-search-js\"\r\n",
-
-    "Content-Type: text/plain\r\n"
-    "ETag: \"lightning-search-plain\"\r\n",
-
-    "Content-Type: application/opensearchdescription+xml\r\n"
-    "ETag: \"lightning-search-xml\"\r\n"
-    
+    "text/html",
+    "image/x-icon",
+    "text/css",
+    "text/javascript",
+    "text/plain"
 }; 
+
 
 
 
@@ -36,7 +23,6 @@ const char* headers[] = {
 #define H_CSS 2 // header for css
 #define H_JS 3 // header for js
 #define H_ERROR 4 // headder for invalid 
-#define H_XML 5 // xml file for opensearch browser detection 
 #define SIZE_ERROR 9 // size of error 404 page (9 chars)
 
 #define QUERY parsed // only use if search query specified 
@@ -141,6 +127,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             resp = sendQuery(url+1, parsed.length()-2); // everything after / and question mark is searched
             h_num = H_PAGE;
             parsed = "/search.html"; //
+        } else if(!strncmp(url,"ac?",4)){ // autocomplete feature as defined by opensearch.xml file
+
         }else if(url[0] == '\0'){ // if nothing , main page
             h_num = H_PAGE;
             parsed = "/index.html";
@@ -151,13 +139,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed.insert(0,"/images");
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
             h_num = H_JS;
-        } else if(!strncmp(url, "xml",4)){ // opensearch xml files
-            h_num = H_XML;
         }
         
         
         parsed.insert(0,"www");
-        if(h_num == H_IMAGE || h_num == H_XML){
+        if(h_num == H_IMAGE){
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
         } else if (h_num != H_ERROR){
             f.open(parsed);
@@ -193,7 +179,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     
    std::ostringstream oss; // output stream
    oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
-                            << headers[h_num] << 
+                            "Content-Type:"<< headers[h_num] <<"\r\n"
+                            "ETag: \"ls-"<< headers[h_num] <<"\"\r\n"
                            "Content-Length: "<< size <<"\r\n"
                            "\r\n";
     
