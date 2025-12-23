@@ -157,7 +157,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         
         
         parsed.insert(0,"www");
-        if(h_num == H_IMAGE){
+        if(h_num == H_IMAGE || h_num == H_XML){
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
         } else if (h_num != H_ERROR){
             f.open(parsed);
