@@ -250,7 +250,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     } else {
         oss << "error 404";
     }
-                           
+    std::cout << oss.str() << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
     
 
