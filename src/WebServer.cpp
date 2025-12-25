@@ -12,7 +12,7 @@ const char* headers[] = {
     "text/css",
     "text/javascript",
     "text/plain",
-    "application/json"
+    "application/javascript"
 }; 
 
 
