@@ -12,7 +12,7 @@ const char* headers[] = {
     "text/css",
     "text/javascript",
     "text/plain",
-    "text/plain"
+    "application/json"
 }; 
 
 
@@ -173,6 +173,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed = "/search.html"; //
         } else if(!strncmp(url, "ac?", 3)){ // autocomplete feature as defined by opensearch.xml file
             parsed = std::string("[\"")+ (parsed.c_str()+3) + "\": [\""+ (parsed.c_str()+3) +" \"]]";
+            std::coud << parsed << '\n';
             errorCode = 200;
             size = parsed.length()-1;
             h_num=H_JSON;
