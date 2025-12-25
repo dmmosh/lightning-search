@@ -77,6 +77,28 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
 
 };
 
+unsigned int WebServer::lastWord(const std::string& word){
+    // word is guranteed to start at ac?
+    // will iterate from the end to the beginning
+    unsigned int i = word.length(); // will always check the character before and return the current one
+    while(true){
+        switch(word[i-1]){
+            case '?': // end of word
+            case '+': // space 
+                return i;
+                break;
+            case '0':
+                if(word[i-2] == '2' && word[i-3] == '%') { // if the previous 3 characters are %20,
+                    return i;
+                }
+            default: // every other char 
+                i-=1;
+        }
+    }
+
+};
+
+
 
 // when the server receivees thee message from client
 void WebServer::onMessageReceived(int client, const char* msg, int length){
@@ -130,8 +152,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             h_num = H_PAGE;
             parsed = "/search.html"; //
         } else if(!strncmp(url,"ac?",4)){ // autocomplete feature as defined by opensearch.xml file
+            lastWord(parsed);  // changes the parsed to the LAST WORD or question mark
             h_num=H_JSON;
-            parsed="/testac.json";
         }else if(url[0] == '\0'){ // if nothing , main page
             h_num = H_PAGE;
             parsed = "/index.html";
@@ -145,11 +167,10 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }
         
         
-        parsed.insert(0,"www");
         if(h_num == H_IMAGE){
-            f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
+            f.open("www"+parsed, std::ios::in | std::ios::binary); // open image in binary mode  
         } else if (h_num != H_PLAIN){
-            f.open(parsed);
+            f.open("www"+parsed);
         }
         
         //std::cout << parsed << '\n';
@@ -191,8 +212,13 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         if(out.status_code == 200){ // if search happened, append script to the beginning
             oss<< results;
         }
-        oss << f.rdbuf();
-        f.close(); // close the file
+        if(h_num == H_JSON){ // if json, imitate a json document
+            oss << '[' << 
+        } else { // if not json (most of the time)
+            oss << f.rdbuf();
+            f.close(); // close the file
+
+        }
     } else {
         oss << "error 404";
     }

@@ -27,6 +27,7 @@ public:
     
 protected:
 cpr::AsyncResponse sendQuery(const char* query, unsigned int length);
+unsigned int lastWord(const std::string& word); // client connected
 virtual void onClientConnected(int client); // client connected
 virtual void onClientDisconnected(int client); // client disconnected
 virtual void onMessageReceived(int client, const char* msg, int length); // message is received from client
