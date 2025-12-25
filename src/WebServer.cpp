@@ -244,7 +244,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             
         }
     }else if(h_num == H_JSON){
-        oss << ;
+        oss << parsed;
             
     } else {
         oss << "error 404";
