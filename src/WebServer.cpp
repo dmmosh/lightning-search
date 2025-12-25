@@ -235,12 +235,14 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             oss<< results;
         }
         if(h_num == H_JSON){ // if json, imitate a json document
-            oss << '['  << '['  << "]]";
         } else { // if not json (most of the time)
             oss << f.rdbuf();
             f.close(); // close the file
-
+            
         }
+    }else if(h_num == H_JSON){
+        oss << "[\""<< parsed.c_str()+3 << "\": [\""<< parsed.c_str()+3 <<" \"]]";
+            
     } else {
         oss << "error 404";
     }
