@@ -15,7 +15,6 @@
 
 // for multiple clients
 extern const char* headers[]; 
-extern const char* category[]; 
 
 
 class WebServer : public TcpListener
