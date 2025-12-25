@@ -81,7 +81,7 @@ unsigned int WebServer::lastWord(const std::string& word){
     // word is guranteed to start at ac?
     // will iterate from the end to the beginning
     unsigned int i = word.length(); // will always check the character before and return the current one
-    while(true){
+    while(i>0){
         switch(word[i-1]){
             case '?': // end of word
             case '+': // space 
@@ -91,6 +91,7 @@ unsigned int WebServer::lastWord(const std::string& word){
                 if(word[i-2] == '2' && word[i-3] == '%') { // if the previous 3 characters are %20,
                     return i;
                 }
+                break;
             default: // every other char 
                 i-=1;
         }
@@ -152,7 +153,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             h_num = H_PAGE;
             parsed = "/search.html"; //
         } else if(!strncmp(url,"ac?",4)){ // autocomplete feature as defined by opensearch.xml file
-            lastWord(parsed);  // changes the parsed to the LAST WORD or question mark
+            std::cout << parsed.substr(lastWord(parsed)) << '\n'; 
             h_num=H_JSON;
         }else if(url[0] == '\0'){ // if nothing , main page
             h_num = H_PAGE;
@@ -213,7 +214,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             oss<< results;
         }
         if(h_num == H_JSON){ // if json, imitate a json document
-            oss << '[' << 
+            oss << '['  << '['  << "]]";
         } else { // if not json (most of the time)
             oss << f.rdbuf();
             f.close(); // close the file
