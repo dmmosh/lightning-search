@@ -114,6 +114,7 @@ unsigned int WebServer::lastWord(const std::string& word){
                 i-=1;
         }
     }
+    return word.length();
 
 };
 
