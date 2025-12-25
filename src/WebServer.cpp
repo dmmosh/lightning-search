@@ -193,7 +193,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         if(h_num == H_IMAGE){
             parsed.insert(0,"www");
             f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
-        } else if (h_num != H_PLAIN){
+        } else if (h_num != H_PLAIN && h_num != H_JSON){
             parsed.insert(0,"www");
             f.open(parsed);
         }
