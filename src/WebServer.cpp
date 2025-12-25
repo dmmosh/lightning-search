@@ -171,7 +171,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             resp = sendQuery(url+1, parsed.length()-2); // everything after / and question mark is searched
             h_num = H_PAGE;
             parsed = "/search.html"; //
-        } else if(parsed.contains("ac?")){ // autocomplete feature as defined by opensearch.xml file
+        } else if(parsed.find("ac?") != std::string::npos){ // autocomplete feature as defined by opensearch.xml file
             std::cout << "kvdjfnlkvjdfkji" << '\n'; 
             h_num=H_JSON;
         }else if(url[0] == '\0'){ // if nothing , main page
