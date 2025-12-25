@@ -172,10 +172,10 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             h_num = H_PAGE;
             parsed = "/search.html"; //
         } else if(!strncmp(url, "ac?", 3)){ // autocomplete feature as defined by opensearch.xml file
-            parsed = std::string("{[\"")+ (parsed.c_str()+3) + "\", [\""+ (parsed.c_str()+3) +" \"]]}";
+            parsed = std::string("[\"")+ (parsed.c_str()+3) + "\", [\""+ (parsed.c_str()+3) +" \"]]";
             std::cout << parsed << '\n';
             errorCode = 200;
-            size = parsed.length()-1;
+            size = parsed.length();
             h_num=H_JSON;
         }else if(url[0] == '\0'){ // if nothing , main page
             h_num = H_PAGE;
