@@ -29,7 +29,7 @@ const char* headers[] = {
 
 #define QUERY parsed // only use if search query specified 
 
-using json = nlohmann::json;
+//using json = nlohmann::json;
 int h_num = H_PLAIN; // header number
 char* env_key = "EXA1"; // goes up (env_key[3]) until it cant anymore 
 char* key = std::getenv(env_key);
@@ -38,27 +38,45 @@ char* key = std::getenv(env_key);
 
 cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
     
-    json body = {
-        {"query",query},
-        {"type", "fast"}
-    };
+    // json body = {
+    //     {"query",query},
+    //     {"type", "fast"}
+    // };
+    
     
 
     // regex pattern for website matching 
     // if website is found, itll exclusively search 
-    const std::regex pattern("(?:^|\\s|\\+|%20)(([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+)(?![:/.\\w]))");
-    std::cmatch matches;
+    static const std::regex pattern("(?:^|\\s|\\+|%20)(([a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+)(?![:/.\\w]))");
+    //std::cmatch matches;
     // Use cregex_iterator for const char arrays
     std::cregex_iterator it(query, query+length, pattern);
     std::cregex_iterator end; // Default constructor creates an end-of-sequence iterator
 
+    std::ostringstream oss; // output stream
+    oss << "{ \"type\": \"fast\", "
+                 "\"query\": \"" << query << '\"';
+
     //std::cout << "Found matches:" << std::endl;
-    while (it != end) {
-        std::cmatch match = *it;
-        body["includeDomains"].push_back(match[1].str());
-        //std::cout << "*\t" << match[1].str()<< '\n';
-        ++it;
+    if(it != end){ // if matches found, (iterator is not at the end)
+        oss << ", \"includeDomains\": [";
+
+        while (it != end) {
+            std::cmatch match = *it;
+            //body["includeDomains"].push_back(match[1].str());
+            oss << '\"' << match[1].str() << '\"';
+            //std::cout << "*\t" << match[1].str()<< '\n';
+            ++it;
+            if(it !=end){ // if currently is NOT the last element,
+                oss << ',';
+            }
+        }    
+        oss << ']';
+
     }
+    
+    
+    oss << '}';
     //std::cout << body << '\n';
 
 
@@ -68,7 +86,7 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
 
                         cpr::Header{{"Content-Type","application/json"},
                                     {"x-api-key", (const char*)key}},
-                        cpr::Body{body.dump().c_str()}
+                        cpr::Body{oss.str().c_str()}
                                 );
                                 
                                 // cpr::Body{std::format("{\"query\": \"{}\",")}
