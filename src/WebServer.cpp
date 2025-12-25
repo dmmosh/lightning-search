@@ -188,9 +188,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         
         
         if(h_num == H_IMAGE){
-            f.open("www"+parsed, std::ios::in | std::ios::binary); // open image in binary mode  
+            parsed.insert(0,"www");
+            f.open(parsed, std::ios::in | std::ios::binary); // open image in binary mode  
         } else if (h_num != H_PLAIN){
-            f.open("www"+parsed);
+            parsed.insert(0,"www");
+            f.open(parsed);
         }
         
         //std::cout << parsed << '\n';
