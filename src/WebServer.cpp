@@ -249,12 +249,10 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     } else if(h_num == H_PLAIN){ // error ! plain file only on error 404
         oss = "error 404";
     } else if (f.is_open() && f.good()) { // if file is all good, (html, css, js. in a search it does this too)
-        std::string add = std::string(
+        oss = std::string(
         (std::istreambuf_iterator<char>(f)),
         std::istreambuf_iterator<char>()
         );
-        std::cout << add << '\n';
-        oss = add;
         f.close();
     }
 
@@ -292,7 +290,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                             "Content-Type:{}\r\n"
                             "ETag: \"ls-{}\"\r\n"
                            "Content-Length: {}\r\n"
-                           "\r\n", errorCode, headers[h_num], headers[h_num], size));
+                           "", errorCode, headers[h_num], headers[h_num], size));
     
     //std::cout << oss.str() << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
