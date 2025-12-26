@@ -42,7 +42,7 @@ std::string compressGzip(const std::string& str) {
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
 
-    int ret = deflateInit(&strm, 9);
+    int ret = deflateInit(&strm, 6);
 
     strm.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(str.data()));
     strm.avail_in = static_cast<uInt>(str.length());
