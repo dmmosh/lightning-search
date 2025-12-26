@@ -249,10 +249,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     } else if(h_num == H_PLAIN){ // error ! plain file only on error 404
         oss = "error 404";
     } else if (f.is_open() && f.good()) { // if file is all good, (html, css, js. in a search it does this too)
-        oss = std::string(
+        std::string add = std::string(
         (std::istreambuf_iterator<char>(f)),
         std::istreambuf_iterator<char>()
         );
+        std::cout << add << '\n';
+        oss = add;
         f.close();
     }
 
