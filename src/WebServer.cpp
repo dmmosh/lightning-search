@@ -329,8 +329,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                             "Content-Encoding: gzip\r\n"
                             "Content-Type:{}\r\n"
                             "ETag: \"ls-{}\"\r\n"
-                           "Content-Length: {}\r\n"
-                           "\r\n", errorCode, headers[h_num], headers[h_num], size));
+                           "Transfer-Encoding: chunked"
+                           "\r\n", errorCode, headers[h_num], headers[h_num]));
     
     //std::cout << oss.str() << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
