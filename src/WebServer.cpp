@@ -173,7 +173,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed = "/search.html"; //
         } else if(!strncmp(url, "ac?", 3)){ // autocomplete feature as defined by opensearch.xml file
             std::cout << parsed.substr(lastWord(parsed)) << '\n';
-            parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", [\""+ (parsed.c_str()+4)+"test" +" \"," +"\""+ (parsed.c_str()+4)+"test" +" \"," + "\"" + (parsed.c_str()+4)+"test" +" \"," +"\""+ (parsed.c_str()+4)+"test" +" \"," +"\""+ (parsed.c_str()+4)+"test" +" \"" +"]]";
+            parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", [\"hello linkedin!\"]]";
             errorCode = 200;
             size = parsed.length();
             h_num=H_JSON;
