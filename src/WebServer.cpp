@@ -277,7 +277,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             oss = "error 404";
         }
     }
-    std::cout << oss << '\n';
+    //std::cout << oss << '\n';
     
     oss = compressGzip(oss);
     size = oss.length();
@@ -294,7 +294,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     
     //std::cout << oss.str() << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
-    std::cout << oss << '\n';
+    //std::cout << oss << '\n';
 
    sendToClient(client, oss.c_str(), oss.length()); // send to client
 }; 
