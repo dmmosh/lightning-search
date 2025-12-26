@@ -40,15 +40,15 @@ std::string compressGzip(const std::string& str) {
     z_stream zs;                        // z_stream is zlib's control structure
     memset(&zs, 0, sizeof(zs));
 
-    if (deflateInit(&zs, 6) != Z_OK)
-        throw(std::runtime_error("deflateInit (level 9) failed while compressing."));
+    if (deflateInit(&zs, 9) != Z_OK)
+        throw(std::runtime_error("deflateInit failed while compressing."));
 
     zs.next_in = (Bytef*)str.data();
     zs.avail_in = str.size();           // set the z_stream's input
 
     int ret;
-    char outbuffer[32768];
-    std::string out;
+    char outbuffer[10240];
+    std::string outstring;
 
     // retrieve the compressed bytes blockwise
     do {
@@ -57,10 +57,10 @@ std::string compressGzip(const std::string& str) {
 
         ret = deflate(&zs, Z_FINISH);
 
-        if (out.size() < zs.total_out) {
+        if (outstring.size() < zs.total_out) {
             // append the block to the output string
-            out.append(outbuffer,
-                             zs.total_out - out.size());
+            outstring.append(outbuffer,
+                             zs.total_out - outstring.size());
         }
     } while (ret == Z_OK);
 
@@ -72,7 +72,7 @@ std::string compressGzip(const std::string& str) {
         throw(std::runtime_error(oss.str()));
     }
 
-    return out;
+    return outstring;
 }
 
 unsigned int lastWord(const std::string& word){
@@ -286,7 +286,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     std::cout << oss << '\n';
     
     oss = compressGzip(oss);
-    size = 536;
+    size = oss.length();
     
     //std::cout << (int)oss.c_str()+oss.size()-5 << '\n';
 //    std::ostringstream oss; // output stream
