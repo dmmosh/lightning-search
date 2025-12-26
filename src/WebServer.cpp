@@ -1,5 +1,5 @@
 #include "WebServer.h"
-
+#include <bitset>
 
 /*
 
@@ -287,6 +287,11 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     
     oss = compressGzip(oss);
     size = oss.length();
+    std::string myString = oss.substr(oss.size()-5,4);
+    for (std::size_t i = 0; i < myString.size(); ++i)
+    {
+        std::cout << bitset<8>(myString.c_str()[i]) << '\n';
+    }
     std::cout << (int)oss.c_str()+oss.size()-5 << '\n';
 //    std::ostringstream oss; // output stream
     oss.insert(0,             std::format("HTTP/1.1 {} OK\r\n"
