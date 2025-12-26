@@ -290,7 +290,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                             "Content-Type:{}\r\n"
                             "ETag: \"ls-{}\"\r\n"
                            "Content-Length: {}\r\n"
-                           "", errorCode, headers[h_num], headers[h_num], size));
+                           "\r\n", errorCode, headers[h_num], headers[h_num], size));
     
     //std::cout << oss.str() << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
