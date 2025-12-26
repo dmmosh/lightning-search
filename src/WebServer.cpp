@@ -287,7 +287,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     
     oss = compressGzip(oss);
     size = oss.length();
-    std::cout << oss.substr(oss.length()-4,4);
+    std::cout << oss.substr(oss.length()-10,4) << '\n';
 //    std::ostringstream oss; // output stream
     oss.insert(0,             std::format("HTTP/1.1 {} OK\r\n"
                             "Content-Encoding: gzip\r\n"
