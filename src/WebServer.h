@@ -12,10 +12,15 @@
 #include <cstdlib> // Required for std::getenv
 #include <regex>
 #include <cpr/cpr.h>
+#include <zlib.h>
+
 
 // for multiple clients
 extern const char* headers[]; 
 
+std::string compressGzip(const std::string& str);
+std::string compressGzip(std::ifstream& file);
+unsigned int lastWord(const std::string& word); // client connected
 
 class WebServer : public TcpListener
 {
@@ -25,7 +30,6 @@ public:
     
 protected:
 cpr::AsyncResponse sendQuery(const char* query, unsigned int length);
-unsigned int lastWord(const std::string& word); // client connected
 virtual void onClientConnected(int client); // client connected
 virtual void onClientDisconnected(int client); // client disconnected
 virtual void onMessageReceived(int client, const char* msg, int length); // message is received from client

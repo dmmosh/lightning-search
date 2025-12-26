@@ -35,6 +35,110 @@ const char* env_key = (const char*)"EXA1"; // goes up (env_key[3]) until it cant
 char* key = std::getenv(env_key);
 
 
+// Helper function to compress a string
+std::string compressGzip(const std::string& str) {
+
+    std::string out = "";
+    z_stream zs;
+    zs.zalloc = Z_NULL;
+    zs.zfree = Z_NULL;
+    zs.opaque = Z_NULL;
+    
+    // Initialize the compression stream
+    // Z_DEFAULT_COMPRESSION (level 6) is a good balance of speed and ratio
+    if (deflateInit(&zs, Z_DEFAULT_COMPRESSION) != Z_OK)
+        return "";
+
+    zs.next_in = (Bytef*)str.data();
+    zs.avail_in = str.size();
+    
+    // Set up output buffer
+    // zlib guarantees that the compressed size will be at most the size of the source + 12 + 0.1%
+    size_t compress_bound = str.size() + (str.size() / 1000) + 12 + 1;
+    out.resize(compress_bound);
+    zs.next_out = (Bytef*)out.data();
+    zs.avail_out = compress_bound;
+
+    // Compress the data until the end of the stream
+    int ret;
+    ret = deflate(&zs, Z_FINISH);
+    
+    if (ret != Z_STREAM_END) {
+        deflateEnd(&zs);
+        return ""; // Error or incomplete
+    }
+
+    // Resize the string to the actual compressed size
+    out.resize(zs.total_out);
+    deflateEnd(&zs);
+    return out;
+}
+
+std::string compressGzip(std::ifstream& file) {
+//std::ifstream file(filename, std::ios::binary);
+
+
+    z_stream zs;                        // zlib stream structure
+    memset(&zs, 0, sizeof(zs));
+
+    // Initialize deflate: Z_BEST_COMPRESSION or Z_DEFAULT_COMPRESSION
+    if (deflateInit(&zs, Z_BEST_COMPRESSION) != Z_OK) {
+        throw std::runtime_error("deflateInit failed");
+    }
+
+    std::string out;
+    char inBuffer[32768];               // 32KB input buffer
+    char outBuffer[32768];              // 32KB output buffer
+    int flush;
+
+    do {
+        file.read(inBuffer, sizeof(inBuffer));
+        zs.avail_in = static_cast<uInt>(file.gcount());
+        zs.next_in = reinterpret_cast<Bytef*>(inBuffer);
+        
+        // If we reached the end of the file, tell zlib to finish
+        flush = file.eof() ? Z_FINISH : Z_NO_FLUSH;
+
+        do {
+            zs.avail_out = sizeof(outBuffer);
+            zs.next_out = reinterpret_cast<Bytef*>(outBuffer);
+
+            deflate(&zs, flush);
+
+            // Calculate how much was compressed and append to string
+            size_t have = sizeof(outBuffer) - zs.avail_out;
+            out.append(outBuffer, have);
+
+        } while (zs.avail_out == 0); // Repeat if the output buffer was too small
+
+    } while (flush != Z_FINISH);
+
+    deflateEnd(&zs);
+    return out;
+}
+
+unsigned int lastWord(const std::string& word){
+    // word is guranteed to start at ac?
+    // will iterate from the end to the beginning
+    unsigned int i = word.length(); // will always check the character before and return the current one
+    while(i>0){
+        switch(word[i-1]){
+            case '?': // end of word
+            case '+': // space 
+                return i;
+                break;
+            case '0':
+                if(word[i-2] == '2' && word[i-3] == '%') { // if the previous 3 characters are %20,
+                    return i;
+                }
+                break;
+            default: // every other char 
+                i-=1;
+        }
+    }
+    return word.length();
+
+};
 
 cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
     
@@ -95,29 +199,6 @@ cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
 
 };
 
-unsigned int WebServer::lastWord(const std::string& word){
-    // word is guranteed to start at ac?
-    // will iterate from the end to the beginning
-    unsigned int i = word.length(); // will always check the character before and return the current one
-    while(i>0){
-        switch(word[i-1]){
-            case '?': // end of word
-            case '+': // space 
-                return i;
-                break;
-            case '0':
-                if(word[i-2] == '2' && word[i-3] == '%') { // if the previous 3 characters are %20,
-                    return i;
-                }
-                break;
-            default: // every other char 
-                i-=1;
-        }
-    }
-    return word.length();
-
-};
-
 
 
 // when the server receivees thee message from client
@@ -156,7 +237,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
    int errorCode = 404;
    std::ifstream f; // reead from file
    //std::cout << key << '\n';
-   unsigned long size = SIZE_ERROR;
+   unsigned long size;
 //    std::cout << "{\n";
 //     std::cout << msg;
 //    std::cout << "}\n";
@@ -200,16 +281,28 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         
         //std::cout << parsed << '\n';
         // if file-opening requests are good, record size and error code
-        if(f.is_open() && f.good()){
+        if( h_num == H_JSON || (f.is_open() && f.good())){ // checks if json or file is open
             errorCode = 200;
             // size is the size of header, size of parsed file, and 
-            size = std::filesystem::file_size(parsed);
+            //size = std::filesystem::file_size(parsed);
         }
         //std::cout << h_num << '\t' << parsed<< '\n';
         
     }
     
 
+    std::string oss; // output string
+    if(h_num == H_JSON){ // if a json ( not a file)
+        oss = compressGzip(parsed);
+    } else if(h_num == H_PLAIN){ // error ! plain file only on error 404
+        oss = compressGzip("error 404");
+    } else if (f.is_open() && f.good()) { // if file is all good, (html, css, js. in a search it does this too)
+        oss = compressGzip(f);
+        f.close();
+    }
+
+
+    // can append the results at the beginning once other string operations were concluded
     std::string results = "<script>let results =;</script>";
     cpr::Response out;
     if(resp.valid()){ // a search is going on!!
@@ -218,45 +311,32 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         std::cout << "wait DONE" << '\n';
 
         if(out.status_code == 200){ // everything worked out
-            results.insert(21,out.text);    
-            size+=results.length();
+            //results.insert(21,out.text);  
+            // insert compressed results to the beginning of the output response
+            oss.insert(0,compressGzip(std::format("<script>let results ={};</script>",out.text)));
+            //size+=results.length();
             //std::cout << results << '\n';
 
         } else { // if the api request fails, display error msg
             errorCode = 404;
-            h_num = H_PLAIN;
-            size = SIZE_ERROR;
+            oss = compressGzip("[{\"error\":404}]");
         }
     }
+
+    size = oss.length();
+//    std::ostringstream oss; // output stream
+    oss.insert(0,             std::format("HTTP/1.1 {} OK\r\n"
+                            "Content-Encoding: gzip\r\n"
+                            "Content-Type:{}\r\n"
+                            "ETag: \"ls-{}\"\r\n"
+                           "Content-Length: {}\r\n"
+                           "\r\n", errorCode, headers[h_num], headers[h_num], size));
     
-   std::ostringstream oss; // output stream
-   oss  <<                 "HTTP/1.1 "<<errorCode<<" OK\r\n"
-                            "Content-Type:"<< headers[h_num] <<"\r\n"
-                            "ETag: \"ls-"<< headers[h_num] <<"\"\r\n"
-                           "Content-Length: "<< size <<"\r\n"
-                           "\r\n";
-    
-    if(f.is_open() && f.good()){ // write the opened file's buffer into ostringstream
-        if(out.status_code == 200){ // if search happened, append script to the beginning
-            oss<< results;
-        }
-        if(h_num == H_JSON){ // if json, imitate a json document
-        } else { // if not json (most of the time)
-            oss << f.rdbuf();
-            f.close(); // close the file
-            
-        }
-    }else if(h_num == H_JSON){
-        oss << parsed;
-            
-    } else {
-        oss << "error 404";
-    }
     //std::cout << oss.str() << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
     
 
-   sendToClient(client, oss.str().c_str(), oss.str().length()); // send to client
+   sendToClient(client, oss.c_str(), oss.length()); // send to client
 }; 
 
 void WebServer::onClientConnected(int client){
