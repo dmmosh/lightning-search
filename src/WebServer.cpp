@@ -37,36 +37,39 @@ char* key = std::getenv(env_key);
 
 // Helper function to compress a string
 std::string compressGzip(const std::string& str) {
-    z_stream strm = {0};
-    strm.zalloc = Z_NULL;
-    strm.zfree = Z_NULL;
-    strm.opaque = Z_NULL;
+    z_stream zs;                        // z_stream is zlib's control structure
+    memset(&zs, 0, sizeof(zs));
 
-    int ret = deflateInit(&strm, 6);
+    if (deflateInit(&zs, 6) != Z_OK)
+        throw(std::runtime_error("deflateInit failed while compressing."));
 
-    strm.next_in = reinterpret_cast<Bytef*>(const_cast<char*>(str.data()));
-    strm.avail_in = static_cast<uInt>(str.length());
+    zs.next_in = (Bytef*)str.data();
+    zs.avail_in = str.size();           // set the z_stream's input
 
-    // Allocate output buffer (can grow if needed, but a standard max size is guaranteed)
-    // zlib guarantees max compressed size is source size + 0.1% + 12 bytes
-    size_t max_compressed_size = str.length() + (str.length() / 1000) + 12 + 1;
-    std::vector<char> buffer(max_compressed_size);
+    int ret;
+    char outbuffer[32768];
+    std::string outstring;
 
-    strm.next_out = reinterpret_cast<Bytef*>(buffer.data());
-    strm.avail_out = static_cast<uInt>(buffer.size());
+    // retrieve the compressed bytes blockwise
+    do {
+        zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
+        zs.avail_out = sizeof(outbuffer);
 
-    // Perform compression
-    ret = deflate(&strm, Z_FINISH);
-    if (ret != Z_STREAM_END) {
-        deflateEnd(&strm);
+        ret = deflate(&zs, Z_FINISH);
+
+        if (outstring.size() < zs.total_out) {
+            // append the block to the output string
+            outstring.append(outbuffer, zs.total_out - outstring.size());
+        }
+    } while (ret == Z_OK);
+
+    deflateEnd(&zs);
+
+    if (ret != Z_STREAM_END) {          // an error occurred that was not EOF
+        throw(std::runtime_error("Exception during zlib compression."));
     }
 
-    // Clean up
-    deflateEnd(&strm);
-
-    // Create result string from the used portion of the buffer
-    // Use the correct string constructor for binary data
-    return std::string(buffer.data(), strm.total_out);
+    return outstring;
 };
 
 unsigned int lastWord(const std::string& word){
