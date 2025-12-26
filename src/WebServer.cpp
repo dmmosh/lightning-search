@@ -285,7 +285,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     //std::cout << (int)oss.c_str()+oss.size()-5 << '\n';
 //    std::ostringstream oss; // output stream
     oss.insert(0,             std::format("HTTP/1.1 {} OK\r\n"
-                            "Content-Encoding: gzip\r\n"
+                            "Content-Encoding: deflate\r\n"
                             "Cache-Control: max-age=31536000\r\n"
                             "Content-Type:{}\r\n"
                             "ETag: \"ls-{}\"\r\n"
