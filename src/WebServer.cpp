@@ -323,14 +323,14 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }
     }
 
-    size = oss.length();
+    size = oss.length()-1;
 //    std::ostringstream oss; // output stream
     oss.insert(0,             std::format("HTTP/1.1 {} OK\r\n"
                             "Content-Encoding: gzip\r\n"
                             "Content-Type:{}\r\n"
                             "ETag: \"ls-{}\"\r\n"
-                           "Transfer-Encoding: chunked"
-                           "\r\n", errorCode, headers[h_num], headers[h_num]));
+                           "Content-Length: {}\r\n"
+                           "\r\n", errorCode, headers[h_num], headers[h_num], size));
     
     //std::cout << oss.str() << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
