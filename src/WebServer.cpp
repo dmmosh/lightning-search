@@ -40,7 +40,7 @@ std::string compressGzip(const std::string& str) {
     z_stream zs;                        // z_stream is zlib's control structure
     memset(&zs, 0, sizeof(zs));
 
-    if (deflateInit(&zs, 9) != Z_OK)
+    if (deflateInit(&zs, 6) != Z_OK)
         throw(std::runtime_error("deflateInit (level 9) failed while compressing."));
 
     zs.next_in = (Bytef*)str.data();
@@ -72,49 +72,6 @@ std::string compressGzip(const std::string& str) {
         throw(std::runtime_error(oss.str()));
     }
 
-    return out;
-}
-
-std::string compressGzip(std::ifstream& file) {
-//std::ifstream file(filename, std::ios::binary);
-
-
-    z_stream zs;                        // zlib stream structure
-    memset(&zs, 0, sizeof(zs));
-
-    // Initialize deflate: Z_BEST_COMPRESSION or Z_DEFAULT_COMPRESSION
-    if (deflateInit(&zs, Z_BEST_COMPRESSION) != Z_OK) {
-        throw std::runtime_error("deflateInit failed");
-    }
-
-    std::string out;
-    char inBuffer[32768];               // 32KB input buffer
-    char outBuffer[32768];              // 32KB output buffer
-    int flush;
-
-    do {
-        file.read(inBuffer, sizeof(inBuffer));
-        zs.avail_in = static_cast<uInt>(file.gcount());
-        zs.next_in = reinterpret_cast<Bytef*>(inBuffer);
-        
-        // If we reached the end of the file, tell zlib to finish
-        flush = file.eof() ? Z_FINISH : Z_NO_FLUSH;
-
-        do {
-            zs.avail_out = sizeof(outBuffer);
-            zs.next_out = reinterpret_cast<Bytef*>(outBuffer);
-
-            deflate(&zs, flush);
-
-            // Calculate how much was compressed and append to string
-            size_t have = sizeof(outBuffer) - zs.avail_out;
-            out.append(outBuffer, have);
-
-        } while (zs.avail_out == 0); // Repeat if the output buffer was too small
-
-    } while (flush != Z_FINISH);
-
-    deflateEnd(&zs);
     return out;
 }
 

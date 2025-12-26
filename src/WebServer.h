@@ -19,7 +19,6 @@
 extern const char* headers[]; 
 
 std::string compressGzip(const std::string& str);
-std::string compressGzip(std::ifstream& file);
 unsigned int lastWord(const std::string& word); // client connected
 
 class WebServer : public TcpListener
