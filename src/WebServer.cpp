@@ -37,40 +37,41 @@ char* key = std::getenv(env_key);
 
 // Helper function to compress a string
 std::string compressGzip(const std::string& str) {
+    z_stream zs;                        // z_stream is zlib's control structure
+    memset(&zs, 0, sizeof(zs));
 
-    std::string out = "";
-    z_stream zs;
-    zs.zalloc = Z_NULL;
-    zs.zfree = Z_NULL;
-    zs.opaque = Z_NULL;
-    
-    // Initialize the compression stream
-    // Z_DEFAULT_COMPRESSION (level 6) is a good balance of speed and ratio
-    if (deflateInit(&zs, Z_DEFAULT_COMPRESSION) != Z_OK)
-        return "";
+    if (deflateInit(&zs, 9) != Z_OK)
+        throw(std::runtime_error("deflateInit (level 9) failed while compressing."));
 
     zs.next_in = (Bytef*)str.data();
-    zs.avail_in = str.size();
-    
-    // Set up output buffer
-    // zlib guarantees that the compressed size will be at most the size of the source + 12 + 0.1%
-    size_t compress_bound = str.size() + (str.size() / 1000) + 12 + 1;
-    out.resize(compress_bound);
-    zs.next_out = (Bytef*)out.data();
-    zs.avail_out = compress_bound;
+    zs.avail_in = str.size();           // set the z_stream's input
 
-    // Compress the data until the end of the stream
     int ret;
-    ret = deflate(&zs, Z_FINISH);
-    
-    if (ret != Z_STREAM_END) {
-        deflateEnd(&zs);
-        return ""; // Error or incomplete
+    char outbuffer[32768];
+    std::string out;
+
+    // retrieve the compressed bytes blockwise
+    do {
+        zs.next_out = reinterpret_cast<Bytef*>(outbuffer);
+        zs.avail_out = sizeof(outbuffer);
+
+        ret = deflate(&zs, Z_FINISH);
+
+        if (out.size() < zs.total_out) {
+            // append the block to the output string
+            out.append(outbuffer,
+                             zs.total_out - out.size());
+        }
+    } while (ret == Z_OK);
+
+    deflateEnd(&zs);
+
+    if (ret != Z_STREAM_END) {          // an error occurred that was not EOF
+        std::ostringstream oss;
+        oss << "Exception during zlib compression: (" << ret << ") " << zs.msg;
+        throw(std::runtime_error(oss.str()));
     }
 
-    // Resize the string to the actual compressed size
-    out.resize(zs.total_out);
-    deflateEnd(&zs);
     return out;
 }
 
