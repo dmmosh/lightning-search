@@ -67,7 +67,7 @@ std::string compressGzip(const std::string& str) {
     // Create result string from the used portion of the buffer
     // Use the correct string constructor for binary data
     return std::string(buffer.data(), strm.total_out)
-}
+};
 
 unsigned int lastWord(const std::string& word){
     // word is guranteed to start at ac?
