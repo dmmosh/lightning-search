@@ -213,9 +213,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     std::string results = "<script>let results =;</script>";
     cpr::Response out;
     if(resp.valid()){ // a search is going on!!
-        std::cout << "waiting.." << '\n';
         out = resp.get(); // wait for response
-        std::cout << "wait DONE" << '\n';
 
         if(out.status_code == 200){ // everything worked out
             results.insert(21,out.text);    
@@ -239,7 +237,9 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     if(f.is_open() && f.good()){ // write the opened file's buffer into ostringstream
         if(out.status_code == 200){ // if search happened, append script to the beginning
             oss<< results;
-        } else { 
+        }
+        if(h_num == H_JSON){ // if json, imitate a json document
+        } else { // if not json (most of the time)
             oss << f.rdbuf();
             f.close(); // close the file
             
