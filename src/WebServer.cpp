@@ -286,7 +286,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     std::cout << oss << '\n';
     
     oss = compressGzip(oss);
-    size = oss.length();
+    size = 536;
     
     //std::cout << (int)oss.c_str()+oss.size()-5 << '\n';
 //    std::ostringstream oss; // output stream
