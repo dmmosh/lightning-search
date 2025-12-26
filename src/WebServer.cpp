@@ -293,17 +293,19 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
 
     std::string oss; // output string
     if(h_num == H_JSON){ // if a json ( not a file)
-        oss = compressGzip(parsed);
+        oss = parsed;
     } else if(h_num == H_PLAIN){ // error ! plain file only on error 404
-        oss = compressGzip("error 404");
+        oss = "error 404";
     } else if (f.is_open() && f.good()) { // if file is all good, (html, css, js. in a search it does this too)
-        oss = compressGzip(f);
+        oss = std::string(
+        (std::istreambuf_iterator<char>(f)),
+        std::istreambuf_iterator<char>()
+        );
         f.close();
     }
 
 
     // can append the results at the beginning once other string operations were concluded
-    std::string results = "<script>let results =;</script>";
     cpr::Response out;
     if(resp.valid()){ // a search is going on!!
         std::cout << "waiting.." << '\n';
@@ -313,16 +315,19 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         if(out.status_code == 200){ // everything worked out
             //results.insert(21,out.text);  
             // insert compressed results to the beginning of the output response
-            oss.insert(0,compressGzip(std::format("<script>let results ={};</script>",out.text)));
+            oss.insert(0,std::format("<script>let results ={};</script>",out.text));
             //size+=results.length();
             //std::cout << results << '\n';
 
         } else { // if the api request fails, display error msg
+            h_num = H_PLAIN;
             errorCode = 404;
-            oss = compressGzip("[{\"error\":404}]");
+            oss = "error 404";
         }
     }
-
+    std::cout << oss << '\n';
+    
+    oss = compressGzip(oss);
     size = oss.size();
 //    std::ostringstream oss; // output stream
     oss.insert(0,             std::format("HTTP/1.1 {} OK\r\n"
