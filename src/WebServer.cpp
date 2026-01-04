@@ -311,7 +311,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                            "Content-Length: {}\r\n"
                            "\r\n", errorCode, headers[h_num], headers[h_num], size));
     
-    std::cout << oss.str() << '\n';            
+    std::cout << oss << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
     //std::cout << oss << '\n';
 
