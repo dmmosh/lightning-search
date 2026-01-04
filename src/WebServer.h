@@ -32,6 +32,7 @@ class singleton{
         singleton(const singleton& obj) = delete;
         static singleton* getInstance();
         void set(const std::string& name);
+        const std::string get();
         void print() const;
 };
 

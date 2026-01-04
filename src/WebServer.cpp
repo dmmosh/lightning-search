@@ -49,6 +49,11 @@ singleton* singleton::getInstance(){
 void singleton::set(const std::string& name){
     this->name = name;
 };
+
+const std::string singleton::get(){
+    return name;
+};
+
 void singleton::print() const{
     std::cout << name << '\n';
 };
@@ -311,7 +316,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
                            "Content-Length: {}\r\n"
                            "\r\n", errorCode, headers[h_num], headers[h_num], size));
     
-    std::cout << oss << '\n';            
+    //std::cout << oss << '\n';            
     //oss<< f.rdbuf(); // copy buffer from filestream to stringstream
     //std::cout << oss << '\n';
 

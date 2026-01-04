@@ -1,7 +1,9 @@
 
 window.onload = function() {
     document.getElementById("myTextField").focus();
-    document.getElementById("testField").innerHTML = "hello";
+    
+
+    document.getElementById("testField").innerHTML = Module.getInstance().get();
     
 }
 
