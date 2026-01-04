@@ -36,8 +36,8 @@ class singleton{
 };
 
 // for transition between backend and frontend
-extern singleton* singleton ::ptr; 
-extern std::mutex singleton ::mtx;
+inline singleton* singleton ::ptr = nullptr; 
+inline std::mutex singleton ::mtx;
 
 std::string compressGzip(const std::string& str);
 unsigned int lastWord(const std::string& word); // client connected

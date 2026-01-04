@@ -36,13 +36,7 @@ char* key = std::getenv(env_key);
 
 
 
-// for backend and frontend sync
-singleton* singleton::ptr = nullptr; 
-std::mutex singleton::mtx;
-
-
-
-// frontend sync
+// front and backend sync
 singleton* singleton::getInstance(){
     if(ptr == nullptr){
         std::lock_guard<std::mutex> lock(mtx);
