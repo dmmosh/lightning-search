@@ -236,7 +236,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             parsed = "/index.html";
         } else if(!strncmp(url, "css", 3)){ // if the folder is css
             h_num = H_CSS;
-        } else if(!strncmp(url, "images", 7)){ // images are being loaded
+        } else if(!strncmp(url, "images", 6)){ // images are being loaded
             h_num = H_IMAGE;
             parsed.insert(0,"/images");
         } else if(!strncmp(url, "js", 2)){ // js code is being loaded
