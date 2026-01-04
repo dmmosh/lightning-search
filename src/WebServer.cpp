@@ -262,7 +262,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         //std::cout << h_num << '\t' << parsed<< '\n';
         
     }
-    singleton* s1 = singleton::getInstance();
     s1->set("hel;lo");
     s1->print(); //cdsnjbcjkhcdd
 
