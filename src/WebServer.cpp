@@ -234,7 +234,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         }else if(url[0] == '\0'){ // if nothing , main page
             h_num = H_PAGE;
             parsed = "/index.html";
-        } else if(!strncmp(url, "css", 4)){ // if the folder is css
+        } else if(!strncmp(url, "css", 3)){ // if the folder is css
             h_num = H_CSS;
         } else if(!strncmp(url, "images", 7)){ // images are being loaded
             h_num = H_IMAGE;
