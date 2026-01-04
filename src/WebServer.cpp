@@ -33,7 +33,7 @@ const char* headers[] = {
 int h_num = H_PLAIN; // header number
 const char* env_key = (const char*)"EXA1"; // goes up (env_key[3]) until it cant anymore 
 char* key = std::getenv(env_key);
-
+singleton* s1;
 
 
 // front and backend sync
