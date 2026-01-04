@@ -262,8 +262,6 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         //std::cout << h_num << '\t' << parsed<< '\n';
         
     }
-    s1->set("hel;lo");
-    s1->print(); //cdsnjbcjkhcdd
 
     std::string oss; // output string
     if(h_num == H_JSON){ // if a json ( not a file)
