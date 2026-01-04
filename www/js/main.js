@@ -6,6 +6,6 @@ window.onload = function() {
 }
 
 function buttonPress(){
-    console.log("hi ");
+    console.log("higjkldsjlkchjkhkg ");
     window.location.href = "search.html";
 }

@@ -3,3 +3,7 @@ p {
     font-size: 18px;
     text-align: center;
   }
+
+  body {
+    background-color: #b2a8ce; /* a light gray color */
+  }
