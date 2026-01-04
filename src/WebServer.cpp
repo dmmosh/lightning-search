@@ -270,7 +270,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
     }
     singleton* s1 = singleton::getInstance();
     s1->set("hel;lo");
-    s1->print(); //cdsnjbcjkh
+    s1->print(); //cdsnjbcjkhcdd
 
     std::string oss; // output string
     if(h_num == H_JSON){ // if a json ( not a file)
