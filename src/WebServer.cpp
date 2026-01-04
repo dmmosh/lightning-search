@@ -35,6 +35,30 @@ const char* env_key = (const char*)"EXA1"; // goes up (env_key[3]) until it cant
 char* key = std::getenv(env_key);
 
 
+
+// for backend and frontend sync
+singleton* singleton::ptr = nullptr; 
+std::mutex singleton::mtx;
+
+
+
+// frontend sync
+singleton* singleton::getInstance(){
+    if(ptr == nullptr){
+        std::lock_guard<std::mutex> lock(mtx);
+        if(ptr == nullptr){
+            ptr = new singleton();
+        }
+    }
+    return ptr;
+};
+void singleton::set(const std::string& name){
+    this->name = name;
+};
+void singleton::print() const{
+    std::cout << name << '\n';
+};
+
 // Helper function to compress a string
 std::string compressGzip(const std::string& str) {
     z_stream zs;                        // z_stream is zlib's control structure
@@ -244,7 +268,9 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         //std::cout << h_num << '\t' << parsed<< '\n';
         
     }
-    
+    singleton* s1 = singleton::getInstance();
+    s1->set("hel;lo");
+    s1->print();
 
     std::string oss; // output string
     if(h_num == H_JSON){ // if a json ( not a file)

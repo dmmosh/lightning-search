@@ -11,12 +11,33 @@
 #include <cstring>
 #include <cstdlib> // Required for std::getenv
 #include <regex>
+#include <mutex>
 #include <cpr/cpr.h>
 #include <zlib.h>
 
 
 // for multiple clients
 extern const char* headers[]; 
+
+
+class singleton{
+    private:
+        std::string name;
+
+        static singleton* ptr;
+        static std::mutex mtx;
+        singleton(){}; 
+
+    public:
+        singleton(const singleton& obj) = delete;
+        static singleton* getInstance();
+        void set(const std::string& name);
+        void print() const;
+};
+
+// for transition between backend and frontend
+extern singleton* singleton ::ptr; 
+extern std::mutex singleton ::mtx;
 
 std::string compressGzip(const std::string& str);
 unsigned int lastWord(const std::string& word); // client connected
