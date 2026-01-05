@@ -32,7 +32,7 @@ dictionary = list(set([ word for title in titles for word in title.split()]))
 #print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
 stop_word = '.'
-stop_wordi = len(dictionary)
+stop_wordi = ord(stop_word)
 iword[stop_wordi] = stop_word
 percentile = int(np.percentile(list(map(len,dictionary)),25)) # 25th percentile of dictionary lengths 
 
