@@ -90,7 +90,7 @@ def build_data(dictionary):
         i = max(0,len(word)-1-percentile) # start
         j = i
         while(j<len(word)-1):
-            out = [stop_wordi]*(percentile-(j-i+1)) + [ord(c) for c in wordi[i:j+1]]
+            out = [stop_wordi]*(percentile-(j-i+1)) + [ord(c) for c in word[i:j+1]]
             #print(out)
             x.append(out)
             y.append(wordi[word])
