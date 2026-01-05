@@ -17,22 +17,27 @@ else:
     
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
-def median(str_list):
-    """Calculates the median length of strings in a list without the statistics module."""
-    lengths = [len(s) for s in str_list]
-    if not lengths:
-      return None
-    lengths.sort() # Sort the lengths in ascending order
-    n = len(lengths)
-    if n % 2 == 1:
-        # Odd number of elements: the median is the middle element
-        median = lengths[n // 2]
+def manual_25th_percentile(data):
+    if not data:
+        return None
+    
+    # 1. Sort the data
+    sorted_data = sorted(data)
+    n = len(sorted_data)
+    
+    # 2. Calculate the rank (index)
+    # Using the (n-1) method common in most statistical software
+    rank = 0.25 * (n - 1)
+    
+    # 3. Interpolate
+    index = int(rank)       # The integer part
+    fraction = rank - index # The decimal part
+    
+    if index + 1 < n:
+        # Interpolation formula: low_val + fraction * (high_val - low_val)
+        return sorted_data[index] + fraction * (sorted_data[index + 1] - sorted_data[index])
     else:
-        # Even number of elements: the median is the average of the two middle elements
-        mid_index_1 = n // 2 - 1
-        mid_index_2 = n // 2
-        median = (lengths[mid_index_1] + lengths[mid_index_2]) / 2.0
-    return median
+        return sorted_data[index]
 
 
 def subi(sub:str): # substring to index 
@@ -50,14 +55,14 @@ iword = {i:word for i, word in enumerate(dictionary)}
 stop_word = '.'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
-med = median(dictionary)
+percentile = manual_25th_percentile(dictionary)
 
 wordi = {word:i for i, word in iword.items()}
 
 embedding_dimensions = 5 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
 
-block_size = med // 2 # a good balance between too much and too little
+block_size = percentile # a good balance between too much and too little
 hidden_layer_size = 100
 # model
 model = nn.Sequential(
@@ -95,17 +100,21 @@ def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
     y = torch.tensor(data=y,dtype=torch.long)
     return x,y
 
-def build_data(dictionary):
-    x=[]
-    y=[]
-    for word in dictionary:
-        x.append([subi(word[0:i]) for i in range(1, len(word))])
-        y.append(wordi[word])
+# def build_data(dictionary):
+#     x=[]
+#     y=[]
+    
+    
+#     for d in dictionary:
+#         context = []
+        
+#         x.append([subi(word[0:i]) for i in range(1, len(word))])
+#         y.append(wordi[word])
         
     
-    x= torch.tensor(data=x,dtype=torch.long)
-    y = torch.tensor(data=y,dtype=torch.long)
-    return x,y
+#     x= torch.tensor(data=x,dtype=torch.long)
+#     y = torch.tensor(data=y,dtype=torch.long)
+#     return x,y
 
 def visualize(x,y,iword):
     for i in range(100):
@@ -153,9 +162,9 @@ def train_model(x,y):
 
 if __name__ == '__main__':
 
-    x,y = build_data(dictionary)
-    visualize(x,y,iword)
-
+    # x,y = build_data(dictionary)
+    # visualize(x,y,iword)
+    print(percentile)
     
     # train_model(x, y)
     # torch.save({
