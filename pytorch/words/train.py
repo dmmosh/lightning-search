@@ -34,7 +34,7 @@ iword = {i:word for i, word in enumerate(dictionary)}
 stop_word = '.'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
-percentile = np.percentile(np.array(dictionary),25)
+percentile = np.percentile(map(len,dictionary),25)
 
 wordi = {word:i for i, word in iword.items()}
 
