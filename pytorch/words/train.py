@@ -36,7 +36,7 @@ def median(str_list):
 
 
 def subi(sub:str): # substring to index 
-    return int.from_bytes(sub, 'big')
+    return int.from_bytes(sub.encode('utf-8'), 'big')
 
 def isub(i:int): # index to substring
     return i.to_bytes((i.bit_length() + 7) // 8, 'big').decode('utf-8')
