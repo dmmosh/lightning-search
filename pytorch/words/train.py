@@ -95,7 +95,7 @@ def build_data(dictionary):
             out = [stop_wordi]*(percentile-(j-i+1)) + [ord(c) for c in wordi[i:j+1]]
             #print(out)
             x.append(out)
-            y.append(word)
+            y.append(stop_wordi)
             j+=1
             
             
