@@ -120,13 +120,23 @@ if __name__ == '__main__':
     import statistics
     print(sum(map(len,dictionary))/len(dictionary))
     def median_string_length(str_list):
-        """Calculates the median length of strings in a list."""
-        # Get the length of each string using a list comprehension
+        """Calculates the median length of strings in a list without the statistics module."""
         lengths = [len(s) for s in str_list]
-        # Calculate the median of the lengths
         if not lengths:
-          return None # Handle empty list case
-        return statistics.median(lengths)
+          return None
+
+        lengths.sort() # Sort the lengths in ascending order
+        n = len(lengths)
+
+        if n % 2 == 1:
+            # Odd number of elements: the median is the middle element
+            median = lengths[n // 2]
+        else:
+            # Even number of elements: the median is the average of the two middle elements
+            mid_index_1 = n // 2 - 1
+            mid_index_2 = n // 2
+            median = (lengths[mid_index_1] + lengths[mid_index_2]) / 2.0
+        return median
     print(median_string_length(dictionary))
     
     # train_model(x, y)
