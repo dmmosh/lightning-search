@@ -153,7 +153,7 @@ def train_model(x,y):
 
 if __name__ == '__main__':
 
-    x,y = build_data(titles,iword,wordi,stop_wordi,block_size)
+    x,y = build_data(dictionary)
     visualize(x,y,iword)
 
     
