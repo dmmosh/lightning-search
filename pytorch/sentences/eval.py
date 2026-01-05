@@ -28,39 +28,49 @@ model = nn.Sequential(
     nn.Linear(hidden_layer_size, dictionary_size, bias=False), nn.BatchNorm1d(dictionary_size)
 )
 model.load_state_dict(checkpoint['model_state_dict'])
+model.eval()
 
 
-def inference(sample_count, start_word, stopi):
-    model.eval()
-    samples_out = []
-    for i in range(sample_count):
-        context = [wordi[start_word]]*block_size
-        words = []
-        
-        while(len(words) < 5):
-            embedx = embed[torch.tensor(context)]
-            embedx = embedx.view(1,embedding_dimensions*block_size)
-            
-            logits = model(embedx)
-            #print(logits)
-            probs = F.softmax(logits,dim=1)
-            chari=torch.multinomial(probs,num_samples=1).item()
-            #print(iword[chari])
-            context = context[1:] + [chari]
-            words.append(iword[chari])
-            if(chari == stopi):
-                break
-            
-        #print(words)
-        samples_out.append(' '.join(words[:-1]))
+def inference(start_word, stopi):
+    context = [wordi[start_word]]*block_size
+    words = []
     
-    return samples_out
+    while(len(words) < 5):
+        embedx = embed[torch.tensor(context)]
+        embedx = embedx.view(1,embedding_dimensions*block_size)
+        
+        logits = model(embedx)
+        #print(logits)
+        probs = F.softmax(logits,dim=1)
+        chari=torch.multinomial(probs,num_samples=1).item()
+        #print(iword[chari])
+        context = context[1:] + [chari]
+        words.append(iword[chari])
+        if(chari == stopi):
+            break
+        
+    #print(words)
+    return ' '.join(words[:-1])
 
 
 if __name__ == '__main__':
-
-    start_word = 'software'
-    samples = inference(20,start_word, stop_wordi)
+    print('sentence prediction testing')
+    while(True):
+        
+        start_word = input()
+        if(start_word not in wordi):
+            print(start_word,'->')
+            continue
     
-    for sample in samples:
-        print(start_word, '-> ', sample)
+        out = set()
+        i = 0
+        while(i<50 and len(out)<6):
+            infer = inference(start_word,stop_wordi)
+            if(infer != ''):
+                out.add(infer)
+            i+=1
+
+        for o in out:
+            print(start_word, '-> ', o)
+    
+    
