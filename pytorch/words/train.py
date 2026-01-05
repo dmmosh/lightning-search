@@ -35,6 +35,13 @@ def median(str_list):
     return median
 
 
+def subi(sub:str): # substring to index 
+    return int.from_bytes(sub, 'big')
+
+def isub(i:int): # index to substring
+    return i.to_bytes((i.bit_length() + 7) // 8, 'big').decode('utf-8')
+
+
 df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
 titles = list(set(df['name']))  # get the titles
 dictionary = list(set([ word for title in titles for word in title.split()]))
@@ -43,13 +50,14 @@ iword = {i:word for i, word in enumerate(dictionary)}
 stop_word = '.'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
+med = median(dictionary)
 
 wordi = {word:i for i, word in iword.items()}
 
 embedding_dimensions = 5 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
 
-block_size = median(dictionary) // 2 # a good balance between too much and too little
+block_size = med // 2 # a good balance between too much and too little
 hidden_layer_size = 100
 # model
 model = nn.Sequential(
@@ -87,23 +95,31 @@ def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
     y = torch.tensor(data=y,dtype=torch.long)
     return x,y
 
-# def build_data(dictionary):
-#     x=[]
-#     y=[]
-#     for word in dictionary:
-#         x.append([word[0:i] for i in range(1, len(word))])
-#         y.append(wordi[word])
+def build_data(dictionary):
+    x=[]
+    y=[]
+    for word in dictionary:
+        x.append([subi(word[0:i]) for i in range(1, len(word))])
+        y.append(wordi[word])
         
     
-#     x= torch.tensor(data=x,dtype=torch.long)
-#     y = torch.tensor(data=y,dtype=torch.long)
-#     return x,y
+    x= torch.tensor(data=x,dtype=torch.long)
+    y = torch.tensor(data=y,dtype=torch.long)
+    return x,y
 
 def visualize(x,y,iword):
     for i in range(100):
         context = x[i]
         target = y[i]
         context_words = [iword[i.item()] for i in context]
+        target_word = iword[target.item()]
+        print(f'{context_words} -> {target_word}')
+
+def visualize(x,y,iword):
+    for i in range(100):
+        context = x[i]
+        target = y[i]
+        context_words = [isub(i.item()) for i in context]
         target_word = iword[target.item()]
         print(f'{context_words} -> {target_word}')
 
