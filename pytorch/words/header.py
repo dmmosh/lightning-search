@@ -6,8 +6,5 @@ import os
 save_path = "model_states_words.pth"
 
 
-block_size = 3
-
-hidden_layer_size = 100
 
 

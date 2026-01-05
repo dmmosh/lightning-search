@@ -33,6 +33,9 @@ wordi = {word:i for i, word in iword.items()}
 embedding_dimensions = 5 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
 
+block_size = 3
+hidden_layer_size = 100
+
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -45,7 +48,6 @@ embed = torch.rand((dictionary_size, embedding_dimensions)) # embedding layer in
 batch_size = 512 # batch size ( amount of samples before the weights are updated)
 learning_rate = 0.1 # how much model weights adjust during training
 iterations = 100000 # number of iterations of batches to complete one epoch (pass through entire dataset)
-
 
 def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
     x=[]
@@ -116,7 +118,9 @@ if __name__ == '__main__':
         'wordi': wordi,
         'stop_wordi': stop_wordi,
         'embedding_dimensions':embedding_dimensions,
-        'dictionary_size':dictionary_size
+        'dictionary_size':dictionary_size,
+        'hidden_layer_size':hidden_layer_size,
+        'block_size':block_size
     }, save_path)
     print("Model and related variables saved successfully.")
 

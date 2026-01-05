@@ -19,6 +19,8 @@ embedding_dimensions = checkpoint['embedding_dimensions'] # number of integers t
 dictionary_size = checkpoint['dictionary_size']
 iword = checkpoint['iword']
 wordi = checkpoint['wordi']
+hidden_layer_size = checkpoint['hidden_layer_size']
+block_size = checkpoint['block_size']
 stop_wordi = checkpoint['stop_wordi']
 print("Model and related variables loaded successfully.")
 

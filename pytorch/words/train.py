@@ -1,5 +1,5 @@
 from header import *
-
+import header
 
 '''
 train the nn model
@@ -17,6 +17,22 @@ else:
     
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
+def median(str_list):
+    """Calculates the median length of strings in a list without the statistics module."""
+    lengths = [len(s) for s in str_list]
+    if not lengths:
+      return None
+    lengths.sort() # Sort the lengths in ascending order
+    n = len(lengths)
+    if n % 2 == 1:
+        # Odd number of elements: the median is the middle element
+        median = lengths[n // 2]
+    else:
+        # Even number of elements: the median is the average of the two middle elements
+        mid_index_1 = n // 2 - 1
+        mid_index_2 = n // 2
+        median = (lengths[mid_index_1] + lengths[mid_index_2]) / 2.0
+    return median
 
 
 df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
@@ -33,6 +49,8 @@ wordi = {word:i for i, word in iword.items()}
 embedding_dimensions = 5 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
 
+block_size = median(dictionary)
+hidden_layer_size = 100
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -68,14 +86,14 @@ def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
     y = torch.tensor(data=y,dtype=torch.long)
     return x,y
 
-def build_data(dictionary):
-    x=[]
-    y=[]
+# def build_data(dictionary):
+#     x=[]
+#     y=[]
     
     
-    x= torch.tensor(data=x,dtype=torch.long)
-    y = torch.tensor(data=y,dtype=torch.long)
-    return x,y
+#     x= torch.tensor(data=x,dtype=torch.long)
+#     y = torch.tensor(data=y,dtype=torch.long)
+#     return x,y
 
 def visualize(x,y,iword):
     for i in range(100):
@@ -115,29 +133,9 @@ def train_model(x,y):
 
 if __name__ == '__main__':
 
-    #x,y = build_data(titles,iword,wordi,stop_wordi,block_size)
-    #visualize(x,y,iword)
-    import statistics
-    print(sum(map(len,dictionary))/len(dictionary))
-    def median_string_length(str_list):
-        """Calculates the median length of strings in a list without the statistics module."""
-        lengths = [len(s) for s in str_list]
-        if not lengths:
-          return None
+    x,y = build_data(titles,iword,wordi,stop_wordi,block_size)
+    visualize(x,y,iword)
 
-        lengths.sort() # Sort the lengths in ascending order
-        n = len(lengths)
-
-        if n % 2 == 1:
-            # Odd number of elements: the median is the middle element
-            median = lengths[n // 2]
-        else:
-            # Even number of elements: the median is the average of the two middle elements
-            mid_index_1 = n // 2 - 1
-            mid_index_2 = n // 2
-            median = (lengths[mid_index_1] + lengths[mid_index_2]) / 2.0
-        return median
-    print(median_string_length(dictionary))
     
     # train_model(x, y)
     # torch.save({
@@ -147,7 +145,9 @@ if __name__ == '__main__':
     #     'wordi': wordi,
     #     'stop_wordi': stop_wordi,
     #     'embedding_dimensions':embedding_dimensions,
-    #     'dictionary_size':dictionary_size
+    #     'dictionary_size':dictionary_size,
+    #     'hidden_layer_size':hidden_layer_size,
+    #     'block_size':block_size
     # }, save_path)
     # print("Model and related variables saved successfully.")
 
