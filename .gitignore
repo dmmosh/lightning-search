@@ -2,3 +2,4 @@ lm-search
 .vscode
 network-log.json
 test.py
+pytorch/__pycache__
