@@ -49,7 +49,7 @@ wordi = {word:i for i, word in iword.items()}
 embedding_dimensions = 5 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
 
-block_size = median(dictionary)
+block_size = median(dictionary) // 2 # a good balance between 
 hidden_layer_size = 100
 # model
 model = nn.Sequential(
