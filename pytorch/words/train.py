@@ -159,9 +159,8 @@ def train_model(x,y):
 
 if __name__ == '__main__':
 
-    # x,y = build_data(dictionary)
-    # visualize(x,y,iword)
-    print(percentile)
+    x,y = build_data(dictionary)
+    visualize(x,y,iword)
     
     # train_model(x, y)
     # torch.save({
