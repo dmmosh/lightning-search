@@ -28,7 +28,7 @@ def isub(i): # index to substring
 
 df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
 titles = list(set(df['name']))  # get the titles
-dictionary = list(set([ word for title in titles for word in title.split()]))
+dictionary = set([ word for title in titles for word in title.split()])
 #print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
 stop_word = '.'
@@ -93,12 +93,9 @@ def build_data(dictionary):
             out = [stop_wordi]*(percentile-(j-i+1)) + [ord(c) for c in word[i:j+1]]
             #print(out)
             x.append(out)
-            y.append(wordi[word])
+            y.append(word)
             j+=1
             
-            
-        
-        
         # context = [stop_wordi]*percentile-len(d)-1 if  (percentile-len(d)-1>0) else []
         # context += [d[:i+1] for i in range(len(d)-1-percentile, len(d)-1)]
         # x.append(context)
