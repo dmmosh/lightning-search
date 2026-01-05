@@ -127,7 +127,7 @@ if __name__ == '__main__':
         if not lengths:
           return None # Handle empty list case
         return statistics.median(lengths)
-    median_string_length(dictionary)
+    print(median_string_length(dictionary))
     
     # train_model(x, y)
     # torch.save({
