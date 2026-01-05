@@ -34,7 +34,7 @@ iword = {i:word for i, word in enumerate(dictionary)}
 stop_word = '.'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
-percentile = int(np.percentile(list(map(len,dictionary)),25))
+percentile = int(np.percentile(list(map(len,dictionary)),25)) # 25th percentile of dictionary lengths 
 
 wordi = {word:i for i, word in iword.items()}
 
@@ -79,21 +79,39 @@ def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
     y = torch.tensor(data=y,dtype=torch.long)
     return x,y
 
-# def build_data(dictionary):
-#     x=[]
-#     y=[]
+def build_data(dictionary):
+    x=[]
+    y=[]
     
     
-#     for d in dictionary:
-#         context = []
+    for word in dictionary:
+        context = [stop_wordi]*percentile
+        wordi = word[:-1]
         
-#         x.append([subi(word[0:i]) for i in range(1, len(word))])
-#         y.append(wordi[word])
+        # do a sliding window
+        i = max(0,len(wordi)-percentile) # start
+        j = i
+        while(j<len(wordi)):
+            x.append(([stop_word]*percentile-(j-i+1)) + wordi[i:j+1])
+            y.append(word)
+            j+=1
+        
+
+        
+            
+            
+        
+        
+        # context = [stop_wordi]*percentile-len(d)-1 if  (percentile-len(d)-1>0) else []
+        # context += [d[:i+1] for i in range(len(d)-1-percentile, len(d)-1)]
+        # x.append(context)
+        # y.append(wordi[word])
+        
         
     
-#     x= torch.tensor(data=x,dtype=torch.long)
-#     y = torch.tensor(data=y,dtype=torch.long)
-#     return x,y
+    x= torch.tensor(data=x,dtype=torch.long)
+    y = torch.tensor(data=y,dtype=torch.long)
+    return x,y
 
 def visualize(x,y,iword):
     for i in range(100):
