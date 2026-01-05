@@ -49,7 +49,7 @@ wordi = {word:i for i, word in iword.items()}
 embedding_dimensions = 5 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
 
-block_size = median(dictionary) // 2 # a good balance between 
+block_size = median(dictionary) // 2 # a good balance between too much and too little
 hidden_layer_size = 100
 # model
 model = nn.Sequential(
@@ -81,6 +81,8 @@ def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
             context = context[1:] + [wordi[word]]
         x.append(context)
         y.append(stop_wordi)
+        print([iword[i] for i in context])
+        print(stop_wordi)
     
     x= torch.tensor(data=x,dtype=torch.long)
     y = torch.tensor(data=y,dtype=torch.long)
@@ -89,7 +91,10 @@ def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
 # def build_data(dictionary):
 #     x=[]
 #     y=[]
-    
+#     for word in dictionary:
+#         x.append([word[0:i] for i in range(1, len(word))])
+#         y.append(wordi[word])
+        
     
 #     x= torch.tensor(data=x,dtype=torch.long)
 #     y = torch.tensor(data=y,dtype=torch.long)
