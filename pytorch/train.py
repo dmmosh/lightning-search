@@ -1,4 +1,3 @@
-import header
 from header import *
 
 
@@ -67,9 +66,6 @@ def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
     y = torch.tensor(data=y,dtype=torch.long)
     return x,y
 
-
-x,y = build_data(titles,iword,wordi,stop_wordi,block_size)
-
 def visualize(x,y,iword):
     for i in range(100):
         context = x[i]
@@ -77,24 +73,6 @@ def visualize(x,y,iword):
         context_words = [iword[i.item()] for i in context]
         target_word = iword[target.item()]
         print(f'{context_words} -> {target_word}')
-
-#print(visualize(x,y,iword))
-        
-
-
-# embedding vectors (numerical data to represent the names
-
-
-
-print(embed.shape)
-# actual model
-#hidden_layer_size = int(embedding_dimensions*block_size*2/3) + dictionary_size# 2/3 of size of input + size of output 
-hidden_layer_size = 100
-model = nn.Sequential(
-    nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
-    nn.Linear(hidden_layer_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
-    nn.Linear(hidden_layer_size, dictionary_size, bias=False), nn.BatchNorm1d(dictionary_size)
-)
 
 def train_model(x,y):
     for i in range(iterations):
@@ -122,11 +100,11 @@ def train_model(x,y):
             print('iteration', i, 'loss:', loss.item())
 
 
-    
 #print(model)
 
 if __name__ == '__main__':
 
+    x,y = build_data(titles,iword,wordi,stop_wordi,block_size)
 
     
     

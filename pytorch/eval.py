@@ -1,8 +1,8 @@
 import torch
-import header # edit access
 from header import * # read access
 
-
+if(not os.path.exists(save_path)): # if the save path isnt present, exit
+    os._exit()
 
 # set to cuda or cpu
 if torch.cuda.is_available():
@@ -11,7 +11,6 @@ if torch.cuda.is_available():
 else:
     torch.set_default_device('cpu')
     print("CUDA not available, default device set to CPU")
-
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
 checkpoint = torch.load(save_path)
@@ -58,9 +57,10 @@ def inference(sample_count, start_word, stopi):
     return samples_out
 
 
+if __name__ == '__main__':
 
-start_word = 'software'
-samples = inference(20,start_word, stop_wordi)
-
-for sample in samples:
-    print(start_word, '-> ', sample)
+    start_word = 'software'
+    samples = inference(20,start_word, stop_wordi)
+    
+    for sample in samples:
+        print(start_word, '-> ', sample)
