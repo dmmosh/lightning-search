@@ -81,9 +81,8 @@ def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
             context = context[1:] + [wordi[word]]
         x.append(context)
         y.append(stop_wordi)
-        print([iword[i] for i in context])
-        print(stop_wordi)
     
+    print(x)
     x= torch.tensor(data=x,dtype=torch.long)
     y = torch.tensor(data=y,dtype=torch.long)
     return x,y
