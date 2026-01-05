@@ -1,4 +1,5 @@
 from header import *
+import numpy as np 
 import header
 
 '''
@@ -17,28 +18,6 @@ else:
     
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
-def manual_25th_percentile(data):
-    if not data:
-        return None
-    
-    # 1. Sort the data
-    sorted_data = sorted(data)
-    n = len(sorted_data)
-    
-    # 2. Calculate the rank (index)
-    # Using the (n-1) method common in most statistical software
-    rank = 0.25 * (n - 1)
-    
-    # 3. Interpolate
-    index = int(rank)       # The integer part
-    fraction = rank - index # The decimal part
-    
-    if index + 1 < n:
-        # Interpolation formula: low_val + fraction * (high_val - low_val)
-        return sorted_data[index] + fraction * (sorted_data[index + 1] - sorted_data[index])
-    else:
-        return sorted_data[index]
-
 
 def subi(sub:str): # substring to index 
     return int.from_bytes(sub.encode('utf-8'), 'big')
@@ -55,7 +34,7 @@ iword = {i:word for i, word in enumerate(dictionary)}
 stop_word = '.'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
-percentile = manual_25th_percentile(dictionary)
+percentile = np.percentile(dictionary,25)
 
 wordi = {word:i for i, word in iword.items()}
 
