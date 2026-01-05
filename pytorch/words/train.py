@@ -85,17 +85,15 @@ def build_data(dictionary):
     
     
     for word in dictionary:
-        context = [stop_wordi]*percentile
-        wordi = word[:-1]
         
         # do a sliding window
-        i = max(0,len(wordi)-percentile) # start
+        i = max(0,len(word)-1-percentile) # start
         j = i
-        while(j<len(wordi)):
+        while(j<len(word)-1):
             out = [stop_wordi]*(percentile-(j-i+1)) + [ord(c) for c in wordi[i:j+1]]
             #print(out)
             x.append(out)
-            y.append(stop_wordi)
+            y.append(wordi[word])
             j+=1
             
             
