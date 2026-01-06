@@ -22,6 +22,7 @@ wordi = checkpoint['wordi']
 hidden_layer_size = checkpoint['hidden_layer_size']
 block_size = checkpoint['block_size']
 stop_wordi = checkpoint['stop_wordi']
+stop_word = '.'
 print("Model and related variables loaded successfully.")
 
 model = nn.Sequential(
@@ -34,25 +35,18 @@ model.eval()
 
 
 def inference(start_word, stopi):
-    context = [wordi[start_word]]*block_size
-    words = []
     
-    while(len(words) < 5):
-        embedx = embed[torch.tensor(context)]
-        embedx = embedx.view(1,embedding_dimensions*block_size)
-        
-        logits = model(embedx)
-        #print(logits)
-        probs = F.softmax(logits,dim=1)
-        chari=torch.multinomial(probs,num_samples=1).item()
-        #print(iword[chari])
-        context = context[1:] + [chari]
-        words.append(iword[chari])
-        if(chari == stopi):
-            break
-        
-    #print(words)
-    return ' '.join(words[:-1])
+    out = start_word[-block_size:].rjust(block_size,stop_word)
+    out = [ord(c) for c in out]
+    #print(out)
+    embedx = embed[torch.tensor(out)]
+    embedx = embedx.view(1,embedding_dimensions*block_size)
+    #print(embedx.shape)
+    with torch.no_grad():
+        output = model(embedx)
+        probs = torch.softmax(output, dim=1)
+        top_probs, top_indices = torch.topk(probs, k=6, dim=1)
+        return [iword[i] for i in top_indices.tolist()[0]]
 
 
 if __name__ == '__main__':
@@ -60,17 +54,19 @@ if __name__ == '__main__':
     while(True):
         
         start_word = input()
-        if(start_word not in wordi):
-            print(start_word,'->')
-            continue
+        
+        out = inference(start_word,stop_wordi)
+        # if(start_word not in wordi):
+        #     print(start_word,'->')
+        #     continue
     
-        out = set()
-        i = 0
-        while(i<50 and len(out)<6):
-            infer = inference(start_word,stop_wordi)
-            if(infer != ''):
-                out.add(infer)
-            i+=1
+        # out = set()
+        # i = 0
+        # while(i<50 and len(out)<6):
+        #     infer = inference(start_word,stop_wordi)
+        #     if(infer != ''):
+        #         out.add(infer)
+        #     i+=1
 
         for o in out:
             print(start_word, '-> ', o)

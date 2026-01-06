@@ -1,6 +1,4 @@
 from header import *
-import numpy as np 
-import header
 
 '''
 train the nn model
@@ -19,30 +17,22 @@ else:
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
 
-def subi(sub:str): # substring to index 
-    return int.from_bytes(sub.encode('utf-8'), 'big')
-
-def isub(i): # index to substring
-    return i.to_bytes((i.bit_length() + 7) // 8, 'big').decode('utf-8')
-
 
 df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
 titles = list(set(df['name']))  # get the titles
-dictionary = set([ word for title in titles for word in title.split()])
+dictionary = list(set([ word for title in titles for word in title.split()]))
 #print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
 stop_word = '.'
-stop_wordi = ord(stop_word)
+stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
-percentile = int(np.percentile(list(map(len,dictionary)),25)) # 25th percentile of dictionary lengths 
 
 wordi = {word:i for i, word in iword.items()}
 
 embedding_dimensions = 5 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
-
-block_size = percentile # a good balance between too much and too little
-hidden_layer_size = 100
+block_size = 10
+hidden_layer_size = 500
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -54,30 +44,8 @@ embed = torch.rand((dictionary_size, embedding_dimensions)) # embedding layer in
 # model training variables
 batch_size = 512 # batch size ( amount of samples before the weights are updated)
 learning_rate = 0.1 # how much model weights adjust during training
-iterations = 100000 # number of iterations of batches to complete one epoch (pass through entire dataset)
+iterations = 50000 # number of iterations of batches to complete one epoch (pass through entire dataset)
 
-
-def build_data(titles:list[str], iword, wordi,stop_wordi,block_size):
-    x=[]
-    y=[]
-    for title in titles:
-        words = title.strip().split(' ')
-        context = [stop_wordi]*block_size
-        for word in words + [stop_wordi]: # split words with the key at the end
-            if word not in wordi: # word is not in dict
-                continue
-            x.append(context)
-            y.append(wordi[word])
-            print([iword[i] for i in context])
-            print(word)
-            context = context[1:] + [wordi[word]]
-        x.append(context)
-        y.append(stop_wordi)
-    
-    print(x)
-    x= torch.tensor(data=x,dtype=torch.long)
-    y = torch.tensor(data=y,dtype=torch.long)
-    return x,y
 
 def build_data(dictionary):
     x=[]
@@ -85,15 +53,17 @@ def build_data(dictionary):
     
     
     for word in dictionary:
-        
+    
+        if word not in wordi:
+            continue    
         # do a sliding window
-        i = max(0,len(word)-1-percentile) # start
+        i = max(0,len(word)-block_size) # start
         j = i
-        while(j<len(word)-1):
-            out = [stop_wordi]*(percentile-(j-i+1)) + [ord(c) for c in word[i:j+1]]
+        while(j<len(word)):
+            out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
             #print(out)
             x.append(out)
-            y.append(word)
+            y.append(wordi[word])
             j+=1
             
         # context = [stop_wordi]*percentile-len(d)-1 if  (percentile-len(d)-1>0) else []
@@ -111,15 +81,7 @@ def visualize(x,y,iword):
     for i in range(100):
         context = x[i]
         target = y[i]
-        context_words = [iword[i.item()] for i in context]
-        target_word = iword[target.item()]
-        print(f'{context_words} -> {target_word}')
-
-def visualize(x,y,iword):
-    for i in range(100):
-        context = x[i]
-        target = y[i]
-        context_words = [isub(i.item()) for i in context]
+        context_words = [chr(i.item()) for i in context]
         target_word = iword[target.item()]
         print(f'{context_words} -> {target_word}')
 
@@ -154,21 +116,22 @@ def train_model(x,y):
 if __name__ == '__main__':
 
     x,y = build_data(dictionary)
-    visualize(x,y,iword)
+
     
-    # train_model(x, y)
-    # torch.save({
-    #     'model_state_dict': model.state_dict(),
-    #     'embed': embed,
-    #     'iword': iword,
-    #     'wordi': wordi,
-    #     'stop_wordi': stop_wordi,
-    #     'embedding_dimensions':embedding_dimensions,
-    #     'dictionary_size':dictionary_size,
-    #     'hidden_layer_size':hidden_layer_size,
-    #     'block_size':block_size
-    # }, save_path)
-    # print("Model and related variables saved successfully.")
+    visualize(x,y,iword)
+    train_model(x, y)
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'embed': embed,
+        'iword': iword,
+        'wordi': wordi,
+        'stop_wordi': stop_wordi,
+        'hidden_layer_size':hidden_layer_size,
+        'block_size':block_size,
+        'embedding_dimensions':embedding_dimensions,
+        'dictionary_size':dictionary_size
+    }, save_path)
+    print("Model and related variables saved successfully.")
 
 
 
