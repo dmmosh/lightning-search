@@ -245,7 +245,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"hsdello liahfghanakedin!\","
             "\"hsdello ldsiaanakedin!\""
             "],"
-            "{\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]}"
+            "{\"google:suggestrelevance\":[1,1,1,1,1,1,1,1,1,1]}"
             "]"; 
             ;
             errorCode = 200;

@@ -24,7 +24,7 @@ titles = list(set(df['name']))  # get the titles
 dictionary = list(set([ word for title in titles for word in title.split()]))
 #print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
-stop_word = '.'
+stop_word = '?'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
 
