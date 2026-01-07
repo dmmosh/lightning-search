@@ -234,7 +234,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             //std::cout << parsed.substr(lastWord(parsed)) << '\n';
             //parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
             parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
-            "\"swag\","
+            "\"https://www.facebook.com\","
             "\"hi chat\","
             "\"hello\","
             "\"sdu\","
@@ -249,7 +249,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"google:clientdata\":{\"bpc\":false,\"tlw\":false},"
             "\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10],"
             "\"google:suggestdetail\":[{},{},{},{},{},{},{},{},{},{}],"
-            "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
+            "\"google:suggesttype\":[\"NAVIGATION\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
             "}"
             "]";
             /*
