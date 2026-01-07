@@ -245,7 +245,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"oxymoro\","
             "\"ahxsj\""
             "],"
-            "{\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10]}"
+            "{\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]}"
             "]"; 
             ;
             /*
