@@ -234,15 +234,15 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             std::cout << parsed.substr(lastWord(parsed)) << '\n';
             parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
             "\"hello linkedin!\","
-            "\"hello linkedin!\","
-            "\"hello linkedin!\","
-            "\"hello linkedin!\","
-            "\"hello linkedin!\","
-            "\"hello linkedin!\","
-            "\"hello linkedin!\","
-            "\"hello linkedin!\","
-            "\"hello linkedin!\","
-            "\"hello linkedin!\""
+            "\"hello liankedin!\","
+            "\"hello linfkedin!\","
+            "\"hello linkfedin!\","
+            "\"hello linakedin!\","
+            "\"hello linakedin!\","
+            "\"hello linkegdin!\","
+            "\"hello linkaedin!\","
+            "\"hello linksedin!\","
+            "\"hello linksedin!\""
             
             ;
             parsed += "]]"; 
