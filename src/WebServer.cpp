@@ -242,7 +242,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"hello linkedin!\","
             "\"hello linkedin!\","
             "\"hello linkedin!\","
-            "\"hello linkedin!\","
+            "\"hello linkedin!\""
             
             ;
             parsed += "]]"; 
