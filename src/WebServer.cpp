@@ -238,7 +238,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"hebbdllo liankedin!\","
             "\"helcxclo lifdvfdnfkedin!\","
             "\"hexxllo linvdfskfedin!\","
-            "\"hsdello liaanakedin!\"],"
+            "\"hsdello liaanakedin!\","
             "\"hsdello licsdcsdaanakedin!\","
             "\"hsdello lcdssdsiaanakedin!\","
             "\"hsdello liahfghgfanakedin!\","
