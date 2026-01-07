@@ -238,9 +238,9 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"hebbdllo liankedin!\","
             "\"helcxclo lifdvfdnfkedin!\","
             "\"hexxllo linvdfskfedin!\","
-            "\"hsdello liaanakedin!\","
+            "\"hsdello liaanakedin!\"],"
             "{\"google:suggestdetail\":[{},{},{},{},{}]}"
-            "]]"); 
+            "]}"); 
             ;
             errorCode = 200;
             size = parsed.length();
