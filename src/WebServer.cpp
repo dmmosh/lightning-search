@@ -233,16 +233,16 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         } else if(!strncmp(url, "ac?", 3)){ // autocomplete feature as defined by opensearch.xml file
             std::cout << parsed.substr(lastWord(parsed)) << '\n';
             parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
-            "\"hello linkedin!\","
-            "\"hello liankedin!\","
-            "\"hello linfkedin!\","
-            "\"hello linkfedin!\","
-            "\"hello linakedin!\","
-            "\"hello linakedin!\","
-            "\"hello linkegdin!\","
-            "\"hello linkaedin!\","
-            "\"hello linksedin!\","
-            "\"hello linksedin!\""
+            "\"helbblo linkedin!\","
+            "\"hebbdllo liankedin!\","
+            "\"helcxclo lifdvfdnfkedin!\","
+            "\"hexxllo linvdfskfedin!\","
+            "\"hsdello liaanakedin!\","
+            "\"hellgbo linakedin!\","
+            "\"hvdfello linkegdin!\","
+            "\"helcxlo libdcnkaedin!\","
+            "\"heascllo linksedin!\","
+            "\"hello linkscbedin!\""
             
             ;
             parsed += "]]"; 
