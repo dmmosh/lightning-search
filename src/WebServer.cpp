@@ -239,12 +239,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"helcxclo lifdvfdnfkedin!\","
             "\"hexxllo linvdfskfedin!\","
             "\"hsdello liaanakedin!\"],"
-            "\"hsdello licsdcsdaanakedin!\"],"
-            "\"hsdello lcdssdsiaanakedin!\"],"
-            "\"hsdello liahfghgfanakedin!\"],"
-            "\"hsdello liahfghanakedin!\"],"
-            "\"hsdello ldsiaanakedin!\"],"
-            "{\"google:clientdata\":{\"bpc\":false,\"phi\":-1,\"tlw\":false}}"
+            "\"hsdello licsdcsdaanakedin!\","
+            "\"hsdello lcdssdsiaanakedin!\","
+            "\"hsdello liahfghgfanakedin!\","
+            "\"hsdello liahfghanakedin!\","
+            "\"hsdello ldsiaanakedin!\""
+            "],{\"google:clientdata\":{\"bpc\":false,\"phi\":-1,\"tlw\":false}}"
             "]"); 
             ;
             errorCode = 200;
