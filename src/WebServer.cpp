@@ -239,7 +239,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"helcxclo lifdvfdnfkedin!\","
             "\"hexxllo linvdfskfedin!\","
             "\"hsdello liaanakedin!\"],"
-            "{\"google:suggestdetail\":[{},{},{},{},{}]}"
+            "{\"google:clientdata\":{\"bpc\":false,\"phi\":-1,\"tlw\":false}}"
             "]"; 
             ;
             errorCode = 200;
