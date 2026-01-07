@@ -69,8 +69,8 @@ def inference(start_word, stopi):
         #print(logits)
         probs = F.softmax(logits,dim=1)
         chari=torch.multinomial(probs,num_samples=1).item()
-        # top_probs, top_indices = torch.topk(probs, k=6, dim=1)
-        # print([iword[i] for i in top_indices.tolist()[0]])
+        top_probs, top_indices = torch.topk(probs, k=6, dim=1)
+        print([iword[i] for i in top_indices.tolist()[0]])
         #print(iword[chari])
         context = context[1:] + [chari]
         words.append(iword[chari])

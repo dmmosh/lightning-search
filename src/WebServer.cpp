@@ -233,28 +233,27 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         } else if(!strncmp(url, "ac?", 3)){ // autocomplete feature as defined by opensearch.xml file
             //std::cout << parsed.substr(lastWord(parsed)) << '\n';
             //parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
-            parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
-            "\"https://www.facebook.com\","
-            "\"hi chat\","
-            "\"hello\","
-            "\"sdu\","
-            "\"shaniqua\","
-            "\"sadsajh\","
-            "\"on gofd\","
-            "\"shiet\","
-            "\"oxymoro\","
-            "\"oxymordscdsco\","
-            "\"oxaaaaaymoro\","
-            "\"ahxsj\""
-            "],[\"facebook\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
+
+            // parsed debug
+            parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", [" +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + '\"' +
+            "],[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
             "{"
             "\"google:clientdata\":{\"bpc\":false,\"tlw\":false},"
-            "\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10,11,12],"
-            "\"google:suggestdetail\":[{},{},{},{},{},{},{},{},{},{},{},{}],"
-            "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
+            "\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10],"
+            "\"google:suggestdetail\":[{},{},{},{},{},{},{},{},{},{}],"
+            "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
             "}"
-            "]";
-            
+            "]"; 
             errorCode = 200;
             size = parsed.length();
             h_num=H_JSON;
