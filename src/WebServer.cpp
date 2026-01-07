@@ -233,7 +233,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         } else if(!strncmp(url, "ac?", 3)){ // autocomplete feature as defined by opensearch.xml file
             std::cout << parsed.substr(lastWord(parsed)) << '\n';
             //parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
-            parsed = std::string("[\"\",["
+            parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
             "\"helbblo linkedin!\","
             "\"hebbdllo liankedin!\","
             "\"helcxclo lifdvfdnfkedin!\","
@@ -245,7 +245,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"hsdello liahfghanakedin!\","
             "\"hsdello ldsiaanakedin!\""
             "],{\"google:clientdata\":{\"bpc\":false,\"phi\":-1,\"tlw\":false}}"
-            "]"); 
+            "]"; 
             ;
             errorCode = 200;
             size = parsed.length();
