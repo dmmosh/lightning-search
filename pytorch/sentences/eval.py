@@ -1,7 +1,7 @@
 import torch
 from header import * # read access
 
-if(not os.path.exists(save_path)): # if the save path isnt present, exit
+if(not os.path.exists(save_path_sentences)): # if the save path isnt present, exit
     os._exit()
 
 # set to cuda or cpu
@@ -13,7 +13,7 @@ else:
     print("CUDA not available, default device set to CPU")
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
-checkpoint = torch.load(save_path)
+checkpoint = torch.load(save_path_sentences)
 embed = checkpoint['embed']
 embedding_dimensions = checkpoint['embedding_dimensions'] # number of integers to repsent in n dimension space
 dictionary_size = checkpoint['dictionary_size']
@@ -45,6 +45,8 @@ def inference(start_word, stopi):
         #print(logits)
         probs = F.softmax(logits,dim=1)
         chari=torch.multinomial(probs,num_samples=1).item()
+        # top_probs, top_indices = torch.topk(probs, k=6, dim=1)
+        # print([iword[i] for i in top_indices.tolist()[0]])
         #print(iword[chari])
         context = context[1:] + [chari]
         words.append(iword[chari])
@@ -54,6 +56,29 @@ def inference(start_word, stopi):
     #print(words)
     return ' '.join(words[:-1])
 
+
+def inference(start_word, stopi):
+    context = [wordi[start_word]]*block_size
+    words = []
+    
+    while(len(words) < 5):
+        embedx = embed[torch.tensor(context)]
+        embedx = embedx.view(1,embedding_dimensions*block_size)
+        
+        logits = model(embedx)
+        #print(logits)
+        probs = F.softmax(logits,dim=1)
+        chari=torch.multinomial(probs,num_samples=1).item()
+        # top_probs, top_indices = torch.topk(probs, k=6, dim=1)
+        # print([iword[i] for i in top_indices.tolist()[0]])
+        #print(iword[chari])
+        context = context[1:] + [chari]
+        words.append(iword[chari])
+        if(chari == stopi):
+            break
+        
+    #print(words)
+    return ' '.join(words[:-1])
 
 if __name__ == '__main__':
     print('sentence prediction testing')
