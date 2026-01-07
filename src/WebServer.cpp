@@ -234,8 +234,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             //std::cout << parsed.substr(lastWord(parsed)) << '\n';
             //parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
             parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
-            "\"helbblo linkedin!\","
-            "\"hi\","
+            "\"swag\","
+            "\"hi chat\","
             "\"hello\","
             "\"sdu\","
             "\"shaniqua\","
@@ -244,10 +244,14 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"shiet\","
             "\"oxymoro\","
             "\"ahxsj\""
-            "],"
-            "{\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]}"
-            "]"; 
-            ;
+            "],[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
+            "{"
+            "\"google:clientdata\":{\"bpc\":false,\"tlw\":false},"
+            "\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10],"
+            "\"google:suggestdetail\":[{},{},{},{},{},{},{},{},{},{}],"
+            "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
+            "}"
+            "]";
             /*
             "\"swag\","
             "\"hi chat\","
