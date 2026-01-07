@@ -245,7 +245,12 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"oxymoro\","
             "\"ahxsj\""
             "],[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
-            "{\"google:clientdata\":{\"bpc\":false,\"tlw\":false}}"
+            "{"
+            "\"google:clientdata\":{\"bpc\":false,\"tlw\":false},"
+            "\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10],"
+            "\"google:suggestdetail\":[{},{},{},{},{},{},{},{},{},{}],"
+            "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
+            "}"
             "]"; 
             ;
             errorCode = 200;
