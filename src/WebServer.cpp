@@ -243,35 +243,18 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"on gofd\","
             "\"shiet\","
             "\"oxymoro\","
+            "\"oxymordscdsco\","
+            "\"oxaaaaaymoro\","
             "\"ahxsj\""
-            "],[\"facebook\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
+            "],[\"facebook\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
             "{"
             "\"google:clientdata\":{\"bpc\":false,\"tlw\":false},"
-            "\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10],"
-            "\"google:suggestdetail\":[{},{},{},{},{},{},{},{},{},{}],"
-            "\"google:suggesttype\":[\"NAVIGATION\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
+            "\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10,11,12],"
+            "\"google:suggestdetail\":[{},{},{},{},{},{},{},{},{},{},{},{}],"
+            "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
             "}"
             "]";
-            /*
-            "\"swag\","
-            "\"hi chat\","
-            "\"hello\","
-            "\"sdu\","
-            "\"shaniqua\","
-            "\"sadsajh\","
-            "\"on gofd\","
-            "\"shiet\","
-            "\"oxymoro\","
-            "\"ahxsj\""
-            "],[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
-            "{"
-            "\"google:clientdata\":{\"bpc\":false,\"tlw\":false},"
-            "\"google:suggestrelevance\": [1,2,3,4,5,6,7,8,9,10],"
-            "\"google:suggestdetail\":[{},{},{},{},{},{},{},{},{},{}],"
-            "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
-            "}"
-            "]"; 
-            */
+            
             errorCode = 200;
             size = parsed.length();
             h_num=H_JSON;
