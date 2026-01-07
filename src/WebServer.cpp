@@ -245,7 +245,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"hsdello liahfghanakedin!\","
             "\"hsdello ldsiaanakedin!\""
             "],"
-            "{\"google:verbatimrelevance\": 1}"
+            "{\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]}"
             "]"; 
             ;
             errorCode = 200;
