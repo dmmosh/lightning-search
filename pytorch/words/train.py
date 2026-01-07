@@ -44,7 +44,7 @@ embed = torch.rand((dictionary_size, embedding_dimensions)) # embedding layer in
 # model training variables
 batch_size = 512 # batch size ( amount of samples before the weights are updated)
 learning_rate = 0.1 # how much model weights adjust during training
-iterations = 50000 # number of iterations of batches to complete one epoch (pass through entire dataset)
+iterations = 100000 # number of iterations of batches to complete one epoch (pass through entire dataset)
 
 
 def build_data(dictionary):
@@ -130,7 +130,7 @@ if __name__ == '__main__':
         'block_size':block_size,
         'embedding_dimensions':embedding_dimensions,
         'dictionary_size':dictionary_size
-    }, save_path)
+    }, save_path_words)
     print("Model and related variables saved successfully.")
 
 

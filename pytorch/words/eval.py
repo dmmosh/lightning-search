@@ -1,7 +1,7 @@
 import torch
 from header import * # read access
 
-if(not os.path.exists(save_path)): # if the save path isnt present, exit
+if(not os.path.exists(save_path_words)): # if the save path isnt present, exit
     os._exit()
 
 # set to cuda or cpu
@@ -13,7 +13,7 @@ else:
     print("CUDA not available, default device set to CPU")
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
-checkpoint = torch.load(save_path)
+checkpoint = torch.load(save_path_words)
 embed = checkpoint['embed']
 embedding_dimensions = checkpoint['embedding_dimensions'] # number of integers to repsent in n dimension space
 dictionary_size = checkpoint['dictionary_size']
@@ -45,7 +45,7 @@ def inference(start_word, stopi):
     with torch.no_grad():
         output = model(embedx)
         probs = torch.softmax(output, dim=1)
-        top_probs, top_indices = torch.topk(probs, k=6, dim=1)
+        top_probs, top_indices = torch.topk(probs, k=10, dim=1)
         return [iword[i] for i in top_indices.tolist()[0]]
 
 
