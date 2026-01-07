@@ -244,7 +244,8 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"hsdello liahfghgfanakedin!\","
             "\"hsdello liahfghanakedin!\","
             "\"hsdello ldsiaanakedin!\""
-            "],{\"google:clientdata\":{\"bpc\":false,\"phi\":-1,\"tlw\":false}}"
+            "],[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",],[],"
+            "{\"google:clientdata\":{\"bpc\":false,\"phi\":-1,\"tlw\":false}}"
             "]"; 
             ;
             errorCode = 200;
