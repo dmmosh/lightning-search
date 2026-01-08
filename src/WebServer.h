@@ -2,9 +2,9 @@
 #include "header.h"
 #include <string>
 #include <iostream>
-#include <torch>
 #include <sstream>
 #include <istream>
+#include <torch/torch.h>
 #include <iterator>
 #include <fstream>
 #include <vector>
@@ -18,7 +18,6 @@
 
 // for multiple clients
 extern const char* headers[]; 
-
 
 std::string compressGzip(const std::string& str);
 unsigned int lastWord(const std::string& word); // client connected
