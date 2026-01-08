@@ -4,15 +4,15 @@
 #include <iostream>
 #include <sstream>
 #include <istream>
-#include <torch/torch.h>
+#include <ATen/ATen.h>
 #include <iterator>
 #include <fstream>
 #include <vector>
 #include <filesystem>
 #include <cstring>
 #include <cstdlib> // Required for std::getenv
-#include <regex>
 #include <cpr/cpr.h>
+#include <regex>
 #include <zlib.h>
 
 
