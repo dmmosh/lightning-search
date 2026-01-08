@@ -2,6 +2,7 @@
 #include "header.h"
 #include <string>
 #include <iostream>
+#include <torch>
 #include <sstream>
 #include <istream>
 #include <iterator>
@@ -11,35 +12,12 @@
 #include <cstring>
 #include <cstdlib> // Required for std::getenv
 #include <regex>
-#include <mutex>
 #include <cpr/cpr.h>
 #include <zlib.h>
 
 
 // for multiple clients
 extern const char* headers[]; 
-
-
-class singleton{
-    private:
-        std::string name;
-
-        static singleton* ptr;
-        static std::mutex mtx;
-        singleton(){}; 
-
-    public:
-        singleton(const singleton& obj) = delete;
-        static singleton* getInstance();
-        void set(const std::string& name);
-        const std::string get();
-        void print() const;
-};
-
-// for transition between backend and frontend
-inline singleton* singleton ::ptr = nullptr; 
-inline std::mutex singleton ::mtx;
-extern singleton* s1;
 
 
 std::string compressGzip(const std::string& str);

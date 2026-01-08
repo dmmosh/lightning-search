@@ -15,25 +15,30 @@ else:
     torch.set_default_device('cpu')
     print("CUDA not available, default device set to CPU")
     
+torch.cuda.empty_cache()
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
 
+from datasets import load_dataset
 
-df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
-titles = list(set(df['name']))  # get the titles
+ds1 = load_dataset("tingchih/all_sentences", split="train", streaming=True)
+ds2 = load_dataset("lighteval/natural_questions_clean", split="train", streaming=True)
+import re
+#df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
+titles = [re.sub(r'[^a-zA-Z0-9]+$','',text).lower() for text in list(ds1.take(1000)['text'])]+list(ds2.take(107000)['question']) #+ list(set(df['name']))  # get the titles
 dictionary = list(set([ word for title in titles for word in title.split()]))
 #print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
-stop_word = '?'
+stop_word = '\\'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
 
 wordi = {word:i for i, word in iword.items()}
 
-embedding_dimensions = 5 # number of integers to repsent in n dimension space
+embedding_dimensions = 6 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
-block_size = 3
-hidden_layer_size = 500
+block_size = 4
+hidden_layer_size = 4000
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -46,28 +51,26 @@ embed = torch.rand((dictionary_size, embedding_dimensions)) # embedding layer in
 batch_size = 512 # batch size ( amount of samples before the weights are updated)
 learning_rate = 0.1 # how much model weights adjust during training
 iterations = 50000 # number of iterations of batches to complete one epoch (pass through entire dataset)
+x,y = torch.empty((0,3),dtype=torch.long), torch.empty((0,3),dtype=torch.long)
 
-
-def build_data(titles:list[str], wordi,stop_wordi,block_size):
-    x=[]
-    y=[]
+def build_data():
+    x1=[]
+    y1=[]
     for title in titles:
         words = title.strip().split(' ')
         context = [stop_wordi]*block_size
         for word in words + [stop_wordi]: # split words with the key at the end
             if word not in wordi: # word is not in dict
                 continue
-            x.append(context)
-            y.append(wordi[word])
+            x1.append(context)
+            y1.append(wordi[word])
             context = context[1:] + [wordi[word]]
-        x.append(context)
-        y.append(stop_wordi)
+        x1.append(context)
+        y1.append(stop_wordi)
     
-    x= torch.tensor(data=x,dtype=torch.long)
-    y = torch.tensor(data=y,dtype=torch.long)
-    return x,y
+    return torch.tensor(data=x1,dtype=torch.long), torch.tensor(data=y1,dtype=torch.long)
 
-def visualize(x,y,iword):
+def visualize(x,y):
     for i in range(100):
         context = x[i]
         target = y[i]
@@ -97,7 +100,7 @@ def train_model(x,y):
         
         for p in model.parameters():
             p.data -= learning_rate * p.grad # minimizes loss
-        if i%1000 == 0:
+        if i%100 == 0:
             print('iteration', i, 'loss:', loss.item())
 
 
@@ -105,11 +108,14 @@ def train_model(x,y):
 
 if __name__ == '__main__':
 
-    x,y = build_data(titles,wordi,stop_wordi,block_size)
-
+    #build_data()
     
+    x,y = build_data()
+    visualize(x,y)
+    print(x.shape)
+    train_model(x,y)
     
-    train_model(x, y)
+    #train_model()
     torch.save({
         'model_state_dict': model.state_dict(),
         'embed': embed,

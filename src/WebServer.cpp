@@ -33,30 +33,7 @@ const char* headers[] = {
 int h_num = H_PLAIN; // header number
 const char* env_key = (const char*)"EXA1"; // goes up (env_key[3]) until it cant anymore 
 char* key = std::getenv(env_key);
-singleton* s1;
 
-
-// front and backend sync
-singleton* singleton::getInstance(){
-    if(ptr == nullptr){
-        std::lock_guard<std::mutex> lock(mtx);
-        if(ptr == nullptr){
-            ptr = new singleton();
-        }
-    }
-    return ptr;
-};
-void singleton::set(const std::string& name){
-    this->name = name;
-};
-
-const std::string singleton::get(){
-    return name;
-};
-
-void singleton::print() const{
-    std::cout << name << '\n';
-};
 
 // Helper function to compress a string
 std::string compressGzip(const std::string& str) {
@@ -233,19 +210,20 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         } else if(!strncmp(url, "ac?", 3)){ // autocomplete feature as defined by opensearch.xml file
             //std::cout << parsed.substr(lastWord(parsed)) << '\n';
             //parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
+            parsed = "";
+            /*
 
             // parsed debug
-            parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", [" +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + "\"," +
-            '\"'+ (parsed.c_str()+4) + '\"' +
+            parsed = "\"swag\","
+            "\"hi chat\","
+            "\"hello\","
+            "\"sdu\","
+            "\"shaniqua\","
+            "\"sadsajh\","
+            "\"on gofd\","
+            "\"shiet\","
+            "\"oxymoro\","
+            "\"ahxsj\""
             "],[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
             "{"
             "\"google:clientdata\":{\"bpc\":false,\"tlw\":false},"
@@ -254,6 +232,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
             "}"
             "]"; 
+            */
             errorCode = 200;
             size = parsed.length();
             h_num=H_JSON;

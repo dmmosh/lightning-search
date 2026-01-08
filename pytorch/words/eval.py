@@ -45,7 +45,7 @@ def inference(start_word, stopi):
     with torch.no_grad():
         output = model(embedx)
         probs = torch.softmax(output, dim=1)
-        top_probs, top_indices = torch.topk(probs, k=10, dim=1)
+        _, top_indices = torch.topk(probs, k=10, dim=1)
         return [iword[i] for i in top_indices.tolist()[0]]
 
 
