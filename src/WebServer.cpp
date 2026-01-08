@@ -42,7 +42,6 @@ std::string compressGzip(const std::string& str) {
 
     if (deflateInit(&zs, 6) != Z_OK)
         throw(std::runtime_error("deflateInit failed while compressing."));
-
     zs.next_in = (Bytef*)str.data();
     zs.avail_in = str.size();           // set the z_stream's input
 

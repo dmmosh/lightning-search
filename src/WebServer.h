@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <istream>
-#include <ATen/ATen.h>
+#include <torch/torch.h>
 #include <iterator>
 #include <fstream>
 #include <vector>
@@ -14,7 +14,6 @@
 #include <cpr/cpr.h>
 #include <regex>
 #include <zlib.h>
-
 
 // for multiple clients
 extern const char* headers[]; 
