@@ -22,7 +22,7 @@ wordi = checkpoint['wordi']
 hidden_layer_size = checkpoint['hidden_layer_size']
 block_size = checkpoint['block_size']
 stop_wordi = checkpoint['stop_wordi']
-stop_word = '.'
+stop_word=iword[stop_wordi]
 print("Model and related variables loaded successfully.")
 
 model = nn.Sequential(

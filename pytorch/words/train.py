@@ -17,22 +17,50 @@ else:
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
 
+import re
+#df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
+from datasets import load_dataset
+checkpoint = torch.load('model_states_sentences.pth') # going to copy the dictionary and wordi / iword values from sentences 
+iword = checkpoint['iword']
+wordi = checkpoint['wordi']
+stop_wordi = checkpoint['stop_wordi']
+stop_word=iword[stop_wordi]
 
-df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
-titles = list(set(df['name']))  # get the titles
-dictionary = list(set([ word for title in titles for word in title.split()]))
+# 1st dataset , 
+#ds1 = [element.replace('/', '') for element in list(load_dataset("shreyasharma/sentences_truthv2", split="train")['sentences'])] # truth nuke questions
+
+# dictionary: will contain a bunch of words !! for autocomplete
+#dictionary = {load_dataset("jeggers/words_length_short",split="train")['word']} # short words
+dictionary = set([word.lower() for word in load_dataset("AIGym/top-100K-words", split="train")['text'] if word.isalnum()]) # top 100k words
+dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
+dictionary.update(load_dataset("redflash/words",split="train")['words']) # more random words
+ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
+dictionary.update(['google.com'] + list(ds_websites.take(60000)['google.com'])) # top 100000 websites, for some reason google is the column name 
+dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train")['word'])
+
+#ds1 += [re.sub(r'[^\x00-\x7F]+', '',word) for word in list(load_dataset("lighteval/natural_questions_clean", split="train")['question'])] #question words
+
+
+
+# 2nd dataset imports as utf 8, have to convert to ascii by removing the invalid characters
+#titles = [name for name in ds1 if len(name)>2]
+#dictionary = list(set([ word for title in titles for word in title.split()]))
+#print(dictionary[:10])
+#dictionary = list(set([ word for title in titles for word in title.split()]))
 #print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
-stop_word = '\\'
+stop_word = '?'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
 
 wordi = {word:i for i, word in iword.items()}
 
-embedding_dimensions = 5 # number of integers to repsent in n dimension space
-dictionary_size = len(dictionary) + 1
+
+
+embedding_dimensions = 10 # number of integers to repsent in n dimension space
+dictionary_size = len(dictionary)+1
 block_size = 10
-hidden_layer_size = 500
+hidden_layer_size = 2000
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -40,7 +68,6 @@ model = nn.Sequential(
     nn.Linear(hidden_layer_size, dictionary_size, bias=False), nn.BatchNorm1d(dictionary_size)
 )
 embed = torch.rand((dictionary_size, embedding_dimensions)) # embedding layer init, transforms discrete data (words) into numerical vectors
-
 # model training variables
 batch_size = 512 # batch size ( amount of samples before the weights are updated)
 learning_rate = 0.1 # how much model weights adjust during training
@@ -86,16 +113,25 @@ def visualize(x,y,iword):
         print(f'{context_words} -> {target_word}')
 
 def train_model(x,y):
-    for i in range(iterations):
-        ix = torch.randint(0,x.shape[0], (batch_size,))  # gives random index 
+    i = 0
+    loss_min = float('inf')
+    while(i<iterations and loss_min>2.0):
+        ix = torch.randint(0,len(y), (batch_size,))  # gives random index 
+        #print(y.shape, ix)
         xb, yb = x[ix], y[ix] # random input and output
+        # for element in xb:
+        #     for e in element:
+        #         if(e>=len(embed)):
+        #             print("OUT OF BOUNDS ",e, len(embed))
+        #print(int(torch.max(xb).item()))
         embedx = embed[xb]
+        #print(embedx.shape)
         
         # 512 x 5 x 3 matrix (3d) -> 512 x 15 matrix (2d)
         embedx = embedx.view(embedx.shape[0], embedding_dimensions*block_size)
         
         
-        logits = model.forward(embedx)
+        logits = model(embedx)
         
         loss = F.cross_entropy(logits,yb)
         
@@ -107,9 +143,10 @@ def train_model(x,y):
         
         for p in model.parameters():
             p.data -= learning_rate * p.grad # minimizes loss
-        if i%1000 == 0:
-            print('iteration', i, 'loss:', loss.item())
-
+        loss_min = loss.item()
+        if i%100 == 0:
+            print('iteration', i, 'loss:', loss_min)
+        i+=1
 
 #print(model)
 
@@ -132,10 +169,3 @@ if __name__ == '__main__':
         'dictionary_size':dictionary_size
     }, save_path_words)
     print("Model and related variables saved successfully.")
-
-
-
-
-
-
-

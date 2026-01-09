@@ -59,12 +59,12 @@ def inference(start_word):
 
 
 def inference(start_word:str):
-    sentence = str(re.split(r'[.,?!\'\"]','',start_word)[-1]) # gets the LAST sentence
+    sentence = str(re.split(r'[.,?!\'\"]',start_word)[-1]) # gets the LAST sentence
     slide = sentence.split(' ')[-block_size:] # splits the last sentence into a list of last block size words
     if slide[-1] not in wordi:
         return ['no matches']
     # last element guranteed to be ready for dataset
-    slide = ['']*(block_size-len(slide))+ slide # pad the slide with invalid values
+    slide = ['\\']*(block_size-len(slide))+ slide # pad the slide with invalid values
     
     
     # last word guranteed to be in the list , iterate back to get more
@@ -78,12 +78,10 @@ def inference(start_word:str):
             slide[i] = last_valid
     
     print(slide)
-    
-    
-    
-    
+    slide = [wordi[word] for word in slide]
+    slide_orig = slide[:]
     with torch.no_grad():
-        slide = [wordi[start_word]]*block_size
+        #slide = [wordi[start_word]]*block_size
         embedx = embed[torch.tensor(slide)]
         embedx = embedx.view(1,embedding_dimensions*block_size)
         #print(embedx.shape)
@@ -96,10 +94,9 @@ def inference(start_word:str):
         # for every follow up 
         for i, follow_up in enumerate(out):
             
-            slide = [wordi[start_word]]*block_size
-            slide[-1] = wordi[follow_up]
+            slide = slide_orig[1:] + [wordi[follow_up]]
             j = 0
-            while(j<15):
+            while(j<3):
                 embedx = embed[torch.tensor(slide)]
                 embedx = embedx.view(1,embedding_dimensions*block_size)
                 output = model(embedx)
@@ -139,9 +136,7 @@ if __name__ == '__main__':
     while(True):
         
         start_word = input()
-        if(start_word not in wordi):
-            print(start_word,'->')
-            continue
+        
     
         infer = inference(start_word)
         print(infer)

@@ -18,14 +18,12 @@ else:
 torch.cuda.empty_cache()
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
-
+import re
 from datasets import load_dataset
 
-ds1 = load_dataset("tingchih/all_sentences", split="train", streaming=True)
-ds2 = load_dataset("lighteval/natural_questions_clean", split="train", streaming=True)
-import re
+titles = [element.replace('/', '') for element in list(load_dataset("shreyasharma/sentences_truthv2", split="train")['sentences'])]
+titles+= [re.sub(r'[^\x00-\x7F]+', '',word) for word in list(load_dataset("lighteval/natural_questions_clean", split="train")['question'])]
 #df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
-titles = [re.sub(r'[^a-zA-Z0-9]+$','',text).lower() for text in list(ds1.take(1000)['text'])]+list(ds2.take(107000)['question']) #+ list(set(df['name']))  # get the titles
 dictionary = list(set([ word for title in titles for word in title.split()]))
 #print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
@@ -37,8 +35,8 @@ wordi = {word:i for i, word in iword.items()}
 
 embedding_dimensions = 6 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
-block_size = 4
-hidden_layer_size = 4000
+block_size = 2
+hidden_layer_size = 2000
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -50,7 +48,7 @@ embed = torch.rand((dictionary_size, embedding_dimensions)) # embedding layer in
 # model training variables
 batch_size = 512 # batch size ( amount of samples before the weights are updated)
 learning_rate = 0.1 # how much model weights adjust during training
-iterations = 50000 # number of iterations of batches to complete one epoch (pass through entire dataset)
+iterations = 100000 # number of iterations of batches to complete one epoch (pass through entire dataset)
 x,y = torch.empty((0,3),dtype=torch.long), torch.empty((0,3),dtype=torch.long)
 
 def build_data():
