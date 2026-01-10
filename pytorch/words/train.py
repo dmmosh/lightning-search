@@ -5,7 +5,8 @@ train the nn model
 
 start from scratch and save the model at the end
 '''
-
+import requests
+from urllib.parse import urlparse
 # set to cuda or cpu
 if torch.cuda.is_available():
     torch.set_default_device('cuda')
@@ -32,14 +33,45 @@ stop_word=iword[stop_wordi]
 # dictionary: will contain a bunch of words !! for autocomplete
 #dictionary = {load_dataset("jeggers/words_length_short",split="train")['word']} # short words
 dictionary = set([word.lower() for word in load_dataset("AIGym/top-100K-words", split="train")['text'] if word.isalnum()]) # top 100k words
-dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
+#dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
+
 dictionary.update(load_dataset("redflash/words",split="train")['words']) # more random words
 ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
-dictionary.update(['google.com'] + list(ds_websites.take(60000)['google.com'])) # top 100000 websites, for some reason google is the column name 
 dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train")['word'])
 
-#ds1 += [re.sub(r'[^\x00-\x7F]+', '',word) for word in list(load_dataset("lighteval/natural_questions_clean", split="train")['question'])] #question words
+def reroute(url):
+    # Ensure the URL has a scheme (http/https) for accurate parsing
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+    try:
+        response = requests.head(url, allow_redirects=False)
+        if 300 <= response.status_code < 400:
+            parsed_url = urlparse(response.headers['Location'])
+        else:
+            return ""
+        # netloc gives 'www.example.com', replace 'www.' if needed
+        return parsed_url.netloc.replace('www.', '', 1)
+    except:   
+        return ""
 
+websites = list(['google.com'] + list(ds_websites.take(100)['google.com'])) # top 100000 websites, for some reason google is the column name 
+print(len(websites))
+for i in range(len(websites)-1,-1,-1): # remove the overlapping prefixes in words 
+    websites[i] = reroute(websites[i]) # call a reroute and see where it goes
+    if websites[i] == '': # if string is empty, delete it 
+        websites.pop(i)
+    else: # website is valid and reroute works 
+        prefix = websites[i].split('.')[0] # remove the website prefixes
+        if prefix in dictionary:
+            dictionary.remove(prefix)
+    if(i%1000 == 0):
+        print(i, 'sites rerouted')
+print(websites)
+print(len(websites))    
+
+dictionary.update(websites) # websites could have duplicate reroutes and it will be handled by the set
+
+#ds1 += [re.sub(r'[^\x00-\x7F]+', '',word) for word in list(load_dataset("lighteval/natural_questions_clean", split="train")['question'])] #question words
 
 
 # 2nd dataset imports as utf 8, have to convert to ascii by removing the invalid characters
@@ -47,9 +79,8 @@ dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train"
 #dictionary = list(set([ word for title in titles for word in title.split()]))
 #print(dictionary[:10])
 #dictionary = list(set([ word for title in titles for word in title.split()]))
-#print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
-stop_word = '?'
+stop_word = '\\'
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
 
@@ -60,7 +91,7 @@ wordi = {word:i for i, word in iword.items()}
 embedding_dimensions = 10 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary)+1
 block_size = 10
-hidden_layer_size = 2000
+hidden_layer_size = 3000
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -114,8 +145,7 @@ def visualize(x,y,iword):
 
 def train_model(x,y):
     i = 0
-    loss_min = float('inf')
-    while(i<iterations and loss_min>2.0):
+    while(i<iterations):
         ix = torch.randint(0,len(y), (batch_size,))  # gives random index 
         #print(y.shape, ix)
         xb, yb = x[ix], y[ix] # random input and output
@@ -143,9 +173,8 @@ def train_model(x,y):
         
         for p in model.parameters():
             p.data -= learning_rate * p.grad # minimizes loss
-        loss_min = loss.item()
         if i%100 == 0:
-            print('iteration', i, 'loss:', loss_min)
+            print('iteration', i, 'loss:', loss.item())
         i+=1
 
 #print(model)
@@ -156,6 +185,7 @@ if __name__ == '__main__':
 
     
     visualize(x,y,iword)
+    print(x.shape)
     train_model(x, y)
     torch.save({
         'model_state_dict': model.state_dict(),
