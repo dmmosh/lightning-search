@@ -1,5 +1,7 @@
 from header import *
-
+import asyncio
+import httpx
+import random
 '''
 train the nn model
 
@@ -18,7 +20,6 @@ else:
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
 
-import re
 #df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
 from datasets import load_dataset
 checkpoint = torch.load('model_states_sentences.pth') # going to copy the dictionary and wordi / iword values from sentences 
@@ -34,17 +35,18 @@ stop_word=iword[stop_wordi]
 #dictionary = {load_dataset("jeggers/words_length_short",split="train")['word']} # short words
 dictionary = set([word.lower() for word in load_dataset("AIGym/top-100K-words", split="train")['text'] if word.isalnum()]) # top 100k words
 #dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
-
-dictionary.update(load_dataset("redflash/words",split="train")['words']) # more random words
-ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
 dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train")['word'])
+ds_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True)
+ds_stack.shuffle(seed=random.randint(0,1000), buffer_size=10000) # shuffle the dataset
+dictionary.update([ word.lower() for title in list(ds_stack.take(10000)['title']) for word in title.split()]) 
+ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
 
-def reroute(url):
+async def reroute(url):
     # Ensure the URL has a scheme (http/https) for accurate parsing
     if not url.startswith(('http://', 'https://')):
         url = 'https://' + url
     try:
-        response = requests.head(url, allow_redirects=False)
+        response = await requests.head(url, allow_redirects=False)
         if 300 <= response.status_code < 400:
             parsed_url = urlparse(response.headers['Location'])
         else:
@@ -56,18 +58,23 @@ def reroute(url):
 
 websites = list(['google.com'] + list(ds_websites.take(100)['google.com'])) # top 100000 websites, for some reason google is the column name 
 print(len(websites))
+sites_visited = set() # prefixes of visited sites
 for i in range(len(websites)-1,-1,-1): # remove the overlapping prefixes in words 
-    websites[i] = reroute(websites[i]) # call a reroute and see where it goes
-    if websites[i] == '': # if string is empty, delete it 
+    prefix = websites[i].split('.')[0] # remove the website prefixes
+    
+    
+    if prefix in sites_visited:
         websites.pop(i)
-    else: # website is valid and reroute works 
-        prefix = websites[i].split('.')[0] # remove the website prefixes
-        if prefix in dictionary:
-            dictionary.remove(prefix)
-    if(i%1000 == 0):
-        print(i, 'sites rerouted')
-print(websites)
-print(len(websites))    
+    else:
+        sites_visited.add(prefix)
+        websites[i] = reroute(websites[i]) # call a reroute and see where it goes
+        if websites[i] == '': # if string is empty, delete it 
+            websites.pop(i)
+        else: # website is valid and reroute works 
+            if prefix in dictionary:
+                dictionary.remove(prefix)
+        if(i%1000 == 0):
+            print(i, 'sites rerouted')
 
 dictionary.update(websites) # websites could have duplicate reroutes and it will be handled by the set
 
