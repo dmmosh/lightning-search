@@ -88,7 +88,7 @@ for sentence in so: # for every sentence
                 if(open_ctr <=0): # theres either overflow or brackets closed 
                 
                     last_word_end = max(words[j].rfind(')'),words[j].rfind(']')) # last ) or last ] 
-                    curr = ' '.join(words[i:j]) + ' ' + words[j][:last_word_end+1]
+                    curr = ' '.join(words[i:j])  + words[j][:last_word_end+1]
                     i=j
                     f=True
                     break
@@ -114,8 +114,8 @@ for sentence in so: # for every sentence
         
         if(len(curr.strip('[]()'))>2 and not is_number(curr)):
             if(f == True):
-                print(curr.replace(' ', ''))
-            dictionary.add(curr.replace(' ', ''))
+                print(curr)
+            dictionary.add(curr)
         i+=1
 
 
