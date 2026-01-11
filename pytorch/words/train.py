@@ -6,8 +6,6 @@ train the nn model
 
 start from scratch and save the model at the end
 '''
-import requests
-from urllib.parse import urlparse
 # set to cuda or cpu
 if torch.cuda.is_available():
     torch.set_default_device('cuda')
@@ -30,15 +28,16 @@ from datasets import load_dataset
 #dictionary = {load_dataset("jeggers/words_length_short",split="train")['word']} # short words
 # dictionary.update([word.lower() for word in load_dataset("AIGym/top-100K-words", split="train")['text'] if word.isalnum()]) # top 100k words
 # #dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
-# dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train")['word'])
 
 dictionary = set() # dictionary of words and coding methods
 words_stack = load_dataset("AIGym/top-100K-words",split="train", streaming=True) # top 100k words
+word2_stack = load_dataset("sunildkumar/popular_english_words",split="train", streaming= True) # more popular words
 so_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True) # stack overflow questions
 ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True) # top 1m websites
 so_stack.shuffle(seed=random.randint(0,1000), buffer_size=50000) # shuffle the dataset
 
 dictionary.update([word.lower() for word in list(words_stack.take(30000)['text']) if word.isalnum()]) # top 30k words 
+dictionary.update([word.lower() for word in list(words2_stack.take(30000)['word'])]) # top 30k words 
 
 
 
@@ -116,10 +115,6 @@ websites = list(['google.com'] + list(ds_websites.take(5000)['google.com'])) # t
 sites_visited = {} # site : shortest prefix ( list )
 for i in range(len(websites)-1,-1,-1): # remove the overlapping prefixes from websites
     extracted = tldextract.extract(websites[i])
-    print(f"Subdomain: {extracted.subdomain}") # forums.news
-    print(f"Domain: {extracted.domain}")       # example
-    print(f"Suffix: {extracted.suffix}")       # co.uk
-    print(f"Registered Domain: {extracted.registered_domain}") # example.co.uk
     
     full = extracted.subdomain +extracted.domain + extracted.suffix
     dosuff = extracted.domain + extracted.suffix
@@ -171,7 +166,7 @@ wordi = {word:i for i, word in iword.items()}
 
 
 
-embedding_dimensions = 10 # number of integers to repsent in n dimension space
+embedding_dimensions = 12 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary)+1
 block_size = 10
 hidden_layer_size = 3000
