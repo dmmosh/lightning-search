@@ -66,7 +66,7 @@ for sentence in so: # for every sentence
         if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
             i+=1
             continue
-        
+        f=False
         """
         could be the beginning of a function call, ? 
         how to handle? iterate 5 indeces 
@@ -84,6 +84,7 @@ for sentence in so: # for every sentence
                     last_word_end = max(words[j].rfind(')'),words[j].rfind(']')) # last ) or last ] 
                     curr = ' '.join(words[i:j]) + ' ' + words[j][:last_word_end+1]
                     i=j
+                    f=True
                     break
                 j+=1
                 
@@ -106,7 +107,9 @@ for sentence in so: # for every sentence
             curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses 
         
         if(len(curr.strip('[]()'))>2 and not is_number(curr)):
-            dictionary.add(curr)
+            if(f == True):
+                print(curr.replace(' ', ''))
+            dictionary.add(curr.replace(' ', ''))
         i+=1
 
 
