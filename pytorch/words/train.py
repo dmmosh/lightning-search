@@ -36,9 +36,8 @@ dictionary = set()
 # dictionary.update([word.lower() for word in load_dataset("AIGym/top-100K-words", split="train")['text'] if word.isalnum()]) # top 100k words
 # #dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
 # dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train")['word'])
-ds_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True)
+ds_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True) # stack overflow questions
 ds_stack.shuffle(seed=random.randint(0,1000), buffer_size=10000) # shuffle the dataset
-dictionary.update([ word.lower() for title in list(ds_stack.take(25000)['title']) for word in title.split()]) 
 # ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
 
 # async def reroute(url):
@@ -105,37 +104,41 @@ import re
 def stripboth(new:str, strip_start, strip_end=""): # strips both trailing and leading iff they match 
     if(strip_end == ''): # if no arg, copy the strip start but reverse 
         strip_end = strip_start[::-1]
-    if(len(strip_start != strip_end)):
+    if(len(strip_start) != len(strip_end)):
         return 
     
     # remove leading and trailing if they match any of the matching chars
-    while(any(new.startswith(strip_start[i]) and new.endswith(strip_end[-(i+1)]) for i in range(len(strip_start)))): 
-        new.removeprefix().removesuffix()
+    while(new.startswith(strip_start) and new.endswith(strip_end)): 
+        new.removeprefix(strip_start).removesuffix(strip_end)
 
 # do some operations on the entire dictionary
-for word in dictionary.copy():
+for word in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
     
     # splits file by separators, DO NOT add file direectories
-    separators = list(filter(None,re.split(r'[/\\]', new)))
+    separators = list(filter(None,re.split(r'[/\\]', word)))
     if(len(separators) != 1): # if theres MORE than 1 element (most directories), remove it and move on
-        dictionary.remove(word)
+        continue
     
-    new = separators[0] # new word, altered
+    new = separators[0] # new word, to be altered
+    if(not new.isascii()): # if the word contains non ascii characters, skip it
+        continue
     
     
-    new = str(new.encode('ascii','ignore')).lower() # to lowercase and encodes in ascii
+    new = str(new.encode('ascii')).lower() # to lowercase and encodes in ascii
     new = new.rstrip('.,?!;')# removes end of sentence word
-    stripboth(new,'\"\'') # remove quotes
+    # start of sentence is usually methods, shouldnt be toucheed
+    new = new.strip('\"\'') # strip quotes
     stripboth(new,'(',')') # removes anything in parenthese
-    stripboth(new,'\"\'') # remove quotes ( again)
+    new = new.strip('\"\'') # strip quotes again 
     
-    if new.count('(') != new.count(')'): # if word is not a method (loose parentheses) , remove the parentheses
-        new.replace('(','')
-        new.replace(')','')
+    left_ctr = new.count('(') 
+    right_ctr = new.count(')')
+    if(left_ctr>right_ctr):  # opens parentheses
+        new.replace('(','',1)
+    elif (right_ctr>left_ctr): # closes parentheses
+        idx = new.rfind(')')
+        new = new[:idx] + new[idx+1:]
     
-    
-    
-    dictionary.remove(word)
     if(len(new)>2): # if new word is more than 2 chars, add it
         dictionary.add(new)
      
