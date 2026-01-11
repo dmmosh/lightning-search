@@ -104,7 +104,7 @@ def is_num(s:str):
     
 # do some operations on the entire dictionary
 #so = list(set([ word for title in list(so_stack.take(25000)['title']) for word in title.split()])) 
-so = list(so_stack.take(25000)['title']) # stack overflow questions, each string is a question
+so = list(so_stack.take(100000)['title']) # stack overflow questions, each string is a question
 
 
 for sentence in so: # for every sentence
