@@ -4,4 +4,3 @@ network-log.json
 test.py
 pytorch/__pycache__
 model_states_words.pth
-model_states_sentences.pth
