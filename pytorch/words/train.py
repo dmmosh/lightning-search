@@ -126,6 +126,8 @@ for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word
     while(curr != prev): 
         prev = curr   
         #stripboth(curr,'(',')') # removes anything in parenthese
+        if (curr.startswith('(') and curr.endswith(')')): 
+            curr.removeprefix('(').removesuffix(')')
         curr = curr.lstrip('\"\'`,!?;:=') # dont remove . ( methods)
         curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses (could be a function)
         # start of sentence is usually methods, shouldnt be toucheed
