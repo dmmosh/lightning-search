@@ -131,7 +131,7 @@ for sentence in so: # for every sentence
                 while(j<num_words-1 and ')' not in words[j] and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
                     j+=1
                 if(')' in  words[j]): # if function, 
-                    dictionary.add(' '.join(words[i:j])+ ' ' + words[j].rstrip(')\"\'`.!?,;:='))
+                    dictionary.add(' '.join(words[i:j])+ ' ' + words[j].rstrip('\"\'`.!?,;:='))
                     i=j+1
                     continue
                 
