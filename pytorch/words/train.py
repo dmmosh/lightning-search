@@ -243,9 +243,9 @@ def build_data(dictionary):
             y.append(wordi[word])
             j+=1
             
-        i=j
+        i = max(0,j-block_size) # start
         while(j<len(word)):
-            out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
+            out = [ord(c) for c in word[i:j+1]]
             #print(out)
             x.append(out)
             y.append(wordi[word])
