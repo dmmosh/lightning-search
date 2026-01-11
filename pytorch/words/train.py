@@ -124,7 +124,7 @@ for sentence in so: # for every sentence
         could be the beginning of a function call, ? 
         how to handle? iterate 5 indeces 
         """
-        if(curr.rfind('(') >0 and curr.count(')') == 0 and not curr[0].isdigit()): # if potentially a function , meaning ( is after 1st index, no closing brackets, and doesnt start with a digit
+        if(curr.lstrip('\"\'`,!?;:=').rfind('(') >0 and curr.count(')') == 0 and not curr[0].isdigit()): # if potentially a function , meaning ( is after 1st index, no closing brackets, and doesnt start with a digit
             j =i+1
             while(j<num_words-1 and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
                 if(')' in  words[j]): # if function, 
@@ -144,8 +144,8 @@ for sentence in so: # for every sentence
         while(curr != prev): 
             prev = curr   
             #stripboth(curr,'(',')') # removes anything in parenthese
-            while(curr.startswith('(') and curr.endswith(')')):  # since a closing parenthese is mentioned, cant be an opening function
-                curr.removeprefix().removesuffix()
+            if(curr.startswith('(') and curr.endswith(')')):  # since a closing parenthese is mentioned, cant be an opening function
+                curr.removeprefix('(').removesuffix(')')
             
             curr = curr.strip() # strips whitespace
             curr = curr.strip('\"\'`') # strip quotes
