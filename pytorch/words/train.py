@@ -153,7 +153,7 @@ for sentence in so: # for every sentence
             #     curr = curr[:idx] + curr[idx+1:]
 
         
-        if(len(curr)>2 and not is_number(curr)):
+        if(len(curr.strip('[]()'))>2 and not is_number(curr)):
             dictionary.add(curr)
 
         i+=1
