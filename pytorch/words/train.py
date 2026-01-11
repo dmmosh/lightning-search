@@ -117,7 +117,7 @@ def is_num(s:str):
 for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
     curr = curr.lower()
     
-    if(not curr.isascii() or (curr.count('/')> 1 or curr.count('\\')>0)): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
+    if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
         continue
     
     # curr = curr.encode('ascii') # to lowercase and encodes in ascii
@@ -148,7 +148,6 @@ for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word
         dictionary.add(curr)
         
 dictionary.add('c++') # hehe
-dictionary.add('to')
 
 #ds1 += [re.sub(r'[^\x00-\x7F]+', '',word) for word in list(load_dataset("lighteval/natural_questions_clean", split="train")['question'])] #question words
 
