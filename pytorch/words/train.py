@@ -131,8 +131,8 @@ for sentence in so: # for every sentence
                     curr = ' '.join(words[i:j+1])
                     print('before', curr)
                     i=j
+                    f = True
                     break
-                f = True
                 j+=1
                 
         
