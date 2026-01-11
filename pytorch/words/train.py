@@ -145,7 +145,7 @@ for sentence in so: # for every sentence
             prev = curr   
             #stripboth(curr,'(',')') # removes anything in parenthese
             while(curr.startswith('(') and curr.endswith(')')):  # since a closing parenthese is mentioned, cant be an opening function
-                curr.removeprefix('(').removesuffix(')')
+                curr.removeprefix().removesuffix()
             
             curr = curr.strip() # strips whitespace
             curr = curr.strip('\"\'`') # strip quotes
