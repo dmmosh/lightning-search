@@ -28,58 +28,19 @@ from datasets import load_dataset
 
 # dictionary: will contain a bunch of words !! for autocomplete
 #dictionary = {load_dataset("jeggers/words_length_short",split="train")['word']} # short words
-dictionary = set()
 # dictionary.update([word.lower() for word in load_dataset("AIGym/top-100K-words", split="train")['text'] if word.isalnum()]) # top 100k words
 # #dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
 # dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train")['word'])
+
+dictionary = set() # dictionary of words and coding methods
+words_stack = load_dataset("AIGym/top-100K-words",split="train", streaming=True) # top 100k words
 so_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True) # stack overflow questions
-so_stack.shuffle(seed=random.randint(0,1000), buffer_size=100000) # shuffle the dataset
-ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
+ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True) # top 1m websites
+so_stack.shuffle(seed=random.randint(0,1000), buffer_size=50000) # shuffle the dataset
+
+dictionary.update([word.lower() for word in list(words_stack.take(15000)['text']) if word.isalnum()]) # top 15k words 
 
 
-
-
-# # WEBSITES DATASET PREPARATION
-# websites = list(['google.com'] + list(ds_websites.take(10000)['google.com'])) # top 100000 websites, for some reason google is the column name 
-# sites_visited = {} # site : shortest prefix ( list )
-# for i in range(len(websites)-1,-1,-1): # remove the overlapping prefixes from websites
-#     extracted = tldextract.extract(websites[i])
-#     print(f"Subdomain: {extracted.subdomain}") # forums.news
-#     print(f"Domain: {extracted.domain}")       # example
-#     print(f"Suffix: {extracted.suffix}")       # co.uk
-#     print(f"Registered Domain: {extracted.registered_domain}") # example.co.uk
-    
-#     full = extracted.subdomain +extracted.domain + extracted.suffix
-#     dosuff = extracted.domain + extracted.suffix
-#     subdom = extracted.subdomain +  extracted.domain
-    
-#     if full in dictionary:
-#         dictionary.remove(full)
-#     if dosuff in dictionary:
-#         dictionary.remove(dosuff)
-#     if subdom in dictionary:
-#         dictionary.remove(subdom)
-#     if extracted.subdomain in dictionary:
-#         dictionary.remove(extracted.subdomain)
-#     if extracted.domain in dictionary:
-#         dictionary.remove(extracted.domain)
-#     if extracted.suffix in dictionary:
-#         dictionary.remove(extracted.suffix)
-    
-#     subdom = extracted.subdomain + '.' if len(extracted.subdomain)>0 else '' +  extracted.domain
-
-    
-#     if subdom in sites_visited: # if site has already been visited , look if the suffix count is shorter than already present
-#         if(len(str(extracted.suffix).split('.'))< len(sites_visited[subdom].split('.'))): # if amount of suffixes is less than whats already present,
-#             sites_visited[subdom] = extracted.suffix
-            
-#     else: # if site hasnt been visited
-        
-#         #sites_visited.add(subdom) # add the prefix
-#         sites_visited[subdom] = extracted.suffix
-
-
-# dictionary.update([key+'.'+value for key,value in sites_visited.items()]) # websites could have duplicate reroutes and it will be handled by the set
 
 
 # STACK OVERFLOW QUESTIONS PREPARATION
@@ -90,8 +51,9 @@ def is_num(s:str):
     return s.replace('.','').isdigit()
     
 # do some operations on the entire dictionary
+
 #so = list(set([ word for title in list(so_stack.take(25000)['title']) for word in title.split()])) 
-so = list(so_stack.take(100000)['title']) # stack overflow questions, each string is a question
+so = list(so_stack.take(50000)['title']) # stack overflow questions, each string is a question
 
 
 for sentence in so: # for every sentence
@@ -143,21 +105,54 @@ for sentence in so: # for every sentence
             
             curr = curr.lstrip('\"\'`,!?;:=') # dont remove . ( methods)
             curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses 
-            # start of sentence is usually methods, shouldnt be toucheed
-            # left_ctr = curr.count('(') 
-            # right_ctr = curr.count(')')
-            # if(left_ctr>right_ctr):  # opens parentheses
-            #     curr.replace('(','',1)
-            # elif (right_ctr>left_ctr): # closes parentheses
-            #     idx = curr.rfind(')')
-            #     curr = curr[:idx] + curr[idx+1:]
-
         
         if(len(curr.strip('[]()'))>2 and not is_number(curr)):
             dictionary.add(curr)
-
         i+=1
+
+
+# WEBSITES DATASET PREPARATION
+websites = list(['google.com'] + list(ds_websites.take(5000)['google.com'])) # top 5000 websites, for some reason google is the column name 
+sites_visited = {} # site : shortest prefix ( list )
+for i in range(len(websites)-1,-1,-1): # remove the overlapping prefixes from websites
+    extracted = tldextract.extract(websites[i])
+    print(f"Subdomain: {extracted.subdomain}") # forums.news
+    print(f"Domain: {extracted.domain}")       # example
+    print(f"Suffix: {extracted.suffix}")       # co.uk
+    print(f"Registered Domain: {extracted.registered_domain}") # example.co.uk
+    
+    full = extracted.subdomain +extracted.domain + extracted.suffix
+    dosuff = extracted.domain + extracted.suffix
+    subdom = extracted.subdomain +  extracted.domain
+    
+    if full in dictionary:
+        dictionary.remove(full)
+    if dosuff in dictionary:
+        dictionary.remove(dosuff)
+    if subdom in dictionary:
+        dictionary.remove(subdom)
+    if extracted.subdomain in dictionary:
+        dictionary.remove(extracted.subdomain)
+    if extracted.domain in dictionary:
+        dictionary.remove(extracted.domain)
+    if extracted.suffix in dictionary:
+        dictionary.remove(extracted.suffix)
+    
+    subdom = extracted.subdomain + '.' if len(extracted.subdomain)>0 else '' +  extracted.domain
+
+    
+    if subdom in sites_visited: # if site has already been visited , look if the suffix count is shorter than already present
+        if(len(str(extracted.suffix).split('.'))< len(sites_visited[subdom].split('.'))): # if amount of suffixes is less than whats already present,
+            sites_visited[subdom] = extracted.suffix
+            
+    else: # if site hasnt been visited
         
+        #sites_visited.add(subdom) # add the prefix
+        sites_visited[subdom] = extracted.suffix
+
+
+dictionary.update([key+'.'+value for key,value in sites_visited.items()]) # websites could have duplicate reroutes and it will be handled by the set
+
 
 #ds1 += [re.sub(r'[^\x00-\x7F]+', '',word) for word in list(load_dataset("lighteval/natural_questions_clean", split="train")['question'])] #question words
 
@@ -304,7 +299,7 @@ if __name__ == '__main__':
 
     x,y = build_data(dictionary)
 
-    
+    print(x.shape)
     visualize(x,y,1000)
     print(x.shape)
     train_model(x, y)
