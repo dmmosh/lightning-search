@@ -104,7 +104,7 @@ def is_num(s:str):
     
 # do some operations on the entire dictionary
 #so = list(set([ word for title in list(so_stack.take(25000)['title']) for word in title.split()])) 
-so = list(so_stack.take(25000)['title']) # stack overflow questions, each string is a question
+so = list(so_stack.take(100000)['title']) # stack overflow questions, each string is a question
 
 
 for sentence in so: # for every sentence
@@ -127,7 +127,7 @@ for sentence in so: # for every sentence
         open_ctr = 1 # the amount of open brackets
         if(curr.lstrip('(\"\'`,!?;:=').rfind('(') >0 and curr.count(')') == 0 and not curr[0].isdigit()): # if potentially a function , meaning ( is after 1st index, no closing brackets, and doesnt start with a digit
             j =i+1
-            while(j<num_words-1 and j-i-1<10): # until reaches last value, closing bracket, or more than 5 values 
+            while(j<num_words-1 and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
                 if('(' in words[j]):
                     open_ctr+=1
                 if(')' in  words[j]): # if function, 
