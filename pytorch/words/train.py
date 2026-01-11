@@ -109,16 +109,15 @@ so = list(so_stack.take(25000)['title']) # stack overflow questions, each string
 
 for sentence in so: # for every sentence
     words = sentence.split() # split by word
-    print(words)
     num_words = len(words) # get length 
     
     
     i = 0
     while(i<num_words):
-        curr = words[i]
-        curr= curr.lower()
+        curr = words[i].lower()
 
         if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
+            i+=1
             continue
         
         # curr = curr.encode('ascii') # to lowercase and encodes in ascii
