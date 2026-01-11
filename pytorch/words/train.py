@@ -114,7 +114,7 @@ def is_number(s:str):
 for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
     
     
-    if((not curr.isascii()) or (curr.count('/')> 1 or curr.count('\\')>1)): # if a file path (most have more than 1 directory)
+    if((curr.count('/')> 1 or curr.count('\\')>1)): # if a file path (most have more than 1 directory)
         continue
     
     # curr = curr.encode('ascii') # to lowercase and encodes in ascii
