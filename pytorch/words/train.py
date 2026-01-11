@@ -36,7 +36,7 @@ so_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", stre
 ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True) # top 1m websites
 so_stack.shuffle(seed=random.randint(0,1000), buffer_size=50000) # shuffle the dataset
 
-dictionary.update([word.lower() for word in list(words_stack.take(30000)['text']) if word.isalnum()]) # top 30k words 
+dictionary.update([word.lower() for word in list(words_stack.take(60000)['text']) if word.isalnum()]) # top 30k words 
 dictionary.update([word.lower() for word in list(words2_stack.take(30000)['word'])]) # top 30k words 
 
 
