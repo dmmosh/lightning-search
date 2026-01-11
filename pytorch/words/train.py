@@ -114,7 +114,7 @@ for sentence in so: # for every sentence
     
     i = 0
     while(i<num_words):
-        curr = words[i].lstrip('\"\'`,!?;:=').lower()
+        curr = words[i].lower()
 
         if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
             i+=1
@@ -130,11 +130,9 @@ for sentence in so: # for every sentence
             while(j<num_words-1 and ')' not in words[j] and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
                 j+=1
             if(')' in  words[j]): # if function, 
-                func = ' '.join(words[i:j])+ ' ' + words[j].rstrip('\"\'`.!?,;:=')
-                print(func)
-                dictionary.add(func)
-                i=j+1
-                continue
+                curr = ' '.join(words[i:j])+ ' ' + words[j].rstrip('\"\'`.!?,;:=')
+                print(curr)
+                i=j
                 
         
         # curr = curr.encode('ascii') # to lowercase and encodes in ascii
