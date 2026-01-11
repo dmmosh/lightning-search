@@ -70,11 +70,17 @@ for sentence in so: # for every sentence
         """
         could be the beginning of a function call, ? 
         how to handle? iterate 5 indeces 
+        
+        note: functions will not be lowercase, case sensitive
+        other words however will
         """
         open_ctr = 1 # the amount of open brackets
         if(curr.lstrip('(\"\'`,!?;:=').rfind('(') >0 and curr.count(')') == 0 and not curr[0].isdigit()): # if potentially a function , meaning ( is after 1st index, no closing brackets, and doesnt start with a digit
             j =i+1
             while(j<num_words-1 and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
+                if(not curr.isascii()): # if the args contain non ascii character, abandon mission
+                    i+=1
+                    continue
                 
                 open_ctr+= words[j].count('(')
                 open_ctr-= words[j].count(')')
