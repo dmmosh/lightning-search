@@ -236,7 +236,7 @@ def build_data(dictionary):
         # do a sliding window
         i = max(0,len(word)-block_size-5) # start
         j = i
-        while(j<len(word)-5+1):
+        while(j<len(word)-5):
             out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
             #print(out)
             x.append(out)
