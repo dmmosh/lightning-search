@@ -31,7 +31,7 @@ from datasets import load_dataset
 
 dictionary = set() # dictionary of words and coding methods
 words_stack = load_dataset("AIGym/top-100K-words",split="train", streaming=True) # top 100k words
-word2_stack = load_dataset("sunildkumar/popular_english_words",split="train", streaming= True) # more popular words
+words2_stack = load_dataset("sunildkumar/popular_english_words",split="train", streaming= True) # more popular words
 so_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True) # stack overflow questions
 ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True) # top 1m websites
 so_stack.shuffle(seed=random.randint(0,1000), buffer_size=50000) # shuffle the dataset
