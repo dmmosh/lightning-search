@@ -115,7 +115,6 @@ for sentence in so: # for every sentence
     i = 0
     while(i<num_words):
         curr = words[i].lower()
-        f = False
         if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
             i+=1
             continue
@@ -136,9 +135,7 @@ for sentence in so: # for every sentence
                 
                     last_word_end = max(words[j].rfind(')'),words[j].rfind(']')) # last ) or last ] 
                     curr = ' '.join(words[i:j]) + ' ' + words[j][:last_word_end+1]
-                    print('before', curr)
                     i=j
-                    f = True
                     break
                 j+=1
                 
@@ -170,9 +167,6 @@ for sentence in so: # for every sentence
 
         
         if(len(curr)>2 and not is_number(curr)):
-            if(f == True):
-                print('after', curr)
-                print()
             dictionary.add(curr)
 
         i+=1
@@ -291,7 +285,7 @@ if __name__ == '__main__':
     x,y = build_data(dictionary)
 
     
-    #visualize(x,y,1000)
+    visualize(x,y,1000)
     print(x.shape)
     train_model(x, y)
     torch.save({
