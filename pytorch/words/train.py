@@ -124,16 +124,15 @@ for sentence in so: # for every sentence
         could be the beginning of a function call, ? 
         how to handle? iterate 5 indeces 
         """
-        if(len(curr)>2 and not is_number(curr)): # if new word is more than 2 chars and not number ,
-            if(curr.count('(') ==1 and curr.count(')') == 0): # if potentially a function 
-                func_call = curr.lstrip('(') # start at the beginning 
-                j =i+1
-                while(j<num_words-1 and ')' not in words[j] and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
-                    j+=1
-                if(')' in  words[j]): # if function, 
-                    dictionary.add(' '.join(words[i:j])+ ' ' + words[j].rstrip('\"\'`.!?,;:='))
-                    i=j+1
-                    continue
+        if(curr.count('(') ==1 and curr.count(')') == 0 and curr[0] != '('): # if potentially a function 
+            func_call = curr.lstrip('(') # start at the beginning 
+            j =i+1
+            while(j<num_words-1 and ')' not in words[j] and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
+                j+=1
+            if(')' in  words[j]): # if function, 
+                dictionary.add(' '.join(words[i:j])+ ' ' + words[j].rstrip('\"\'`.!?,;:='))
+                i=j+1
+                continue
                 
         
         # curr = curr.encode('ascii') # to lowercase and encodes in ascii
