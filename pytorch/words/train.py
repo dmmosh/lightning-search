@@ -115,7 +115,6 @@ for sentence in so: # for every sentence
     i = 0
     while(i<num_words):
         curr = words[i]
-        curr= curr.lower()
 
         if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
             continue
