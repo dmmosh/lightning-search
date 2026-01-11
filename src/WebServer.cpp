@@ -209,6 +209,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
         } else if(!strncmp(url, "ac?", 3)){ // autocomplete feature as defined by opensearch.xml file
             //std::cout << parsed.substr(lastWord(parsed)) << '\n';
             //parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
+<<<<<<< HEAD
             parsed = "";
             /*
 
@@ -223,6 +224,21 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"shiet\","
             "\"oxymoro\","
             "\"ahxsj\""
+=======
+
+            // parsed debug
+            parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", [" +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + "\"," +
+            '\"'+ (parsed.c_str()+4) + '\"' +
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
             "],[\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\"],[],"
             "{"
             "\"google:clientdata\":{\"bpc\":false,\"tlw\":false},"
@@ -231,7 +247,10 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             "\"google:suggesttype\":[\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\",\"QUERY\"]"
             "}"
             "]"; 
+<<<<<<< HEAD
             */
+=======
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
             errorCode = 200;
             size = parsed.length();
             h_num=H_JSON;

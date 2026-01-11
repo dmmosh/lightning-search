@@ -1,6 +1,10 @@
 import torch
 from header import * # read access
+<<<<<<< HEAD
 import re
+=======
+
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 if(not os.path.exists(save_path_sentences)): # if the save path isnt present, exit
     os._exit()
 
@@ -46,8 +50,13 @@ def inference(start_word):
         #print(logits)
         probs = F.softmax(logits,dim=1)
         chari=torch.multinomial(probs,num_samples=1).item()
+<<<<<<< HEAD
         top_probs, top_indices = torch.topk(probs, k=6, dim=1)
         print([iword[i] for i in top_indices.tolist()[0]])
+=======
+        # top_probs, top_indices = torch.topk(probs, k=6, dim=1)
+        # print([iword[i] for i in top_indices.tolist()[0]])
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
         #print(iword[chari])
         context = context[1:] + [chari]
         words.append(iword[chari])
@@ -58,6 +67,7 @@ def inference(start_word):
     return ' '.join(words[:-1])
 
 
+<<<<<<< HEAD
 def inference(start_word:str):
     sentence = str(re.split(r'[.,?!\'\"]',start_word)[-1]) # gets the LAST sentence
     slide = sentence.split(' ')[-block_size:] # splits the last sentence into a list of last block size words
@@ -130,6 +140,30 @@ def inference(start_word:str):
             
     
     return out
+=======
+def inference(start_word, stopi):
+    context = [wordi[start_word]]*block_size
+    words = []
+    
+    while(len(words) < 5):
+        embedx = embed[torch.tensor(context)]
+        embedx = embedx.view(1,embedding_dimensions*block_size)
+        
+        logits = model(embedx)
+        #print(logits)
+        probs = F.softmax(logits,dim=1)
+        chari=torch.multinomial(probs,num_samples=1).item()
+        top_probs, top_indices = torch.topk(probs, k=6, dim=1)
+        print([iword[i] for i in top_indices.tolist()[0]])
+        #print(iword[chari])
+        context = context[1:] + [chari]
+        words.append(iword[chari])
+        if(chari == stopi):
+            break
+        
+    #print(words)
+    return ' '.join(words[:-1])
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 
 if __name__ == '__main__':
     print('sentence prediction testing')

@@ -1,6 +1,10 @@
 from header import *
+<<<<<<< HEAD
 import tldextract
 import random
+=======
+
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 '''
 train the nn model
 
@@ -19,6 +23,7 @@ else:
 torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   # sequential copntainer as safe
 
 
+<<<<<<< HEAD
 #df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
 from datasets import load_dataset
 checkpoint = torch.load('model_states_sentences.pth') # going to copy the dictionary and wordi / iword values from sentences 
@@ -151,21 +156,38 @@ dictionary.add('to')
 # 2nd dataset imports as utf 8, have to convert to ascii by removing the invalid characters
 #titles = [name for name in ds1 if len(name)>2]
 #dictionary = list(set([ word for title in titles for word in title.split()]))
+=======
+
+df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
+titles = list(set(df['name']))  # get the titles
+dictionary = list(set([ word for title in titles for word in title.split()]))
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 #print(dictionary[:10])
 #dictionary = list(set([ word for title in titles for word in title.split()]))
 iword = {i:word for i, word in enumerate(dictionary)}
+<<<<<<< HEAD
 stop_word = '\\'
+=======
+stop_word = '?'
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
 
 wordi = {word:i for i, word in iword.items()}
 
+<<<<<<< HEAD
 
 
 embedding_dimensions = 10 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary)+1
 block_size = 10
 hidden_layer_size = 3000
+=======
+embedding_dimensions = 5 # number of integers to repsent in n dimension space
+dictionary_size = len(dictionary) + 1
+block_size = 10
+hidden_layer_size = 500
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -259,7 +281,10 @@ if __name__ == '__main__':
 
     
     visualize(x,y,iword)
+<<<<<<< HEAD
     print(x.shape)
+=======
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
     train_model(x, y)
     torch.save({
         'model_state_dict': model.state_dict(),
@@ -272,4 +297,15 @@ if __name__ == '__main__':
         'embedding_dimensions':embedding_dimensions,
         'dictionary_size':dictionary_size
     }, save_path_words)
+<<<<<<< HEAD
     print("Model and related variables saved successfully.")
+=======
+    print("Model and related variables saved successfully.")
+
+
+
+
+
+
+
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae

@@ -27,7 +27,11 @@ titles+= [re.sub(r'[^\x00-\x7F]+', '',word) for word in list(load_dataset("light
 dictionary = list(set([ word for title in titles for word in title.split()]))
 #print(dictionary[:10])
 iword = {i:word for i, word in enumerate(dictionary)}
+<<<<<<< HEAD
 stop_word = '\\'
+=======
+stop_word = '?'
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 stop_wordi = len(dictionary)
 iword[stop_wordi] = stop_word
 
@@ -35,8 +39,13 @@ wordi = {word:i for i, word in iword.items()}
 
 embedding_dimensions = 6 # number of integers to repsent in n dimension space
 dictionary_size = len(dictionary) + 1
+<<<<<<< HEAD
 block_size = 2
 hidden_layer_size = 2000
+=======
+block_size = 3
+hidden_layer_size = 500
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 # model
 model = nn.Sequential(
     nn.Linear(embedding_dimensions*block_size, hidden_layer_size, bias=False), nn.BatchNorm1d(hidden_layer_size), nn.Tanh(),
@@ -48,8 +57,12 @@ embed = torch.rand((dictionary_size, embedding_dimensions)) # embedding layer in
 # model training variables
 batch_size = 512 # batch size ( amount of samples before the weights are updated)
 learning_rate = 0.1 # how much model weights adjust during training
+<<<<<<< HEAD
 iterations = 100000 # number of iterations of batches to complete one epoch (pass through entire dataset)
 x,y = torch.empty((0,3),dtype=torch.long), torch.empty((0,3),dtype=torch.long)
+=======
+iterations = 50000 # number of iterations of batches to complete one epoch (pass through entire dataset)
+>>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 
 def build_data():
     x1=[]
