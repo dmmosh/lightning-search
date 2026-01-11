@@ -108,6 +108,9 @@ def stripboth(new:str, strip_start, strip_end=""): # strips both trailing and le
         new.removeprefix(strip_start).removesuffix(strip_end)
 
 def is_number(s:str):
+    return is_num(s) and is_num(s[1:]) and is_num(s[:-1])
+
+def is_num(s:str):
     return s.replace('.','').isdigit()
     
 # do some operations on the entire dictionary
