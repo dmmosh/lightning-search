@@ -33,7 +33,7 @@ dictionary = set()
 # #dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
 # dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train")['word'])
 so_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True) # stack overflow questions
-so_stack.shuffle(seed=random.randint(0,1000), buffer_size=10000) # shuffle the dataset
+so_stack.shuffle(seed=random.randint(0,1000), buffer_size=100000) # shuffle the dataset
 ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
 
 async def reroute(url):
@@ -128,13 +128,14 @@ for sentence in so: # for every sentence
         if(curr.lstrip('(\"\'`,!?;:=').rfind('(') >0 and curr.count(')') == 0 and not curr[0].isdigit()): # if potentially a function , meaning ( is after 1st index, no closing brackets, and doesnt start with a digit
             j =i+1
             while(j<num_words-1 and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
-                if('(' in words[j]):
-                    open_ctr+=1
-                if(')' in  words[j]): # if function, 
-                    open_ctr-=1
                 
-                if(open_ctr == 0):
-                    curr = ' '.join(words[i:j]) + ' ' + words[j][:max(words[j].rfind(')'),words[j].rfind(']'))+1]
+                open_ctr+= words[j].count('(')
+                open_ctr-= words[j].count(')')
+                
+                if(open_ctr <=0): # theres either overflow or brackets closed 
+                
+                    last_word_end = max(words[j].rfind(')'),words[j].rfind(']')) # last ) or last ] 
+                    curr = ' '.join(words[i:j]) + ' ' + words[j][:last_word_end+1]
                     print('before', curr)
                     i=j
                     f = True
