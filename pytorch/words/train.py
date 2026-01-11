@@ -114,7 +114,7 @@ def is_number(s:str):
 for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
     
     
-    if((curr.count('/')> 1 or curr.count('\\')>1)): # if a file path (most have more than 1 directory)
+    if(not curr.isascii() or (curr.count('/')> 1 or curr.count('\\')>1)): # if a file path (most have more than 1 directory)
         continue
     
     # curr = curr.encode('ascii') # to lowercase and encodes in ascii
@@ -125,7 +125,7 @@ for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word
     # if no changes were made, curr == prev, thus stop editing
     while(curr != prev): 
         prev = curr   
-        stripboth(curr,'(',')') # removes anything in parenthese
+        #stripboth(curr,'(',')') # removes anything in parenthese
         curr = curr.lstrip('\"\'`,!?;:=') # dont remove . ( methods)
         curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses (could be a function)
         # start of sentence is usually methods, shouldnt be toucheed
