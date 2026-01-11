@@ -115,7 +115,7 @@ for sentence in so: # for every sentence
     i = 0
     while(i<num_words):
         curr = words[i].lower()
-
+        f = False
         if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
             i+=1
             continue
@@ -132,6 +132,7 @@ for sentence in so: # for every sentence
                     print(curr)
                     i=j
                     break
+                f = True
                 j+=1
                 
         
@@ -159,6 +160,9 @@ for sentence in so: # for every sentence
 
         
         if(len(curr)>2 and not is_number(curr)):
+            if(f == True):
+                print(curr)
+                print()
             dictionary.add(curr)
 
         i+=1
