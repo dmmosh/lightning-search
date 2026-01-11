@@ -36,20 +36,7 @@ so_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", stre
 so_stack.shuffle(seed=random.randint(0,1000), buffer_size=100000) # shuffle the dataset
 ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
 
-async def reroute(url):
-    # Ensure the URL has a scheme (http/https) for accurate parsing
-    if not url.startswith(('http://', 'https://')):
-        url = 'https://' + url
-    try:
-        response = await requests.head(url, allow_redirects=False)
-        if 300 <= response.status_code < 400:
-            parsed_url = urlparse(response.headers['Location'])
-        else:
-            return ""
-        # netloc gives 'www.example.com', replace 'www.' if needed
-        return parsed_url.netloc.replace('www.', '', 1)
-    except:   
-        return ""
+
 
 
 # # WEBSITES DATASET PREPARATION
@@ -152,10 +139,10 @@ for sentence in so: # for every sentence
                 curr.removeprefix('(').removesuffix(')')
             
             curr = curr.strip() # strips whitespace
-            curr = curr.strip('\"\'`') # strip quotes
+            curr = curr.strip('(\"\'`') # strip quotes
             
             curr = curr.lstrip('\"\'`,!?;:=') # dont remove . ( methods)
-            curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses (could be a function)
+            curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses 
             # start of sentence is usually methods, shouldnt be toucheed
             # left_ctr = curr.count('(') 
             # right_ctr = curr.count(')')
@@ -247,7 +234,7 @@ def build_data(dictionary):
         if word not in wordi:
             continue    
         # do a sliding window
-        i = max(0,len(word)-block_size-5) # start
+        i = max(0,len(word)-block_size) # start
         j = i
         while(j<len(word)):
             out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
