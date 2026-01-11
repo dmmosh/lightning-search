@@ -206,6 +206,37 @@ learning_rate = 0.1 # how much model weights adjust during training
 iterations = 100000 # number of iterations of batches to complete one epoch (pass through entire dataset)
 
 
+# def build_data(dictionary):
+#     x=[]
+#     y=[]
+    
+    
+#     for word in dictionary:
+    
+#         if word not in wordi:
+#             continue    
+#         # do a sliding window
+#         i = max(0,len(word)-block_size) # start
+#         j = i
+#         while(j<len(word)):
+#             out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
+#             #print(out)
+#             x.append(out)
+#             y.append(wordi[word])
+#             j+=1
+            
+#         # context = [stop_wordi]*percentile-len(d)-1 if  (percentile-len(d)-1>0) else []
+#         # context += [d[:i+1] for i in range(len(d)-1-percentile, len(d)-1)]
+#         # x.append(context)
+#         # y.append(wordi[word])
+        
+        
+    
+#     x= torch.tensor(data=x,dtype=torch.long)
+#     y = torch.tensor(data=y,dtype=torch.long)
+#     return x,y
+
+
 def build_data(dictionary):
     x=[]
     y=[]
@@ -216,7 +247,7 @@ def build_data(dictionary):
         if word not in wordi:
             continue    
         # do a sliding window
-        i = max(0,len(word)-block_size) # start
+        i = max(0,len(word)-block_size-5) # start
         j = i
         while(j<len(word)):
             out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
