@@ -243,12 +243,13 @@ def build_data(dictionary):
             y.append(wordi[word])
             j+=1
             
-        i = max(0,j-block_size) # start
+        i+=1
         while(j<len(word)):
             out = [ord(c) for c in word[i:j+1]]
             #print(out)
             x.append(out)
             y.append(wordi[word])
+            i+=1
             j+=1
             
         # context = [stop_wordi]*percentile-len(d)-1 if  (percentile-len(d)-1>0) else []
