@@ -114,22 +114,37 @@ for sentence in so: # for every sentence
     
     i = 0
     while(i<num_words):
-        curr = words[i].lower()
+        curr = words[i].lstrip('\"\'`,!?;:=').lower()
 
         if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
             i+=1
             continue
         
+        """
+        could be the beginning of a function call, ? 
+        how to handle? iterate 5 indeces 
+        """
+        if(len(curr)>2 and not is_number(curr)): # if new word is more than 2 chars and not number ,
+            if(curr.count('(') ==1 and curr.count(')') == 0): # if potentially a function 
+                func_call = curr.lstrip('(') # start at the beginning 
+                j =i+1
+                while(j<num_words-1 and ')' not in words[j] and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
+                    j+=1
+                if(')' in  words[j]): # if function, 
+                    dictionary.add(' '.join(words[i:j])+ ' ' + words[j].rstrip(')\"\'`.!?,;:='))
+                    i=j+1
+                    continue
+                
+        
         # curr = curr.encode('ascii') # to lowercase and encodes in ascii
         # curr = curr.decode()
         prev = ''
-
 
         # if no changes were made, curr == prev, thus stop editing
         while(curr != prev): 
             prev = curr   
             #stripboth(curr,'(',')') # removes anything in parenthese
-            if (curr.startswith('(') and curr.endswith(')')): 
+            if (curr.startswith('(') and curr.endswith(')')):  # since a closing parenthese is mentioned, cant be an opening function
                 curr.removeprefix('(').removesuffix(')')
             curr = curr.lstrip('\"\'`,!?;:=') # dont remove . ( methods)
             curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses (could be a function)
@@ -143,12 +158,8 @@ for sentence in so: # for every sentence
             #     idx = curr.rfind(')')
             #     curr = curr[:idx] + curr[idx+1:]
 
-        """
-        could be the beginning of a function call, ? 
-        how to handle? iterate 5 indeces 
-        """
-
-        if(len(curr)>2 and not is_number(curr)): # if new word is more than 2 chars and not number , 
+        
+        if(len(curr)>2 and not is_number(curr)):
             dictionary.add(curr)
 
         i+=1
