@@ -127,7 +127,7 @@ for sentence in so: # for every sentence
         if(curr.rfind('(') >0 and curr.count(')') == 0 and not curr[0].isdigit()): # if potentially a function , meaning ( is after 1st index, no closing brackets, and doesnt start with a digit
             func_call = curr.lstrip('(') # start at the beginning 
             j =i+1
-            while(j<num_words-1 and ')' not in words[j] and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
+            while(j<num_words-2 and ')' not in words[j] and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
                 j+=1
             if(')' in  words[j]): # if function, 
                 curr = ' '.join(words[i:j+1])
