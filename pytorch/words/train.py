@@ -32,122 +32,108 @@ dictionary = set()
 # dictionary.update([word.lower() for word in load_dataset("AIGym/top-100K-words", split="train")['text'] if word.isalnum()]) # top 100k words
 # #dictionary.update([word.lower() for word in list(load_dataset("mmathys/profanity", split="train")['text']) if word.isalnum() and not ' ' in word]) # adds profanity. unsure if spaces are present, removed just in case
 # dictionary.update(load_dataset("sunildkumar/popular_english_words",split="train")['word'])
-ds_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True) # stack overflow questions
-ds_stack.shuffle(seed=random.randint(0,1000), buffer_size=10000) # shuffle the dataset
-# ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
+# ds_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", streaming=True) # stack overflow questions
+# ds_stack.shuffle(seed=random.randint(0,1000), buffer_size=10000) # shuffle the dataset
+ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True)
 
-# async def reroute(url):
-#     # Ensure the URL has a scheme (http/https) for accurate parsing
-#     if not url.startswith(('http://', 'https://')):
-#         url = 'https://' + url
-#     try:
-#         response = await requests.head(url, allow_redirects=False)
-#         if 300 <= response.status_code < 400:
-#             parsed_url = urlparse(response.headers['Location'])
-#         else:
-#             return ""
-#         # netloc gives 'www.example.com', replace 'www.' if needed
-#         return parsed_url.netloc.replace('www.', '', 1)
-#     except:   
-#         return ""
+async def reroute(url):
+    # Ensure the URL has a scheme (http/https) for accurate parsing
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+    try:
+        response = await requests.head(url, allow_redirects=False)
+        if 300 <= response.status_code < 400:
+            parsed_url = urlparse(response.headers['Location'])
+        else:
+            return ""
+        # netloc gives 'www.example.com', replace 'www.' if needed
+        return parsed_url.netloc.replace('www.', '', 1)
+    except:   
+        return ""
 
 
-# # WEBSITES DATASET PREPARATION
-# websites = list(['google.com'] + list(ds_websites.take(12000)['google.com'])) # top 100000 websites, for some reason google is the column name 
-# sites_visited = {} # site : shortest prefix ( list )
-# for i in range(len(websites)-1,-1,-1): # remove the overlapping prefixes from websites
-#     extracted = tldextract.extract(websites[i])
-#     print(f"Subdomain: {extracted.subdomain}") # forums.news
-#     print(f"Domain: {extracted.domain}")       # example
-#     print(f"Suffix: {extracted.suffix}")       # co.uk
-#     print(f"Registered Domain: {extracted.registered_domain}") # example.co.uk
+# WEBSITES DATASET PREPARATION
+websites = list(['google.com'] + list(ds_websites.take(12000)['google.com'])) # top 100000 websites, for some reason google is the column name 
+sites_visited = {} # site : shortest prefix ( list )
+for i in range(len(websites)-1,-1,-1): # remove the overlapping prefixes from websites
+    extracted = tldextract.extract(websites[i])
+    print(f"Subdomain: {extracted.subdomain}") # forums.news
+    print(f"Domain: {extracted.domain}")       # example
+    print(f"Suffix: {extracted.suffix}")       # co.uk
+    print(f"Registered Domain: {extracted.registered_domain}") # example.co.uk
     
-#     full = extracted.subdomain +extracted.domain + extracted.suffix
-#     dosuff = extracted.domain + extracted.suffix
-#     subdom = extracted.subdomain +  extracted.domain
+    full = extracted.subdomain +extracted.domain + extracted.suffix
+    dosuff = extracted.domain + extracted.suffix
+    subdom = extracted.subdomain +  extracted.domain
     
-#     if full in dictionary:
-#         dictionary.remove(full)
-#     if dosuff in dictionary:
-#         dictionary.remove(dosuff)
-#     if subdom in dictionary:
-#         dictionary.remove(subdom)
-#     if extracted.subdomain in dictionary:
-#         dictionary.remove(extracted.subdomain)
-#     if extracted.domain in dictionary:
-#         dictionary.remove(extracted.domain)
-#     if extracted.suffix in dictionary:
-#         dictionary.remove(extracted.suffix)
+    if full in dictionary:
+        dictionary.remove(full)
+    if dosuff in dictionary:
+        dictionary.remove(dosuff)
+    if subdom in dictionary:
+        dictionary.remove(subdom)
+    if extracted.subdomain in dictionary:
+        dictionary.remove(extracted.subdomain)
+    if extracted.domain in dictionary:
+        dictionary.remove(extracted.domain)
+    if extracted.suffix in dictionary:
+        dictionary.remove(extracted.suffix)
     
-#     subdom = extracted.subdomain + '.' if len(extracted.subdomain)>0 else '' +  extracted.domain
+    subdom = extracted.subdomain + '.' if len(extracted.subdomain)>0 else '' +  extracted.domain
 
     
-#     if subdom in sites_visited: # if site has already been visited , look if the suffix count is shorter than already present
-#         if(len(str(extracted.suffix).split('.'))< len(sites_visited[subdom].split('.'))): # if amount of suffixes is less than whats already present,
-#             sites_visited[subdom] = extracted.suffix
+    if subdom in sites_visited: # if site has already been visited , look if the suffix count is shorter than already present
+        if(len(str(extracted.suffix).split('.'))< len(sites_visited[subdom].split('.'))): # if amount of suffixes is less than whats already present,
+            sites_visited[subdom] = extracted.suffix
             
-#     else: # if site hasnt been visited
+    else: # if site hasnt been visited
         
-#         #sites_visited.add(subdom) # add the prefix
-#         sites_visited[subdom] = extracted.suffix
+        #sites_visited.add(subdom) # add the prefix
+        sites_visited[subdom] = extracted.suffix
 
 
-#dictionary.update([key+'.'+value for key,value in sites_visited.items()]) # websites could have duplicate reroutes and it will be handled by the set
+dictionary.update([key+'.'+value for key,value in sites_visited.items()]) # websites could have duplicate reroutes and it will be handled by the set
 
-import re
+# def is_number(s:str):
+#     return is_num(s) and is_num(s[1:]) and is_num(s[:-1])
 
-# SPECIAL CHARACTERS PREPARATION
-def stripboth(new:str, strip_start, strip_end=""): # strips both trailing and leading iff they match 
-    if(strip_end == ''): # if no arg, copy the strip start but reverse 
-        strip_end = strip_start[::-1]
-    if(len(strip_start) != len(strip_end)):
-        return 
+# def is_num(s:str):
+#     return s.replace('.','').isdigit()
     
-    # remove leading and trailing if they match any of the matching chars
-    while(new.startswith(strip_start) and new.endswith(strip_end)): 
-        new.removeprefix(strip_start).removesuffix(strip_end)
-
-def is_number(s:str):
-    return is_num(s) and is_num(s[1:]) and is_num(s[:-1])
-
-def is_num(s:str):
-    return s.replace('.','').isdigit()
+# # do some operations on the entire dictionary
+# for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
+#     curr = curr.lower()
     
-# do some operations on the entire dictionary
-for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
-    curr = curr.lower()
+#     if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
+#         continue
     
-    if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>0): # if a file path (most have more than 1 directory) or on WINDOWS (ew)
-        continue
-    
-    # curr = curr.encode('ascii') # to lowercase and encodes in ascii
-    # curr = curr.decode()
-    prev = ''
+#     # curr = curr.encode('ascii') # to lowercase and encodes in ascii
+#     # curr = curr.decode()
+#     prev = ''
     
     
-    # if no changes were made, curr == prev, thus stop editing
-    while(curr != prev): 
-        prev = curr   
-        #stripboth(curr,'(',')') # removes anything in parenthese
-        if (curr.startswith('(') and curr.endswith(')')): 
-            curr.removeprefix('(').removesuffix(')')
-        curr = curr.lstrip(',!?;:=') # dont remove . ( methods)
-        curr = curr.rstrip('.!?,;:=') # done remove closing parentheses (could be a function)
-        # start of sentence is usually methods, shouldnt be toucheed
-        curr = curr.strip('\"\'`') # strip quotes
-        # left_ctr = curr.count('(') 
-        # right_ctr = curr.count(')')
-        # if(left_ctr>right_ctr):  # opens parentheses
-        #     curr.replace('(','',1)
-        # elif (right_ctr>left_ctr): # closes parentheses
-        #     idx = curr.rfind(')')
-        #     curr = curr[:idx] + curr[idx+1:]
+#     # if no changes were made, curr == prev, thus stop editing
+#     while(curr != prev): 
+#         prev = curr   
+#         #stripboth(curr,'(',')') # removes anything in parenthese
+#         if (curr.startswith('(') and curr.endswith(')')): 
+#             curr.removeprefix('(').removesuffix(')')
+#         curr = curr.lstrip('\"\'`,!?;:=') # dont remove . ( methods)
+#         curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses (could be a function)
+#         # start of sentence is usually methods, shouldnt be toucheed
+#         curr = curr.strip('\"\'`') # strip quotes
+#         # left_ctr = curr.count('(') 
+#         # right_ctr = curr.count(')')
+#         # if(left_ctr>right_ctr):  # opens parentheses
+#         #     curr.replace('(','',1)
+#         # elif (right_ctr>left_ctr): # closes parentheses
+#         #     idx = curr.rfind(')')
+#         #     curr = curr[:idx] + curr[idx+1:]
 
      
-    if(len(curr)>2 and not is_number(curr)): # if new word is more than 2 chars and not number , add it 
-        dictionary.add(curr)
+#     if(len(curr)>2 and not is_number(curr)): # if new word is more than 2 chars and not number , add it 
+#         dictionary.add(curr)
         
-dictionary.add('c++') # hehe
 
 #ds1 += [re.sub(r'[^\x00-\x7F]+', '',word) for word in list(load_dataset("lighteval/natural_questions_clean", split="train")['question'])] #question words
 
