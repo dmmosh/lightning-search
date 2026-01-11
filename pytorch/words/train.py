@@ -108,8 +108,8 @@ so = list(so_stack.take(25000)['title']) # stack overflow questions, each string
 
 
 for sentence in so: # for every sentence
-    print(sentence)
-    words = str(sentence).split() # split by word
+    words = sentence.split() # split by word
+    print(words)
     num_words = len(words) # get length 
     
     
