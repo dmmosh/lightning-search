@@ -235,7 +235,7 @@ def build_data(dictionary):
             continue    
         # do a sliding window
         i = max(0,len(word)-block_size) # start
-        j = i+1
+        j = i+2 # since there is a 2 character requirement, autocomplete only kicks in on 2 or more chars
         while(j<len(word)):
             out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
             #print(out)
