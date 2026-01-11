@@ -38,7 +38,7 @@ so_stack = load_dataset("pacovaldez/stackoverflow-questions",split="train", stre
 ds_websites = load_dataset("arcadia1991/top-1M-website",split="train", streaming=True) # top 1m websites
 so_stack.shuffle(seed=random.randint(0,1000), buffer_size=50000) # shuffle the dataset
 
-dictionary.update([word.lower() for word in list(words_stack.take(15000)['text']) if word.isalnum()]) # top 15k words 
+dictionary.update([word.lower() for word in list(words_stack.take(30000)['text']) if word.isalnum()]) # top 30k words 
 
 
 
@@ -53,7 +53,7 @@ def is_num(s:str):
 # do some operations on the entire dictionary
 
 #so = list(set([ word for title in list(so_stack.take(25000)['title']) for word in title.split()])) 
-so = list(so_stack.take(50000)['title']) # stack overflow questions, each string is a question
+so = list(so_stack.take(100000)['title']) # stack overflow questions, each string is a question
 
 
 for sentence in so: # for every sentence
