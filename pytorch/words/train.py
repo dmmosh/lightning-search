@@ -234,8 +234,16 @@ def build_data(dictionary):
         if word not in wordi:
             continue    
         # do a sliding window
-        i = max(0,len(word)-block_size) # start
+        i = max(0,len(word)-block_size-5) # start
         j = i
+        while(j<len(word)-5):
+            out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
+            #print(out)
+            x.append(out)
+            y.append(wordi[word])
+            j+=1
+            
+        i=j
         while(j<len(word)):
             out = [ord(stop_word)]*(block_size-(j-i+1)) + [ord(c) for c in word[i:j+1]]
             #print(out)
