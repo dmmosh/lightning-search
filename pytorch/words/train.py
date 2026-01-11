@@ -111,8 +111,8 @@ def is_number(s:str):
     return s.replace('.','').isdigit()
     
 # do some operations on the entire dictionary
-for curr.lower() in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
-    
+for curr in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
+    curr = curr.lower()
     
     if(not curr.isascii() or (curr.count('/')> 1 or curr.count('\\')>1)): # if a file path (most have more than 1 directory)
         continue
