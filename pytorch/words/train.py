@@ -128,7 +128,7 @@ for sentence in so: # for every sentence
             j =i+1
             while(j<num_words-1 and j-i-1<5): # until reaches last value, closing bracket, or more than 5 values 
                 if(')' in  words[j]): # if function, 
-                    curr = ' '.join(words[i:j]) + ' ' + words[j][:max(words[j].rfind(')'),words[j].rfind(']'))]
+                    curr = ' '.join(words[i:j]) + ' ' + words[j][:max(words[j].rfind(')'),words[j].rfind(']'))+1]
                     print('before', curr)
                     i=j
                     f = True
