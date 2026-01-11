@@ -21,11 +21,7 @@ torch.serialization.add_safe_globals([torch.nn.modules.container.Sequential])   
 
 #df = pd.read_parquet("hf://datasets/bstds/job_titles/data/train-00000-of-00001-f3966556d39a54a6.parquet") # load the dataset
 from datasets import load_dataset
-checkpoint = torch.load('model_states_sentences.pth') # going to copy the dictionary and wordi / iword values from sentences 
-iword = checkpoint['iword']
-wordi = checkpoint['wordi']
-stop_wordi = checkpoint['stop_wordi']
-stop_word=iword[stop_wordi]
+
 
 # 1st dataset , 
 #ds1 = [element.replace('/', '') for element in list(load_dataset("shreyasharma/sentences_truthv2", split="train")['sentences'])] # truth nuke questions
@@ -111,37 +107,43 @@ def stripboth(new:str, strip_start, strip_end=""): # strips both trailing and le
     while(new.startswith(strip_start) and new.endswith(strip_end)): 
         new.removeprefix(strip_start).removesuffix(strip_end)
 
+def is_number(s:str):
+    return s.replace('.','').isdigit()
+    
 # do some operations on the entire dictionary
 for word in set([ word for title in list(ds_stack.take(25000)['title']) for word in title.split()]):
     
-    # splits file by separators, DO NOT add file direectories
-    separators = list(filter(None,re.split(r'[/\\]', word)))
-    if(len(separators) != 1): # if theres MORE than 1 element (most directories), remove it and move on
+    curr = word
+    print(type(curr))
+    
+    if(not curr.isascii() or curr.count('/')> 1 or curr.count('\\')>1): # if a file path (most have more than 1 directory)
         continue
     
-    new = separators[0] # new word, to be altered
-    if(not new.isascii()): # if the word contains non ascii characters, skip it
-        continue
+    # curr = curr.encode('ascii') # to lowercase and encodes in ascii
+    # curr = curr.decode()
+    prev = ''
     
     
-    new = str(new.encode('ascii')).lower() # to lowercase and encodes in ascii
-    new = new.rstrip('.,?!;')# removes end of sentence word
-    # start of sentence is usually methods, shouldnt be toucheed
-    new = new.strip('\"\'') # strip quotes
-    stripboth(new,'(',')') # removes anything in parenthese
-    new = new.strip('\"\'') # strip quotes again 
-    
-    left_ctr = new.count('(') 
-    right_ctr = new.count(')')
-    if(left_ctr>right_ctr):  # opens parentheses
-        new.replace('(','',1)
-    elif (right_ctr>left_ctr): # closes parentheses
-        idx = new.rfind(')')
-        new = new[:idx] + new[idx+1:]
-    
-    if(len(new)>2): # if new word is more than 2 chars, add it
-        dictionary.add(new)
+    # if no changes were made, curr == prev, thus stop editing
+    while(curr != prev): 
+        prev = curr   
+        stripboth(curr,'(',')') # removes anything in parenthese
+        curr = curr.lstrip('\"\'`,!?;:=') # dont remove . ( methods)
+        curr = curr.rstrip('\"\'`.!?,;:=') # done remove closing parentheses (could be a function)
+        # start of sentence is usually methods, shouldnt be toucheed
+        curr = curr.strip('\"\'`') # strip quotes
+        # left_ctr = curr.count('(') 
+        # right_ctr = curr.count(')')
+        # if(left_ctr>right_ctr):  # opens parentheses
+        #     curr.replace('(','',1)
+        # elif (right_ctr>left_ctr): # closes parentheses
+        #     idx = curr.rfind(')')
+        #     curr = curr[:idx] + curr[idx+1:]
+
      
+    if(len(curr)>2 and not is_number(curr)): # if new word is more than 2 chars and not number , add it 
+        dictionary.add(curr)
+        
 dictionary.add('c++') # hehe
 dictionary.add('to')
 
@@ -209,8 +211,8 @@ def build_data(dictionary):
     y = torch.tensor(data=y,dtype=torch.long)
     return x,y
 
-def visualize(x,y,iword):
-    for i in range(100):
+def visualize(x,y, num):
+    for i in range(num):
         context = x[i]
         target = y[i]
         context_words = [chr(i.item()) for i in context]
@@ -258,7 +260,7 @@ if __name__ == '__main__':
     x,y = build_data(dictionary)
 
     
-    visualize(x,y,iword)
+    visualize(x,y,1000)
     print(x.shape)
     train_model(x, y)
     torch.save({
