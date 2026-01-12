@@ -1,10 +1,13 @@
-ls: \
+/home/wetsock/coding/lightning-search/ls: \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o \
   CMakeFiles/ls.dir/src/main.cpp.o \
   CMakeFiles/ls.dir/src/WebServer.cpp.o \
   CMakeFiles/ls.dir/src/TcpListener.cpp.o \
+  _deps/cpr-build/cpr/libcpr.so.1.14.1 \
+  /usr/lib/libz.so \
+  _deps/curl-build/lib/libcurl.so.4.8.0 \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libstdc++.so \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libm.so \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libm.so \
@@ -31,7 +34,16 @@ ls: \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/libgcc.a \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o \
-  /usr/lib/ld-linux-x86-64.so.2
+  /usr/lib/libssl.so.3 \
+  /usr/lib/libcrypto.so.3 \
+  /usr/lib/ld-linux-x86-64.so.2 \
+  /usr/lib/libssh2.so.1 \
+  /usr/lib/libidn2.so.0 \
+  /usr/lib/libbrotlidec.so.1 \
+  /usr/lib/libbrotlicommon.so.1 \
+  /usr/lib/libzstd.so.1 \
+  /usr/lib/libnghttp2.so.14 \
+  /usr/lib/libunistring.so.5
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o:
 
@@ -44,6 +56,12 @@ CMakeFiles/ls.dir/src/main.cpp.o:
 CMakeFiles/ls.dir/src/WebServer.cpp.o:
 
 CMakeFiles/ls.dir/src/TcpListener.cpp.o:
+
+_deps/cpr-build/cpr/libcpr.so.1.14.1:
+
+/usr/lib/libz.so:
+
+_deps/curl-build/lib/libcurl.so.4.8.0:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libstdc++.so:
 
@@ -97,4 +115,22 @@ CMakeFiles/ls.dir/src/TcpListener.cpp.o:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o:
 
+/usr/lib/libssl.so.3:
+
+/usr/lib/libcrypto.so.3:
+
 /usr/lib/ld-linux-x86-64.so.2:
+
+/usr/lib/libssh2.so.1:
+
+/usr/lib/libidn2.so.0:
+
+/usr/lib/libbrotlidec.so.1:
+
+/usr/lib/libbrotlicommon.so.1:
+
+/usr/lib/libzstd.so.1:
+
+/usr/lib/libnghttp2.so.14:
+
+/usr/lib/libunistring.so.5:

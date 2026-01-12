@@ -11,7 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/wetsock/coding/lightning-search/src/TcpListener.cpp" "CMakeFiles/ls.dir/src/TcpListener.cpp.o" "gcc" "CMakeFiles/ls.dir/src/TcpListener.cpp.o.d"
   "/home/wetsock/coding/lightning-search/src/WebServer.cpp" "CMakeFiles/ls.dir/src/WebServer.cpp.o" "gcc" "CMakeFiles/ls.dir/src/WebServer.cpp.o.d"
   "/home/wetsock/coding/lightning-search/src/main.cpp" "CMakeFiles/ls.dir/src/main.cpp.o" "gcc" "CMakeFiles/ls.dir/src/main.cpp.o.d"
-  "" "ls" "gcc" "CMakeFiles/ls.dir/link.d"
+  "" "/home/wetsock/coding/lightning-search/ls" "gcc" "CMakeFiles/ls.dir/link.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

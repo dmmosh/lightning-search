@@ -50,12 +50,12 @@ CMakeFiles/ls.dir/src/main.cpp.o: \
  /usr/include/bits/waitstatus.h /usr/include/bits/floatn.h \
  /usr/include/bits/floatn-common.h /usr/include/bits/types/locale_t.h \
  /usr/include/bits/types/__locale_t.h /usr/include/alloca.h \
- /usr/include/bits/stdlib-float.h /usr/include/c++/15.2.1/bits/std_abs.h \
- /usr/include/c++/15.2.1/cerrno /usr/include/errno.h \
- /usr/include/bits/errno.h /usr/include/linux/errno.h \
- /usr/include/asm/errno.h /usr/include/asm-generic/errno.h \
- /usr/include/asm-generic/errno-base.h /usr/include/bits/types/error_t.h \
- /usr/include/c++/15.2.1/string \
+ /usr/include/bits/stdlib-bsearch.h /usr/include/bits/stdlib-float.h \
+ /usr/include/c++/15.2.1/bits/std_abs.h /usr/include/c++/15.2.1/cerrno \
+ /usr/include/errno.h /usr/include/bits/errno.h \
+ /usr/include/linux/errno.h /usr/include/asm/errno.h \
+ /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
+ /usr/include/bits/types/error_t.h /usr/include/c++/15.2.1/string \
  /usr/include/c++/15.2.1/bits/requires_hosted.h \
  /usr/include/c++/15.2.1/bits/stringfwd.h \
  /usr/include/c++/15.2.1/bits/memoryfwd.h \
@@ -120,7 +120,8 @@ CMakeFiles/ls.dir/src/main.cpp.o: \
  /usr/include/bits/types/__fpos_t.h /usr/include/bits/types/__fpos64_t.h \
  /usr/include/bits/types/struct_FILE.h \
  /usr/include/bits/types/cookie_io_functions_t.h \
- /usr/include/bits/stdio_lim.h /usr/include/c++/15.2.1/bits/charconv.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+ /usr/include/c++/15.2.1/bits/charconv.h \
  /usr/include/c++/15.2.1/bits/basic_string.tcc \
  /usr/include/c++/15.2.1/bits/memory_resource.h \
  /usr/include/c++/15.2.1/cstddef \
@@ -201,8 +202,10 @@ CMakeFiles/ls.dir/src/main.cpp.o: \
  /usr/include/c++/15.2.1/bits/align.h \
  /usr/include/c++/15.2.1/bits/fs_dir.h \
  /usr/include/c++/15.2.1/bits/fs_ops.h /usr/include/c++/15.2.1/cstring \
- /usr/include/string.h /usr/include/strings.h /usr/include/cpr/cpr.h \
- /usr/include/cpr/api.h /usr/include/c++/15.2.1/functional \
+ /usr/include/string.h /usr/include/strings.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/cpr.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/api.h \
+ /usr/include/c++/15.2.1/functional \
  /usr/include/c++/15.2.1/bits/std_function.h \
  /usr/include/c++/15.2.1/unordered_map \
  /usr/include/c++/15.2.1/bits/unordered_map.h \
@@ -236,8 +239,10 @@ CMakeFiles/ls.dir/src/main.cpp.o: \
  /usr/include/semaphore.h /usr/include/bits/semaphore.h \
  /usr/include/c++/15.2.1/bits/atomic_futex.h \
  /usr/include/c++/15.2.1/utility \
- /usr/include/c++/15.2.1/bits/stl_relops.h /usr/include/cpr/async.h \
- /usr/include/cpr/async_wrapper.h /usr/include/c++/15.2.1/memory \
+ /usr/include/c++/15.2.1/bits/stl_relops.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/async.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/async_wrapper.h \
+ /usr/include/c++/15.2.1/memory \
  /usr/include/c++/15.2.1/bits/stl_tempbuf.h \
  /usr/include/c++/15.2.1/bits/stl_raw_storage_iter.h \
  /usr/include/c++/15.2.1/bits/shared_ptr_atomic.h \
@@ -246,8 +251,9 @@ CMakeFiles/ls.dir/src/main.cpp.o: \
  /usr/include/c++/15.2.1/bits/ranges_algobase.h \
  /usr/include/c++/15.2.1/pstl/glue_memory_defs.h \
  /usr/include/c++/15.2.1/pstl/execution_defs.h \
- /usr/include/cpr/singleton.h /usr/include/c++/15.2.1/cassert \
- /usr/include/assert.h /usr/include/cpr/threadpool.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/singleton.h \
+ /usr/include/c++/15.2.1/cassert /usr/include/assert.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/threadpool.h \
  /usr/include/c++/15.2.1/chrono /usr/include/c++/15.2.1/bits/stl_algo.h \
  /usr/include/c++/15.2.1/bits/algorithmfwd.h \
  /usr/include/c++/15.2.1/bits/stl_heap.h \
@@ -263,52 +269,85 @@ CMakeFiles/ls.dir/src/main.cpp.o: \
  /usr/include/c++/15.2.1/deque /usr/include/c++/15.2.1/bits/stl_deque.h \
  /usr/include/c++/15.2.1/bits/deque.tcc \
  /usr/include/c++/15.2.1/bits/stl_queue.h /usr/include/c++/15.2.1/thread \
- /usr/include/cpr/async_wrapper.h /usr/include/cpr/auth.h \
- /usr/include/cpr/util.h /usr/include/cpr/callback.h \
- /usr/include/cpr/cprtypes.h /usr/include/curl/curl.h \
- /usr/include/curl/curlver.h /usr/include/curl/system.h \
- /usr/include/curl/easy.h /usr/include/curl/multi.h \
- /usr/include/curl/curl.h /usr/include/curl/urlapi.h \
- /usr/include/curl/options.h /usr/include/curl/header.h \
- /usr/include/curl/websockets.h /usr/include/curl/mprintf.h \
- /usr/include/curl/system.h /usr/include/c++/15.2.1/map \
- /usr/include/c++/15.2.1/bits/stl_tree.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/async_wrapper.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/auth.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/util.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/callback.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/cprtypes.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/curl.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/curlver.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/system.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/easy.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/multi.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/curl.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/urlapi.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/options.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/header.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/websockets.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/mprintf.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/system.h \
+ /usr/include/c++/15.2.1/map /usr/include/c++/15.2.1/bits/stl_tree.h \
  /usr/include/c++/15.2.1/bits/stl_map.h \
  /usr/include/c++/15.2.1/bits/stl_multimap.h \
  /usr/include/c++/15.2.1/numeric \
  /usr/include/c++/15.2.1/bits/stl_numeric.h \
  /usr/include/c++/15.2.1/pstl/glue_numeric_defs.h \
- /usr/include/cpr/cookies.h /usr/include/cpr/curlholder.h \
- /usr/include/cpr/secure_string.h /usr/include/cpr/cprtypes.h \
- /usr/include/cpr/sse.h /usr/include/cpr/bearer.h \
- /usr/include/curl/curlver.h /usr/include/cpr/filesystem.h \
- /usr/include/cpr/multipart.h /usr/include/cpr/buffer.h \
- /usr/include/cpr/file.h /usr/include/cpr/multiperform.h \
- /usr/include/cpr/curlmultiholder.h /usr/include/cpr/response.h \
- /usr/include/cpr/cert_info.h /usr/include/cpr/error.h \
- /usr/include/cpr/ssl_options.h /usr/include/cpr/util.h \
- /usr/include/cpr/session.h /usr/include/c++/15.2.1/variant \
- /usr/include/cpr/accept_encoding.h /usr/include/c++/15.2.1/unordered_set \
- /usr/include/c++/15.2.1/bits/unordered_set.h /usr/include/cpr/body.h \
- /usr/include/cpr/buffer.h /usr/include/cpr/file.h \
- /usr/include/cpr/body_view.h /usr/include/cpr/connect_timeout.h \
- /usr/include/cpr/timeout.h /usr/include/cpr/connection_pool.h \
- /usr/include/cpr/http_version.h /usr/include/cpr/interface.h \
- /usr/include/cpr/limit_rate.h /usr/include/cpr/local_port.h \
- /usr/include/cpr/local_port_range.h /usr/include/cpr/low_speed.h \
- /usr/include/cpr/parameters.h /usr/include/cpr/curl_container.h \
- /usr/include/cpr/payload.h /usr/include/cpr/proxies.h \
- /usr/include/cpr/proxyauth.h /usr/include/cpr/range.h \
- /usr/include/cpr/redirect.h /usr/include/cpr/reserve_size.h \
- /usr/include/cpr/resolve.h /usr/include/c++/15.2.1/set \
- /usr/include/c++/15.2.1/bits/stl_set.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/cookies.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/curlholder.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/secure_string.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/cprtypes.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/sse.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/bearer.h \
+ /home/wetsock/coding/lightning-search/build/_deps/curl-src/include/curl/curlver.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/filesystem.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/multipart.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/buffer.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/file.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/multiperform.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/curlmultiholder.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/response.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/cert_info.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/error.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/ssl_options.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/util.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/session.h \
+ /usr/include/c++/15.2.1/variant \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/accept_encoding.h \
+ /usr/include/c++/15.2.1/unordered_set \
+ /usr/include/c++/15.2.1/bits/unordered_set.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/body.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/buffer.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/file.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/body_view.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/connect_timeout.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/timeout.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/connection_pool.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/http_version.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/interface.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/limit_rate.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/local_port.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/local_port_range.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/low_speed.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/parameters.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/curl_container.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/payload.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/proxies.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/proxyauth.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/range.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/redirect.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/reserve_size.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/resolve.h \
+ /usr/include/c++/15.2.1/set /usr/include/c++/15.2.1/bits/stl_set.h \
  /usr/include/c++/15.2.1/bits/stl_multiset.h \
- /usr/include/cpr/unix_socket.h /usr/include/cpr/user_agent.h \
- /usr/include/cpr/verbose.h /usr/include/cpr/cprver.h \
- /usr/include/cpr/interceptor.h /usr/include/cpr/ssl_ctx.h \
- /usr/include/cpr/status_codes.h /usr/include/c++/15.2.1/regex \
- /usr/include/c++/15.2.1/bitset /usr/include/c++/15.2.1/stack \
- /usr/include/c++/15.2.1/bits/stl_stack.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/unix_socket.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/user_agent.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/verbose.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-build/cpr_generated_includes/cpr/cprver.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/interceptor.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/ssl_ctx.h \
+ /home/wetsock/coding/lightning-search/build/_deps/cpr-src/include/cpr/status_codes.h \
+ /usr/include/c++/15.2.1/regex /usr/include/c++/15.2.1/bitset \
+ /usr/include/c++/15.2.1/stack /usr/include/c++/15.2.1/bits/stl_stack.h \
  /usr/include/c++/15.2.1/bits/regex_constants.h \
  /usr/include/c++/15.2.1/bits/regex_error.h \
  /usr/include/c++/15.2.1/bits/regex_automaton.h \

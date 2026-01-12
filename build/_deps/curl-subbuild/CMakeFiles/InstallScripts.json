@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/wetsock/coding/lightning-search/build/_deps/curl-subbuild/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
