@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <istream>
-#include <torch/torch.h>
+//#include <torch/torch.h>
 #include <iterator>
 #include <fstream>
 #include <vector>

@@ -1,0 +1,3 @@
+/home/wetsock/coding/lightning-search/build/CMakeFiles/ls.dir
+/home/wetsock/coding/lightning-search/build/CMakeFiles/edit_cache.dir
+/home/wetsock/coding/lightning-search/build/CMakeFiles/rebuild_cache.dir

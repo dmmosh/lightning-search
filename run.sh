@@ -8,6 +8,5 @@ g++ -std=c++20 \
     src/main.cpp src/WebServer.cpp src/TcpListener.cpp \
     -I/opt/libtorch/include \
     -I/opt/libtorch/include/torch/csrc/api/include \
-    -L/opt/libtorch/lib \
     -ltorch -lcpr -lz \
     -o ls
