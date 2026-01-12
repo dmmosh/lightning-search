@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <istream>
-//#include <torch/torch.h>
+#include <torch/torch.h>
 #include <iterator>
 #include <fstream>
 #include <vector>
@@ -17,6 +17,8 @@
 
 // for multiple clients
 extern const char* headers[]; 
+
+extern torch::Device device; // the device, all will go to it 
 
 std::string compressGzip(const std::string& str);
 unsigned int lastWord(const std::string& word); // client connected

@@ -211,7 +211,7 @@ void WebServer::onMessageReceived(int client, const char* msg, int length){
             //parsed = std::string("[\"")+ (parsed.c_str()+4) + "\", ["
             parsed = "";
             /*
-
+            
             // parsed debug
             parsed = "\"swag\","
             "\"hi chat\","
