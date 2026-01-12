@@ -22,11 +22,7 @@ wordi = checkpoint['wordi']
 hidden_layer_size = checkpoint['hidden_layer_size']
 block_size = checkpoint['block_size']
 stop_wordi = checkpoint['stop_wordi']
-<<<<<<< HEAD
 stop_word=iword[stop_wordi]
-=======
-stop_word = '.'
->>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
 print("Model and related variables loaded successfully.")
 
 model = nn.Sequential(
@@ -49,11 +45,7 @@ def inference(start_word, stopi):
     with torch.no_grad():
         output = model(embedx)
         probs = torch.softmax(output, dim=1)
-<<<<<<< HEAD
         _, top_indices = torch.topk(probs, k=10, dim=1)
-=======
-        top_probs, top_indices = torch.topk(probs, k=10, dim=1)
->>>>>>> 4141bd7451489f79e93a81d6e7f8c75a8e3489ae
         return [iword[i] for i in top_indices.tolist()[0]]
 
 

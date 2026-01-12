@@ -3,6 +3,7 @@
 #include <string.h>     // For memset
 #include <unistd.h>     // For close()
 #include <sys/types.h>
+#include <torch/torch.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
