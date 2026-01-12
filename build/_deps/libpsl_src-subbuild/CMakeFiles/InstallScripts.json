@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/wetsock/coding/lightning-search/build/_deps/libpsl_src-subbuild/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

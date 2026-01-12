@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/wetsock/coding/lightning-search/build/_deps/zlib-subbuild/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
