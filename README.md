@@ -12,3 +12,8 @@ cd ./lightning-search
 cmake -S . -B build
 cmake --build build
 ```
+
+to run:
+```
+./ls # open localhost:8080 on browser
+```
