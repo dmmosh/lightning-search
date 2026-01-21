@@ -15,21 +15,17 @@
 #include <regex>
 #include <zlib.h>
 
-#define MODEL_PATH "www/model_states_words.pth"
+#define MODEL_PATH "www/libtorch_ac_model.pt"
 #define PORT 8080
-
-typedef struct model{
-    torch::jit::script::Module m;
-    
-}model;
 
 // for multiple clients
 extern const char* headers[]; 
-
+extern torch::jit::script::Module model;
 extern torch::Device device; // the device, all will go to it 
 
-std::string compressGzip(const std::string& str);
+std::string compressGzip(const std::string& str); // compress gzip
 unsigned int lastWord(const std::string& word); // client connected
+std::vector<torch::jit::IValue> str_to_model(const std::string& input);
 
 class WebServer : public TcpListener
 {

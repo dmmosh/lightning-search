@@ -94,6 +94,11 @@ unsigned int lastWord(const std::string& word){
 
 };
 
+std::vector<torch::jit::IValue> str_to_model(const std::string& input){
+    
+};
+
+
 cpr::AsyncResponse WebServer::sendQuery(const char* query, unsigned int length){
     
     // json body = {
