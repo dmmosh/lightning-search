@@ -10,7 +10,8 @@ int main()
     if(torch::cuda::is_available()){ // if cuda is available, switch the global device
         device = torch::Device(torch::kCUDA);
     }
-    std::cout << device.is_cuda() << '\n';
+    std::cout << "The server is using:\t"<< (device.is_cuda() ? "CUDA" : "CPU") << '\n';
+    
 
     WebServer webServer("0.0.0.0", PORT);
     if(webServer.init() != 0){
