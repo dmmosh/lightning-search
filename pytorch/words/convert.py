@@ -19,7 +19,6 @@ checkpoint = torch.load(save_path_words)
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super().__init__()
-        self.checkpoint = torch.load(save_path_words)
         self.embed = checkpoint['embed']
         self.embedding_dimensions = checkpoint['embedding_dimensions'] # number of integers to repsent in n dimension space
         self.dictionary_size = checkpoint['dictionary_size']

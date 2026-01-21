@@ -20,7 +20,7 @@
 
 // for multiple clients
 extern const char* headers[]; 
-extern torch::jit::script::Module model;
+extern torch::jit::script::Module module;
 extern torch::Device device; // the device, all will go to it 
 
 std::string compressGzip(const std::string& str); // compress gzip

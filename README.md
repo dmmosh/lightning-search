@@ -17,3 +17,6 @@ to run:
 ```
 ./ls # open localhost:8080 on browser
 ```
+
+notes:
+Deploying PyTorch Models in C++ // continue tomorrow
