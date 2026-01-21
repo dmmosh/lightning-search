@@ -15,6 +15,14 @@
 #include <regex>
 #include <zlib.h>
 
+#define MODEL_PATH "www/model_states_words.pth"
+#define PORT 8080
+
+typedef struct model{
+    torch::jit::script::Module m;
+    
+}model;
+
 // for multiple clients
 extern const char* headers[]; 
 

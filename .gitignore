@@ -14,3 +14,4 @@ Makefile
 install_manifest.txt
 compile_commands.json
 *.user
+www/libtorch_ac_model.pt

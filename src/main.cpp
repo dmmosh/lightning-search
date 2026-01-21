@@ -1,12 +1,19 @@
 #include "WebServer.h"
 #include <iostream>
+#include <filesystem>
+
 //using namespace std;
 torch::Device device(torch::kCPU); // global device, cpu 
 
-#define PORT 8080
+
 
 int main()
 {
+    if(!std::filesystem::exists(MODEL_PATH)){
+        std::cout << "Model not found. Autocomplete not possible.\n";
+        return 0;
+    }
+    
     if(torch::cuda::is_available()){ // if cuda is available, switch the global device
         device = torch::Device(torch::kCUDA);
     }
