@@ -23,11 +23,11 @@ class NeuralNetwork(nn.Module):
         self.embedding_dimensions = checkpoint['embedding_dimensions'] # number of integers to repsent in n dimension space
         self.dictionary_size = checkpoint['dictionary_size']
         self.iword = checkpoint['iword']
-        self.wordi = checkpoint['wordi']
+        #self.wordi = checkpoint['wordi'] # dont need wordi , only need iword for outputting the output indeces
         self.hidden_layer_size = checkpoint['hidden_layer_size']
         self.block_size = checkpoint['block_size']
         self.stop_wordi = checkpoint['stop_wordi']
-        self.stop_word=self.iword[self.stop_wordi]
+        self.stop_word=ord(self.iword[self.stop_wordi])
 
         self.model = nn.Sequential(
             nn.Linear(self.embedding_dimensions*self.block_size, self.hidden_layer_size, bias=False), nn.BatchNorm1d(self.hidden_layer_size), nn.Tanh(),
@@ -51,7 +51,7 @@ model = NeuralNetwork()
 
 if __name__ == '__main__': # convert to scriptmodule
     test = 'software'
-    out = test[-model.block_size:].rjust(model.block_size,model.stop_word)
+    out = test[-model.block_size:].rjust(model.block_size,chr(model.stop_word))
     out = [ord(c) for c in out]
     print(out)
     logits = model.forward(out)
